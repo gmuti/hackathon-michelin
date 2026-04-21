@@ -1,0 +1,506 @@
+{
+  "info": {
+    "name": "MichelinMatch API",
+    "description": "Collection complète pour tester tous les endpoints de l'API MichelinMatch.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "baseUrl", "value": "http://localhost:3000/api/v1", "type": "string" },
+    { "key": "token", "value": "PASTE_YOUR_SUPABASE_JWT_HERE", "type": "string" },
+    { "key": "restaurantId", "value": "", "type": "string" },
+    { "key": "hotelId", "value": "", "type": "string" },
+    { "key": "userId", "value": "", "type": "string" },
+    { "key": "jamShareCode", "value": "", "type": "string" },
+    { "key": "jamSessionId", "value": "", "type": "string" }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [{ "key": "token", "value": "{{token}}", "type": "string" }]
+  },
+  "item": [
+    {
+      "name": "Users",
+      "item": [
+        {
+          "name": "GET /users/me",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const json = pm.response.json();",
+                  "if (json.data) pm.collectionVariables.set('userId', json.data.id);",
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));",
+                  "pm.test('data present', () => pm.expect(json.data).to.not.be.null);"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/users/me", "host": ["{{baseUrl}}"], "path": ["users", "me"] }
+          }
+        },
+        {
+          "name": "PATCH /users/me",
+          "request": {
+            "method": "PATCH",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"bio\": \"Passionné de gastronomie étoilée\",\n  \"username\": \"gourmet_explorer\",\n  \"cuisinePreferences\": [\"Française\", \"Japonaise\"],\n  \"dietaryRestrictions\": []\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/users/me", "host": ["{{baseUrl}}"], "path": ["users", "me"] }
+          }
+        },
+        {
+          "name": "GET /users/me/collection",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/users/me/collection", "host": ["{{baseUrl}}"], "path": ["users", "me", "collection"] }
+          }
+        },
+        {
+          "name": "POST /users/:id/follow",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/users/{{userId}}/follow",
+              "host": ["{{baseUrl}}"],
+              "path": ["users", "{{userId}}", "follow"]
+            }
+          }
+        },
+        {
+          "name": "DELETE /users/:id/follow",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/users/{{userId}}/follow",
+              "host": ["{{baseUrl}}"],
+              "path": ["users", "{{userId}}", "follow"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Restaurants",
+      "item": [
+        {
+          "name": "GET /restaurants/feed (walk, Paris)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const json = pm.response.json();",
+                  "if (json.data && json.data.length > 0) pm.collectionVariables.set('restaurantId', json.data[0].id);",
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));",
+                  "pm.test('Returns array', () => pm.expect(json.data).to.be.an('array'));"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/restaurants/feed?lat=48.8638&lng=2.3374&transportMode=walk",
+              "host": ["{{baseUrl}}"],
+              "path": ["restaurants", "feed"],
+              "query": [
+                { "key": "lat", "value": "48.8638" },
+                { "key": "lng", "value": "2.3374" },
+                { "key": "transportMode", "value": "walk" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "GET /restaurants/feed (car, filtre cuisine)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/restaurants/feed?lat=48.8638&lng=2.3374&transportMode=car&cuisineTypes=Française",
+              "host": ["{{baseUrl}}"],
+              "path": ["restaurants", "feed"],
+              "query": [
+                { "key": "lat", "value": "48.8638" },
+                { "key": "lng", "value": "2.3374" },
+                { "key": "transportMode", "value": "car" },
+                { "key": "cuisineTypes", "value": "Française" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "GET /restaurants/feed (bike, dietary)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/restaurants/feed?lat=48.8638&lng=2.3374&transportMode=bike&dietaryRestrictions=végétarien",
+              "host": ["{{baseUrl}}"],
+              "path": ["restaurants", "feed"],
+              "query": [
+                { "key": "lat", "value": "48.8638" },
+                { "key": "lng", "value": "2.3374" },
+                { "key": "transportMode", "value": "bike" },
+                { "key": "dietaryRestrictions", "value": "végétarien" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "GET /restaurants/:id",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/restaurants/{{restaurantId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["restaurants", "{{restaurantId}}"]
+            }
+          }
+        },
+        {
+          "name": "GET /restaurants/:id (404)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/restaurants/invalid-id-000",
+              "host": ["{{baseUrl}}"],
+              "path": ["restaurants", "invalid-id-000"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Hotels",
+      "item": [
+        {
+          "name": "GET /hotels/feed (Paris)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const json = pm.response.json();",
+                  "if (json.data && json.data.length > 0) pm.collectionVariables.set('hotelId', json.data[0].id);",
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));",
+                  "pm.test('Returns array', () => pm.expect(json.data).to.be.an('array'));"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/hotels/feed?destination=Paris&checkIn=2026-05-01&checkOut=2026-05-03",
+              "host": ["{{baseUrl}}"],
+              "path": ["hotels", "feed"],
+              "query": [
+                { "key": "destination", "value": "Paris" },
+                { "key": "checkIn", "value": "2026-05-01" },
+                { "key": "checkOut", "value": "2026-05-03" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "GET /hotels/feed (filtre environment COUNTRY)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/hotels/feed?destination=massig&checkIn=2026-05-01&checkOut=2026-05-03&environment=COUNTRY",
+              "host": ["{{baseUrl}}"],
+              "path": ["hotels", "feed"],
+              "query": [
+                { "key": "destination", "value": "massig" },
+                { "key": "checkIn", "value": "2026-05-01" },
+                { "key": "checkOut", "value": "2026-05-03" },
+                { "key": "environment", "value": "COUNTRY" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "GET /hotels/:id",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/hotels/{{hotelId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["hotels", "{{hotelId}}"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Swipe",
+      "item": [
+        {
+          "name": "POST /swipe — LIKE restaurant",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"targetId\": \"{{restaurantId}}\",\n  \"targetType\": \"RESTAURANT\",\n  \"action\": \"LIKE\"\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/swipe", "host": ["{{baseUrl}}"], "path": ["swipe"] }
+          }
+        },
+        {
+          "name": "POST /swipe — SUPER_LIKE restaurant",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"targetId\": \"{{restaurantId}}\",\n  \"targetType\": \"RESTAURANT\",\n  \"action\": \"SUPER_LIKE\"\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/swipe", "host": ["{{baseUrl}}"], "path": ["swipe"] }
+          }
+        },
+        {
+          "name": "POST /swipe — DISLIKE hôtel",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"targetId\": \"{{hotelId}}\",\n  \"targetType\": \"HOTEL\",\n  \"action\": \"DISLIKE\"\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/swipe", "host": ["{{baseUrl}}"], "path": ["swipe"] }
+          }
+        },
+        {
+          "name": "POST /swipe — dans une session Jam",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"targetId\": \"{{restaurantId}}\",\n  \"targetType\": \"RESTAURANT\",\n  \"action\": \"LIKE\",\n  \"sessionId\": \"{{jamSessionId}}\"\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/swipe", "host": ["{{baseUrl}}"], "path": ["swipe"] }
+          }
+        },
+        {
+          "name": "POST /swipe — body invalide (400)",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"targetType\": \"UNKNOWN\",\n  \"action\": \"LIKE\"\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/swipe", "host": ["{{baseUrl}}"], "path": ["swipe"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Jam",
+      "item": [
+        {
+          "name": "POST /jam — créer session RESTAURANT",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const json = pm.response.json();",
+                  "if (json.data) {",
+                  "  pm.collectionVariables.set('jamShareCode', json.data.shareCode);",
+                  "  pm.collectionVariables.set('jamSessionId', json.data.id);",
+                  "}",
+                  "pm.test('Status 201', () => pm.response.to.have.status(201));",
+                  "pm.test('shareCode format', () => pm.expect(json.data.shareCode).to.match(/^JAM-[A-F0-9]{4}$/));"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"targetType\": \"RESTAURANT\",\n  \"matchThreshold\": 0.5\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/jam", "host": ["{{baseUrl}}"], "path": ["jam"] }
+          }
+        },
+        {
+          "name": "POST /jam — créer session HOTEL",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"targetType\": \"HOTEL\",\n  \"matchThreshold\": 1.0,\n  \"destination\": \"Paris\",\n  \"checkIn\": \"2026-05-10\",\n  \"checkOut\": \"2026-05-12\"\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/jam", "host": ["{{baseUrl}}"], "path": ["jam"] }
+          }
+        },
+        {
+          "name": "GET /jam/:shareCode",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/jam/{{jamShareCode}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["jam", "{{jamShareCode}}"]
+            }
+          }
+        },
+        {
+          "name": "GET /jam/:id/results",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/jam/{{jamSessionId}}/results",
+              "host": ["{{baseUrl}}"],
+              "path": ["jam", "{{jamSessionId}}", "results"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Reviews",
+      "item": [
+        {
+          "name": "POST /reviews/certify-qr",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 201 ou 403', () => {",
+                  "  pm.expect(pm.response.code).to.be.oneOf([201, 403]);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"restaurantId\": \"{{restaurantId}}\",\n  \"qrCode\": \"QR-GRAND-VEFOUR-001\"\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/reviews/certify-qr", "host": ["{{baseUrl}}"], "path": ["reviews", "certify-qr"] }
+          }
+        },
+        {
+          "name": "POST /reviews/certify-qr — QR invalide (403)",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"restaurantId\": \"{{restaurantId}}\",\n  \"qrCode\": \"FAUX-QR-CODE\"\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/reviews/certify-qr", "host": ["{{baseUrl}}"], "path": ["reviews", "certify-qr"] }
+          }
+        },
+        {
+          "name": "POST /reviews — créer un avis",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"targetId\": \"{{restaurantId}}\",\n  \"targetType\": \"RESTAURANT\",\n  \"content\": \"Une expérience gastronomique inoubliable, service impeccable et cuisine d'exception.\",\n  \"rating\": 4.8\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/reviews", "host": ["{{baseUrl}}"], "path": ["reviews"] }
+          }
+        },
+        {
+          "name": "POST /reviews — sans visite certifiée (403)",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"targetId\": \"{{hotelId}}\",\n  \"targetType\": \"HOTEL\",\n  \"content\": \"Très bel hôtel mais je n'y suis jamais allé.\",\n  \"rating\": 5.0\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/reviews", "host": ["{{baseUrl}}"], "path": ["reviews"] }
+          }
+        },
+        {
+          "name": "GET /reviews/RESTAURANT/:id",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/reviews/RESTAURANT/{{restaurantId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["reviews", "RESTAURANT", "{{restaurantId}}"]
+            }
+          }
+        },
+        {
+          "name": "GET /reviews/HOTEL/:id",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/reviews/HOTEL/{{hotelId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["reviews", "HOTEL", "{{hotelId}}"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Auth — erreurs",
+      "item": [
+        {
+          "name": "Sans token (401)",
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/users/me", "host": ["{{baseUrl}}"], "path": ["users", "me"] }
+          }
+        },
+        {
+          "name": "Token invalide (401)",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [{ "key": "token", "value": "invalid.token.here", "type": "string" }]
+            },
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/users/me", "host": ["{{baseUrl}}"], "path": ["users", "me"] }
+          }
+        }
+      ]
+    }
+  ]
+}

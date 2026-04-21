@@ -1,0 +1,216 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+enum UserRole {
+  PLONGEUR
+  SERVEUR
+  COMMIS
+  SOUS_CHEF
+  CHEF
+  CHEF_ETOILE
+}
+
+enum SwipeAction {
+  LIKE
+  DISLIKE
+  SUPER_LIKE
+}
+
+enum TargetType {
+  RESTAURANT
+  HOTEL
+}
+
+enum Environment {
+  CITY
+  COUNTRY
+  SUBURB
+}
+
+enum JamStatus {
+  WAITING
+  ACTIVE
+  COMPLETED
+}
+
+model User {
+  id                  String   @id @default(cuid())
+  supabaseId          String?  @unique
+  email               String   @unique
+  username            String   @unique
+  avatar              String?
+  bio                 String?
+  role                UserRole @default(PLONGEUR)
+  certifiedVisits     Int      @default(0)
+  cuisinePreferences  String[]
+  dietaryRestrictions String[]
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
+
+  swipes          Swipe[]
+  visits          Visit[]
+  reviews         Review[]
+  jamParticipants JamParticipant[]
+  followings      Follow[] @relation("Follower")
+  followers       Follow[] @relation("Following")
+}
+
+model Follow {
+  id          String   @id @default(cuid())
+  followerId  String
+  followingId String
+  createdAt   DateTime @default(now())
+  follower    User     @relation("Follower", fields: [followerId], references: [id])
+  following   User     @relation("Following", fields: [followingId], references: [id])
+
+  @@unique([followerId, followingId])
+}
+
+model Restaurant {
+  id             String   @id @default(cuid())
+  name           String
+  description    String?
+  address        String
+  city           String
+  lat            Float
+  lng            Float
+  michelinStars  Int      @default(0)
+  cuisineType    String
+  priceRange     Int
+  dietaryOptions String[]
+  qrCode         String?  @unique
+  createdAt      DateTime @default(now())
+
+  photos RestaurantPhoto[]
+  dishes Dish[]
+  visits Visit[]
+}
+
+model RestaurantPhoto {
+  id           String     @id @default(cuid())
+  restaurantId String
+  url          String
+  position     Int
+  restaurant   Restaurant @relation(fields: [restaurantId], references: [id])
+}
+
+model Dish {
+  id           String     @id @default(cuid())
+  restaurantId String
+  name         String
+  price        Float?
+  category     String
+  emoji        String?
+  restaurant   Restaurant @relation(fields: [restaurantId], references: [id])
+}
+
+model Hotel {
+  id            String      @id @default(cuid())
+  name          String
+  description   String?
+  city          String
+  country       String
+  lat           Float
+  lng           Float
+  environment   Environment
+  stars         Int         @default(0)
+  pricePerNight Float
+  amenities     String[]
+  createdAt     DateTime    @default(now())
+
+  availabilities HotelAvailability[]
+}
+
+model HotelAvailability {
+  id        String   @id @default(cuid())
+  hotelId   String
+  date      DateTime
+  available Boolean
+  hotel     Hotel    @relation(fields: [hotelId], references: [id])
+
+  @@unique([hotelId, date])
+}
+
+model Swipe {
+  id         String      @id @default(cuid())
+  userId     String
+  targetId   String
+  targetType TargetType
+  action     SwipeAction
+  sessionId  String?
+  createdAt  DateTime    @default(now())
+  user       User        @relation(fields: [userId], references: [id])
+}
+
+model Visit {
+  id           String      @id @default(cuid())
+  userId       String
+  restaurantId String?
+  certified    Boolean     @default(false)
+  certMethod   String?
+  visitedAt    DateTime
+  createdAt    DateTime    @default(now())
+  user         User        @relation(fields: [userId], references: [id])
+  restaurant   Restaurant? @relation(fields: [restaurantId], references: [id])
+}
+
+model Review {
+  id         String     @id @default(cuid())
+  userId     String
+  targetId   String
+  targetType TargetType
+  content    String
+  rating     Float
+  certified  Boolean    @default(false)
+  likes      Int        @default(0)
+  createdAt  DateTime   @default(now())
+  user       User       @relation(fields: [userId], references: [id])
+}
+
+model JamSession {
+  id             String     @id @default(cuid())
+  creatorId      String
+  targetType     TargetType
+  status         JamStatus  @default(WAITING)
+  matchThreshold Float      @default(1.0)
+  shareCode      String     @unique
+  destination    String?
+  checkIn        DateTime?
+  checkOut       DateTime?
+  createdAt      DateTime   @default(now())
+  startedAt      DateTime?
+
+  participants JamParticipant[]
+  matches      JamMatch[]
+}
+
+model JamParticipant {
+  id        String     @id @default(cuid())
+  sessionId String
+  userId    String
+  joinedAt  DateTime   @default(now())
+  session   JamSession @relation(fields: [sessionId], references: [id])
+  user      User       @relation(fields: [userId], references: [id])
+
+  @@unique([sessionId, userId])
+}
+
+model JamMatch {
+  id         String     @id @default(cuid())
+  sessionId  String
+  targetId   String
+  targetType TargetType
+  likeCount  Int        @default(0)
+  isMatch    Boolean    @default(false)
+  createdAt  DateTime   @default(now())
+  session    JamSession @relation(fields: [sessionId], references: [id])
+
+  @@unique([sessionId, targetId])
+}
