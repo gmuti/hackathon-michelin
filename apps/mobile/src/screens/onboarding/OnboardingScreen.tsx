@@ -1,5 +1,8 @@
 import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, SafeAreaView, Animated } from 'react-native';
+import {
+  View, Text, TouchableOpacity, StyleSheet, SafeAreaView, ActivityIndicator,
+} from 'react-native';
+import { useAuth } from '../../context/AuthContext';
 
 const CUISINE_TYPES = [
   { id: 'japanese', label: 'Japonaise', emoji: '🍣' },
@@ -29,16 +32,18 @@ const TRANSPORT_MODES = [
   { id: 'train', emoji: '🚆', label: 'Train', sub: '30 km+' },
 ];
 
-export default function OnboardingScreen({ navigation }: any) {
+export default function OnboardingScreen() {
+  const { updateUser } = useAuth();
   const [step, setStep] = useState(0);
   const [selectedCuisines, setSelectedCuisines] = useState<string[]>([]);
   const [selectedDietary, setSelectedDietary] = useState<string[]>([]);
   const [transport, setTransport] = useState<string>('car');
+  const [saving, setSaving] = useState(false);
   const [showCountdown, setShowCountdown] = useState(false);
   const [countdown, setCountdown] = useState(3);
 
-  const toggle = (id: string, list: string[], setList: Function) => {
-    setList((prev: string[]) => prev.includes(id) ? prev.filter(x => x !== id) : [...prev, id]);
+  const toggle = (id: string, list: string[], setList: React.Dispatch<React.SetStateAction<string[]>>) => {
+    setList(prev => prev.includes(id) ? prev.filter(x => x !== id) : [...prev, id]);
   };
 
   const startCountdown = () => {
@@ -49,24 +54,37 @@ export default function OnboardingScreen({ navigation }: any) {
       setCountdown(c);
       if (c === 0) {
         clearInterval(interval);
-        setTimeout(() => navigation.replace('Main'), 500);
+        // updateUser déclenche la re-render d'AppNavigator → Main
       }
     }, 1000);
   };
 
-  const next = () => {
-    if (step < 2) setStep(step + 1);
-    else startCountdown();
+  const finish = async () => {
+    setSaving(true);
+    // Sauvegarde les préférences en DB — cuisinePreferences non vide déverrouille Main
+    await updateUser({
+      cuisinePreferences: selectedCuisines.length > 0 ? selectedCuisines : ['all'],
+      dietaryRestrictions: selectedDietary,
+    });
+    setSaving(false);
+    startCountdown();
   };
 
-  if (showCountdown) return (
-    <View style={styles.countdown}>
-      <Text style={styles.countdownNumber}>{countdown === 0 ? "🚀" : countdown}</Text>
-      <Text style={styles.countdownLabel}>
-        {countdown === 0 ? "C'est parti !" : countdown === 3 ? "Prêt ?" : "..."}
-      </Text>
-    </View>
-  );
+  const next = () => {
+    if (step < 2) setStep(step + 1);
+    else finish();
+  };
+
+  if (showCountdown) {
+    return (
+      <View style={styles.countdown}>
+        <Text style={styles.countdownNumber}>{countdown === 0 ? '🚀' : countdown}</Text>
+        <Text style={styles.countdownLabel}>
+          {countdown === 0 ? "C'est parti !" : countdown === 3 ? 'Prêt ?' : '...'}
+        </Text>
+      </View>
+    );
+  }
 
   return (
     <View style={styles.container}>
@@ -142,10 +160,11 @@ export default function OnboardingScreen({ navigation }: any) {
           </View>
         )}
 
-        <TouchableOpacity style={styles.nextBtn} onPress={next}>
-          <Text style={styles.nextBtnText}>
-            {step < 2 ? 'Continuer →' : '🚀 Démarrer !'}
-          </Text>
+        <TouchableOpacity style={styles.nextBtn} onPress={next} disabled={saving}>
+          {saving
+            ? <ActivityIndicator color="#0A0A0A" />
+            : <Text style={styles.nextBtnText}>{step < 2 ? 'Continuer →' : '🚀 Démarrer !'}</Text>
+          }
         </TouchableOpacity>
       </SafeAreaView>
     </View>
