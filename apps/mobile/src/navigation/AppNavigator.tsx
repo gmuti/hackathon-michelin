@@ -7,6 +7,7 @@ import { Text } from 'react-native';
 
 import { useAuth } from '../context/AuthContext';
 
+import MapScreen from '../screens/map/MapScreen';
 import SwipeScreen from '../screens/swipe/SwipeScreen';
 import ProfileScreen from '../screens/profile/ProfileScreen';
 import CommunityScreen from '../screens/community/CommunityScreen';
@@ -56,8 +57,8 @@ function TabNavigator() {
         ),
       })}
     >
-      <Tab.Screen name="Restaurants" component={SwipeScreen} initialParams={{ mode: 'restaurant' }} />
-      <Tab.Screen name="Hotels" component={SwipeScreen} initialParams={{ mode: 'hotel' }} />
+      <Tab.Screen name="Restaurants" component={MapScreen} initialParams={{ mode: 'restaurant' }} />
+      <Tab.Screen name="Hotels" component={MapScreen} initialParams={{ mode: 'hotel' }} />
       <Tab.Screen name="Community" component={CommunityScreen} />
       <Tab.Screen name="Profile" component={ProfileScreen} />
     </Tab.Navigator>
@@ -75,25 +76,22 @@ export default function AppNavigator() {
     );
   }
 
-  // Nouvel utilisateur : pas encore configuré ses préférences
   const needsOnboarding = !!token && user?.cuisinePreferences?.length === 0;
 
   return (
     <NavigationContainer>
       <Stack.Navigator screenOptions={{ headerShown: false, animation: 'fade' }}>
         {!token ? (
-          // ── Flux non authentifié ──────────────────────────────
           <>
             <Stack.Screen name="Login" component={LoginScreen} />
             <Stack.Screen name="Register" component={RegisterScreen} />
           </>
         ) : needsOnboarding ? (
-          // ── Onboarding après inscription ──────────────────────
           <Stack.Screen name="Onboarding" component={OnboardingScreen} />
         ) : (
-          // ── Application principale ────────────────────────────
           <>
             <Stack.Screen name="Main" component={TabNavigator} />
+            <Stack.Screen name="Swipe" component={SwipeScreen} />
             <Stack.Screen name="Jam" component={JamScreen} options={{ presentation: 'modal' }} />
           </>
         )}

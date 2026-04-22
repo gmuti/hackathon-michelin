@@ -5,31 +5,25 @@ import {
 import { useAuth } from '../../context/AuthContext';
 
 const CUISINE_TYPES = [
-  { id: 'japanese', label: 'Japonaise', emoji: '🍣' },
-  { id: 'italian', label: 'Italienne', emoji: '🍝' },
-  { id: 'french', label: 'Française', emoji: '🥐' },
-  { id: 'asian', label: 'Asiatique', emoji: '🥢' },
-  { id: 'veg', label: 'Végétarienne', emoji: '🥗' },
-  { id: 'fusion', label: 'Fusion', emoji: '🌮' },
-  { id: 'seafood', label: 'Fruits de mer', emoji: '🦞' },
-  { id: 'bbq', label: 'Grillades', emoji: '🥩' },
-  { id: 'desserts', label: 'Desserts', emoji: '🍰' },
-  { id: 'brunch', label: 'Brunch', emoji: '🥞' },
+  { id: 'japanese',  label: 'Japonaise',     emoji: '🍣' },
+  { id: 'italian',   label: 'Italienne',     emoji: '🍝' },
+  { id: 'french',    label: 'Française',     emoji: '🥐' },
+  { id: 'asian',     label: 'Asiatique',     emoji: '🥢' },
+  { id: 'veg',       label: 'Végétarienne',  emoji: '🥗' },
+  { id: 'fusion',    label: 'Fusion',        emoji: '🌮' },
+  { id: 'seafood',   label: 'Fruits de mer', emoji: '🦞' },
+  { id: 'bbq',       label: 'Grillades',     emoji: '🥩' },
+  { id: 'desserts',  label: 'Desserts',      emoji: '🍰' },
+  { id: 'brunch',    label: 'Brunch',        emoji: '🥞' },
 ];
 
 const DIETARY = [
-  { id: 'veg', label: 'Végétarien', emoji: '🥦' },
-  { id: 'vegan', label: 'Végan', emoji: '🌱' },
-  { id: 'gluten', label: 'Sans gluten', emoji: '🌾' },
-  { id: 'halal', label: 'Halal', emoji: '☪️' },
+  { id: 'veg',     label: 'Végétarien',   emoji: '🥦' },
+  { id: 'vegan',   label: 'Végan',        emoji: '🌱' },
+  { id: 'gluten',  label: 'Sans gluten',  emoji: '🌾' },
+  { id: 'halal',   label: 'Halal',        emoji: '☪️' },
   { id: 'lactose', label: 'Sans lactose', emoji: '🥛' },
-];
-
-const TRANSPORT_MODES = [
-  { id: 'walk', emoji: '🚶', label: 'À pied', sub: '< 1 km' },
-  { id: 'bike', emoji: '🚲', label: 'Vélo', sub: '1 – 5 km' },
-  { id: 'car', emoji: '🚗', label: 'Voiture', sub: '5 – 30 km' },
-  { id: 'train', emoji: '🚆', label: 'Train', sub: '30 km+' },
+  { id: 'casher',  label: 'Casher',       emoji: '✡️' },
 ];
 
 export default function OnboardingScreen() {
@@ -37,14 +31,12 @@ export default function OnboardingScreen() {
   const [step, setStep] = useState(0);
   const [selectedCuisines, setSelectedCuisines] = useState<string[]>([]);
   const [selectedDietary, setSelectedDietary] = useState<string[]>([]);
-  const [transport, setTransport] = useState<string>('car');
   const [saving, setSaving] = useState(false);
   const [showCountdown, setShowCountdown] = useState(false);
   const [countdown, setCountdown] = useState(3);
 
-  const toggle = (id: string, list: string[], setList: React.Dispatch<React.SetStateAction<string[]>>) => {
+  const toggle = (id: string, list: string[], setList: React.Dispatch<React.SetStateAction<string[]>>) =>
     setList(prev => prev.includes(id) ? prev.filter(x => x !== id) : [...prev, id]);
-  };
 
   const startCountdown = () => {
     setShowCountdown(true);
@@ -52,16 +44,12 @@ export default function OnboardingScreen() {
     const interval = setInterval(() => {
       c -= 1;
       setCountdown(c);
-      if (c === 0) {
-        clearInterval(interval);
-        // updateUser déclenche la re-render d'AppNavigator → Main
-      }
+      if (c === 0) clearInterval(interval);
     }, 1000);
   };
 
   const finish = async () => {
     setSaving(true);
-    // Sauvegarde les préférences en DB — cuisinePreferences non vide déverrouille Main
     await updateUser({
       cuisinePreferences: selectedCuisines.length > 0 ? selectedCuisines : ['all'],
       dietaryRestrictions: selectedDietary,
@@ -71,7 +59,7 @@ export default function OnboardingScreen() {
   };
 
   const next = () => {
-    if (step < 2) setStep(step + 1);
+    if (step < 1) setStep(step + 1);
     else finish();
   };
 
@@ -91,7 +79,7 @@ export default function OnboardingScreen() {
       <SafeAreaView style={{ flex: 1 }}>
         {/* Progress */}
         <View style={styles.progress}>
-          {[0, 1, 2].map(i => (
+          {[0, 1].map(i => (
             <View key={i} style={[styles.progressDot, i <= step && styles.progressDotActive]} />
           ))}
         </View>
@@ -120,7 +108,7 @@ export default function OnboardingScreen() {
         {step === 1 && (
           <View style={styles.stepContainer}>
             <Text style={styles.stepTitle}>Des restrictions alimentaires ? 🌿</Text>
-            <Text style={styles.stepSub}>On les appliquera toujours</Text>
+            <Text style={styles.stepSub}>On les appliquera automatiquement à chaque recherche</Text>
             <View style={styles.grid}>
               {DIETARY.map(d => (
                 <TouchableOpacity
@@ -135,35 +123,14 @@ export default function OnboardingScreen() {
                 </TouchableOpacity>
               ))}
             </View>
-          </View>
-        )}
-
-        {step === 2 && (
-          <View style={styles.stepContainer}>
-            <Text style={styles.stepTitle}>Comment tu te déplaces ? 🗺️</Text>
-            <Text style={styles.stepSub}>Pour calibrer les distances</Text>
-            <View style={styles.transportGrid}>
-              {TRANSPORT_MODES.map(t => (
-                <TouchableOpacity
-                  key={t.id}
-                  style={[styles.transportCard, transport === t.id && styles.transportCardActive]}
-                  onPress={() => setTransport(t.id)}
-                >
-                  <Text style={styles.transportEmoji}>{t.emoji}</Text>
-                  <Text style={[styles.transportLabel, transport === t.id && styles.transportLabelActive]}>
-                    {t.label}
-                  </Text>
-                  <Text style={styles.transportSub}>{t.sub}</Text>
-                </TouchableOpacity>
-              ))}
-            </View>
+            <Text style={styles.skipHint}>Tu peux passer si tu n'as aucune restriction</Text>
           </View>
         )}
 
         <TouchableOpacity style={styles.nextBtn} onPress={next} disabled={saving}>
           {saving
             ? <ActivityIndicator color="#0A0A0A" />
-            : <Text style={styles.nextBtnText}>{step < 2 ? 'Continuer →' : '🚀 Démarrer !'}</Text>
+            : <Text style={styles.nextBtnText}>{step < 1 ? 'Continuer →' : '🚀 Démarrer !'}</Text>
           }
         </TouchableOpacity>
       </SafeAreaView>
@@ -179,6 +146,7 @@ const styles = StyleSheet.create({
   stepContainer: { flex: 1, paddingHorizontal: 20, paddingTop: 20 },
   stepTitle: { color: '#fff', fontSize: 26, fontWeight: '800', marginBottom: 6, letterSpacing: -0.5 },
   stepSub: { color: '#666', fontSize: 15, marginBottom: 24 },
+  skipHint: { color: '#444', fontSize: 13, marginTop: 16, textAlign: 'center' },
   grid: { flexDirection: 'row', flexWrap: 'wrap', gap: 10 },
   chip: {
     flexDirection: 'row', alignItems: 'center', gap: 6,
@@ -189,17 +157,6 @@ const styles = StyleSheet.create({
   chipEmoji: { fontSize: 18 },
   chipLabel: { color: '#888', fontSize: 14, fontWeight: '600' },
   chipLabelActive: { color: '#E8C547' },
-  transportGrid: { gap: 12 },
-  transportCard: {
-    flexDirection: 'row', alignItems: 'center', gap: 16,
-    backgroundColor: '#141414', padding: 18, borderRadius: 16,
-    borderWidth: 1.5, borderColor: '#2A2A2A',
-  },
-  transportCardActive: { borderColor: '#E8C547', backgroundColor: 'rgba(232,197,71,0.1)' },
-  transportEmoji: { fontSize: 30 },
-  transportLabel: { color: '#888', fontSize: 16, fontWeight: '700', flex: 1 },
-  transportLabelActive: { color: '#E8C547' },
-  transportSub: { color: '#444', fontSize: 13 },
   nextBtn: {
     marginHorizontal: 20, marginBottom: 24, backgroundColor: '#E8C547',
     paddingVertical: 16, borderRadius: 16, alignItems: 'center',

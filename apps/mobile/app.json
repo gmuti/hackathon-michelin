@@ -4,9 +4,16 @@
     "slug": "michelinmatch",
     "version": "1.0.0",
     "orientation": "portrait",
-    "platforms": ["ios", "android", "web"],
+    "platforms": [
+      "ios",
+      "android",
+      "web"
+    ],
     "web": {
       "bundler": "metro"
+    },
+    "android": {
+      "package": "com.anonymous.michelinmatch"
     }
   }
 }

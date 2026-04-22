@@ -21,29 +21,52 @@ type ProfileData = {
 type CollectionItem = {
   id: string;
   visitedAt: string;
-  restaurant: {
-    id: string;
-    name: string;
-    city: string;
-    michelinStars: number;
-  } | null;
+  restaurant: { id: string; name: string; city: string; michelinStars: number } | null;
 };
 
 const ROLE_CONFIG = [
-  { key: 'PLONGEUR',    label: 'Plongeur',     emoji: '🫧',  min: 0  },
-  { key: 'SERVEUR',     label: 'Serveur',       emoji: '🍽️', min: 1  },
-  { key: 'COMMIS',      label: 'Commis',        emoji: '👨‍🍳', min: 5  },
-  { key: 'SOUS_CHEF',   label: 'Sous-chef',     emoji: '🔪',  min: 15 },
-  { key: 'CHEF',        label: 'Chef',          emoji: '⭐',  min: 30 },
-  { key: 'CHEF_ETOILE', label: 'Chef Étoilé',   emoji: '🌟',  min: 50 },
+  { key: 'PLONGEUR',    label: 'Plongeur',   emoji: '🫧',  min: 0  },
+  { key: 'SERVEUR',     label: 'Serveur',     emoji: '🍽️', min: 1  },
+  { key: 'COMMIS',      label: 'Commis',      emoji: '👨‍🍳', min: 5  },
+  { key: 'SOUS_CHEF',   label: 'Sous-chef',   emoji: '🔪',  min: 15 },
+  { key: 'CHEF',        label: 'Chef',        emoji: '⭐',  min: 30 },
+  { key: 'CHEF_ETOILE', label: 'Chef Étoilé', emoji: '🌟',  min: 50 },
+];
+
+const CUISINE_OPTIONS = [
+  { id: 'japanese', label: 'Japonaise',    emoji: '🍣' },
+  { id: 'italian',  label: 'Italienne',    emoji: '🍝' },
+  { id: 'french',   label: 'Française',    emoji: '🥐' },
+  { id: 'asian',    label: 'Asiatique',    emoji: '🥢' },
+  { id: 'veg',      label: 'Végétarienne', emoji: '🥗' },
+  { id: 'fusion',   label: 'Fusion',       emoji: '🌮' },
+  { id: 'seafood',  label: 'Fruits de mer',emoji: '🦞' },
+  { id: 'bbq',      label: 'Grillades',    emoji: '🥩' },
+  { id: 'desserts', label: 'Desserts',     emoji: '🍰' },
+  { id: 'brunch',   label: 'Brunch',       emoji: '🥞' },
+];
+
+const DIETARY_OPTIONS = [
+  { id: 'veg',     label: 'Végétarien',  emoji: '🥦' },
+  { id: 'vegan',   label: 'Végan',       emoji: '🌱' },
+  { id: 'gluten',  label: 'Sans gluten', emoji: '🌾' },
+  { id: 'halal',   label: 'Halal',       emoji: '☪️' },
+  { id: 'lactose', label: 'Sans lactose',emoji: '🥛' },
+  { id: 'casher',  label: 'Casher',      emoji: '✡️' },
 ];
 
 export default function ProfileScreen() {
-  const { token, user: authUser, logout } = useAuth();
+  const { token, user: authUser, logout, updateUser } = useAuth();
   const [profile, setProfile] = useState<ProfileData | null>(null);
   const [collection, setCollection] = useState<CollectionItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [confirmLogout, setConfirmLogout] = useState(false);
+
+  // Preferences edit modal
+  const [showPrefModal, setShowPrefModal] = useState(false);
+  const [editCuisines, setEditCuisines] = useState<string[]>([]);
+  const [editDietary, setEditDietary] = useState<string[]>([]);
+  const [savingPrefs, setSavingPrefs] = useState(false);
 
   useFocusEffect(
     useCallback(() => {
@@ -60,12 +83,33 @@ export default function ProfileScreen() {
     }, [token]),
   );
 
+  const openPrefModal = () => {
+    const p = profile ?? authUser;
+    setEditCuisines((p?.cuisinePreferences ?? []).filter(x => x !== 'all'));
+    setEditDietary(p?.dietaryRestrictions ?? []);
+    setShowPrefModal(true);
+  };
+
+  const savePrefs = async () => {
+    setSavingPrefs(true);
+    await updateUser({
+      cuisinePreferences: editCuisines.length > 0 ? editCuisines : ['all'],
+      dietaryRestrictions: editDietary,
+    });
+    // Refresh profile
+    if (token) {
+      const res = await api.get<ProfileData>('/users/me', token);
+      if (res.data) setProfile(res.data);
+    }
+    setSavingPrefs(false);
+    setShowPrefModal(false);
+  };
+
+  const toggle = (id: string, list: string[], setList: React.Dispatch<React.SetStateAction<string[]>>) =>
+    setList(prev => prev.includes(id) ? prev.filter(x => x !== id) : [...prev, id]);
+
   if (loading) {
-    return (
-      <View style={styles.loader}>
-        <ActivityIndicator color="#E8C547" size="large" />
-      </View>
-    );
+    return <View style={styles.loader}><ActivityIndicator color="#E8C547" size="large" /></View>;
   }
 
   const p = profile ?? authUser;
@@ -76,9 +120,12 @@ export default function ProfileScreen() {
   const initials = (p?.username ?? 'U').slice(0, 2).toUpperCase();
   const stats = profile?._count;
 
+  const cuisinePrefs = (p?.cuisinePreferences ?? []).filter(x => x !== 'all');
+  const dietaryPrefs = p?.dietaryRestrictions ?? [];
+
   return (
     <View style={styles.container}>
-      {/* Modale de confirmation */}
+      {/* Logout modal */}
       <Modal visible={confirmLogout} transparent animationType="fade">
         <View style={styles.modalOverlay}>
           <View style={styles.modalBox}>
@@ -88,6 +135,57 @@ export default function ProfileScreen() {
               <Text style={styles.modalBtnDangerText}>Déconnexion</Text>
             </TouchableOpacity>
             <TouchableOpacity style={styles.modalBtnCancel} onPress={() => setConfirmLogout(false)}>
+              <Text style={styles.modalBtnCancelText}>Annuler</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
+
+      {/* Preferences edit modal */}
+      <Modal visible={showPrefModal} transparent animationType="slide">
+        <View style={styles.modalOverlay}>
+          <View style={[styles.modalBox, { maxHeight: '85%' }]}>
+            <Text style={styles.modalTitle}>Préférences alimentaires</Text>
+            <ScrollView showsVerticalScrollIndicator={false}>
+              <Text style={styles.prefModalSection}>Cuisines</Text>
+              <View style={styles.chipsWrap}>
+                {CUISINE_OPTIONS.map(c => (
+                  <TouchableOpacity
+                    key={c.id}
+                    style={[styles.chip, editCuisines.includes(c.id) && styles.chipActive]}
+                    onPress={() => toggle(c.id, editCuisines, setEditCuisines)}
+                  >
+                    <Text style={styles.chipEmoji}>{c.emoji}</Text>
+                    <Text style={[styles.chipLabel, editCuisines.includes(c.id) && styles.chipLabelActive]}>
+                      {c.label}
+                    </Text>
+                  </TouchableOpacity>
+                ))}
+              </View>
+
+              <Text style={[styles.prefModalSection, { marginTop: 20 }]}>Restrictions alimentaires</Text>
+              <View style={styles.chipsWrap}>
+                {DIETARY_OPTIONS.map(d => (
+                  <TouchableOpacity
+                    key={d.id}
+                    style={[styles.chip, editDietary.includes(d.id) && styles.chipActive]}
+                    onPress={() => toggle(d.id, editDietary, setEditDietary)}
+                  >
+                    <Text style={styles.chipEmoji}>{d.emoji}</Text>
+                    <Text style={[styles.chipLabel, editDietary.includes(d.id) && styles.chipLabelActive]}>
+                      {d.label}
+                    </Text>
+                  </TouchableOpacity>
+                ))}
+              </View>
+            </ScrollView>
+
+            <TouchableOpacity style={styles.modalBtnPrimary} onPress={savePrefs} disabled={savingPrefs}>
+              {savingPrefs
+                ? <ActivityIndicator color="#0A0A0A" />
+                : <Text style={styles.modalBtnPrimaryText}>Enregistrer</Text>}
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.modalBtnCancel} onPress={() => setShowPrefModal(false)}>
               <Text style={styles.modalBtnCancelText}>Annuler</Text>
             </TouchableOpacity>
           </View>
@@ -114,7 +212,6 @@ export default function ProfileScreen() {
             <Text style={styles.roleBadge}>{roleConfig.emoji} {roleConfig.label}</Text>
           </View>
           {p?.bio ? <Text style={styles.bio}>{p.bio}</Text> : null}
-
           <View style={styles.statsRow}>
             <View style={styles.stat}>
               <Text style={styles.statNum}>{profile?.certifiedVisits ?? 0}</Text>
@@ -162,13 +259,59 @@ export default function ProfileScreen() {
           </View>
           {nextRole && (
             <View style={styles.nextRoleBox}>
-              <Text style={styles.nextRoleText}>
-                Prochain : {nextRole.emoji} {nextRole.label}
-              </Text>
+              <Text style={styles.nextRoleText}>Prochain : {nextRole.emoji} {nextRole.label}</Text>
               <Text style={styles.nextRoleCount}>
                 {nextRole.min - (profile?.certifiedVisits ?? 0)} visites certifiées manquantes
               </Text>
             </View>
+          )}
+        </View>
+
+        {/* Préférences alimentaires */}
+        <View style={styles.section}>
+          <View style={styles.sectionHeader}>
+            <Text style={styles.sectionTitle}>Préférences alimentaires 🍽️</Text>
+            <TouchableOpacity style={styles.editBtn} onPress={openPrefModal}>
+              <Text style={styles.editBtnText}>Modifier</Text>
+            </TouchableOpacity>
+          </View>
+
+          {cuisinePrefs.length > 0 ? (
+            <>
+              <Text style={styles.prefSubtitle}>Cuisines</Text>
+              <View style={styles.prefsRow}>
+                {cuisinePrefs.map(pref => {
+                  const opt = CUISINE_OPTIONS.find(c => c.id === pref);
+                  return (
+                    <View key={pref} style={styles.prefChip}>
+                      {opt && <Text style={styles.prefChipEmoji}>{opt.emoji}</Text>}
+                      <Text style={styles.prefChipText}>{opt?.label ?? pref}</Text>
+                    </View>
+                  );
+                })}
+              </View>
+            </>
+          ) : (
+            <TouchableOpacity style={styles.emptyPrefs} onPress={openPrefModal}>
+              <Text style={styles.emptyPrefsText}>Ajouter mes préférences de cuisine →</Text>
+            </TouchableOpacity>
+          )}
+
+          {dietaryPrefs.length > 0 && (
+            <>
+              <Text style={[styles.prefSubtitle, { marginTop: 14 }]}>Restrictions</Text>
+              <View style={styles.prefsRow}>
+                {dietaryPrefs.map(pref => {
+                  const opt = DIETARY_OPTIONS.find(d => d.id === pref);
+                  return (
+                    <View key={pref} style={[styles.prefChip, styles.prefChipDietary]}>
+                      {opt && <Text style={styles.prefChipEmoji}>{opt.emoji}</Text>}
+                      <Text style={[styles.prefChipText, styles.prefChipTextDietary]}>{opt?.label ?? pref}</Text>
+                    </View>
+                  );
+                })}
+              </View>
+            </>
           )}
         </View>
 
@@ -192,9 +335,7 @@ export default function ProfileScreen() {
                       : '🍽️'}
                   </Text>
                   <View style={styles.collectionInfo}>
-                    <Text style={styles.collectionName} numberOfLines={1}>
-                      {item.restaurant!.name}
-                    </Text>
+                    <Text style={styles.collectionName} numberOfLines={1}>{item.restaurant!.name}</Text>
                     <Text style={styles.collectionCity}>{item.restaurant!.city}</Text>
                   </View>
                 </View>
@@ -203,25 +344,10 @@ export default function ProfileScreen() {
           )}
         </View>
 
-        {/* Préférences */}
-        {(p?.cuisinePreferences ?? []).filter(x => x !== 'all').length > 0 && (
-          <View style={styles.section}>
-            <Text style={styles.sectionTitle}>Préférences</Text>
-            <View style={styles.prefsRow}>
-              {(p?.cuisinePreferences ?? []).filter(x => x !== 'all').map(pref => (
-                <View key={pref} style={styles.prefChip}>
-                  <Text style={styles.prefChipText}>{pref}</Text>
-                </View>
-              ))}
-            </View>
-          </View>
-        )}
-
-        {/* Déconnexion */}
+        {/* Logout */}
         <TouchableOpacity style={styles.logoutBtn} onPress={() => setConfirmLogout(true)}>
           <Text style={styles.logoutText}>Se déconnecter</Text>
         </TouchableOpacity>
-
         <View style={{ height: 32 }} />
       </ScrollView>
     </View>
@@ -249,8 +375,7 @@ const styles = StyleSheet.create({
   roleBadgeWrap: { marginBottom: 10 },
   roleBadge: {
     color: '#0A0A0A', backgroundColor: '#E8C547',
-    paddingHorizontal: 14, paddingVertical: 5, borderRadius: 20,
-    fontSize: 13, fontWeight: '700',
+    paddingHorizontal: 14, paddingVertical: 5, borderRadius: 20, fontSize: 13, fontWeight: '700',
   },
   bio: { color: '#888', fontSize: 14, textAlign: 'center', lineHeight: 20, marginBottom: 16 },
   statsRow: { flexDirection: 'row', gap: 24, alignItems: 'center', marginTop: 8 },
@@ -258,8 +383,48 @@ const styles = StyleSheet.create({
   statNum: { color: '#fff', fontSize: 20, fontWeight: '800' },
   statLabel: { color: '#666', fontSize: 12, marginTop: 2 },
   statDivider: { width: 1, height: 30, backgroundColor: '#2A2A2A' },
+
   section: { paddingHorizontal: 20, paddingBottom: 28 },
-  sectionTitle: { color: '#fff', fontSize: 18, fontWeight: '700', marginBottom: 16 },
+  sectionHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 },
+  sectionTitle: { color: '#fff', fontSize: 18, fontWeight: '700' },
+  editBtn: {
+    backgroundColor: 'rgba(232,197,71,0.12)', borderWidth: 1, borderColor: '#E8C547',
+    paddingHorizontal: 14, paddingVertical: 6, borderRadius: 20,
+  },
+  editBtnText: { color: '#E8C547', fontSize: 13, fontWeight: '700' },
+
+  // ── Prefs ──
+  prefSubtitle: { color: '#666', fontSize: 12, fontWeight: '600', marginBottom: 8 },
+  prefsRow: { flexDirection: 'row', flexWrap: 'wrap', gap: 8 },
+  prefChip: {
+    flexDirection: 'row', alignItems: 'center', gap: 6,
+    backgroundColor: 'rgba(232,197,71,0.12)', borderWidth: 1.5, borderColor: '#E8C547',
+    paddingHorizontal: 12, paddingVertical: 6, borderRadius: 20,
+  },
+  prefChipDietary: { backgroundColor: 'rgba(0,200,100,0.08)', borderColor: '#00C864' },
+  prefChipEmoji: { fontSize: 14 },
+  prefChipText: { color: '#E8C547', fontSize: 13, fontWeight: '600' },
+  prefChipTextDietary: { color: '#00C864' },
+  emptyPrefs: {
+    borderWidth: 1.5, borderStyle: 'dashed', borderColor: '#2A2A2A',
+    borderRadius: 14, padding: 16, alignItems: 'center',
+  },
+  emptyPrefsText: { color: '#555', fontSize: 14 },
+
+  // ── Modal prefs ──
+  prefModalSection: { color: '#888', fontSize: 13, fontWeight: '600', marginBottom: 12 },
+  chipsWrap: { flexDirection: 'row', flexWrap: 'wrap', gap: 10 },
+  chip: {
+    flexDirection: 'row', alignItems: 'center', gap: 6,
+    backgroundColor: '#141414', paddingHorizontal: 14, paddingVertical: 10,
+    borderRadius: 50, borderWidth: 1.5, borderColor: '#2A2A2A',
+  },
+  chipActive: { backgroundColor: 'rgba(232,197,71,0.15)', borderColor: '#E8C547' },
+  chipEmoji: { fontSize: 18 },
+  chipLabel: { color: '#888', fontSize: 14, fontWeight: '600' },
+  chipLabelActive: { color: '#E8C547' },
+
+  // ── Progression ──
   roleTrack: { flexDirection: 'row', alignItems: 'center', marginBottom: 8 },
   roleStep: { flexDirection: 'row', alignItems: 'center', flex: 1 },
   roleCircle: {
@@ -280,6 +445,8 @@ const styles = StyleSheet.create({
   },
   nextRoleText: { color: '#fff', fontWeight: '700', fontSize: 14 },
   nextRoleCount: { color: '#E8C547', fontSize: 12, marginTop: 4 },
+
+  // ── Collection ──
   emptyBox: { alignItems: 'center', paddingVertical: 24, gap: 8 },
   emptyBoxEmoji: { fontSize: 40 },
   emptyBoxText: { color: '#555', fontSize: 14, textAlign: 'center', lineHeight: 20 },
@@ -292,33 +459,26 @@ const styles = StyleSheet.create({
   collectionInfo: { flex: 1 },
   collectionName: { color: '#fff', fontWeight: '700', fontSize: 13 },
   collectionCity: { color: '#666', fontSize: 11, marginTop: 2 },
-  prefsRow: { flexDirection: 'row', flexWrap: 'wrap', gap: 8 },
-  prefChip: {
-    backgroundColor: 'rgba(232,197,71,0.12)', borderWidth: 1.5, borderColor: '#E8C547',
-    paddingHorizontal: 12, paddingVertical: 6, borderRadius: 20,
-  },
-  prefChipText: { color: '#E8C547', fontSize: 13, fontWeight: '600' },
+
+  // ── Logout ──
   logoutBtn: {
     marginHorizontal: 20, paddingVertical: 14, borderRadius: 14,
     borderWidth: 1.5, borderColor: '#FF4458', alignItems: 'center',
   },
   logoutText: { color: '#FF4458', fontWeight: '700', fontSize: 15 },
+
+  // ── Modals ──
   modalOverlay: {
     flex: 1, backgroundColor: 'rgba(0,0,0,0.75)',
-    justifyContent: 'center', alignItems: 'center', padding: 32,
+    justifyContent: 'center', alignItems: 'center', padding: 24,
   },
-  modalBox: {
-    backgroundColor: '#1A1A1A', borderRadius: 20, padding: 24,
-    width: '100%', gap: 12,
-  },
+  modalBox: { backgroundColor: '#1A1A1A', borderRadius: 20, padding: 24, width: '100%', gap: 12 },
   modalTitle: { color: '#fff', fontSize: 20, fontWeight: '800', textAlign: 'center' },
   modalSub: { color: '#666', fontSize: 14, textAlign: 'center', marginBottom: 4 },
-  modalBtnDanger: {
-    backgroundColor: '#FF4458', paddingVertical: 14, borderRadius: 12, alignItems: 'center',
-  },
+  modalBtnPrimary: { backgroundColor: '#E8C547', paddingVertical: 14, borderRadius: 12, alignItems: 'center' },
+  modalBtnPrimaryText: { color: '#0A0A0A', fontWeight: '800', fontSize: 16 },
+  modalBtnDanger: { backgroundColor: '#FF4458', paddingVertical: 14, borderRadius: 12, alignItems: 'center' },
   modalBtnDangerText: { color: '#fff', fontWeight: '800', fontSize: 16 },
-  modalBtnCancel: {
-    backgroundColor: '#2A2A2A', paddingVertical: 14, borderRadius: 12, alignItems: 'center',
-  },
+  modalBtnCancel: { backgroundColor: '#2A2A2A', paddingVertical: 14, borderRadius: 12, alignItems: 'center' },
   modalBtnCancelText: { color: '#888', fontWeight: '600', fontSize: 15 },
 });
