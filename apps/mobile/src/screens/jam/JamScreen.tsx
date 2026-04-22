@@ -4,7 +4,6 @@ import { View, Text, TouchableOpacity, StyleSheet, SafeAreaView } from 'react-na
 type JamState = 'lobby' | 'countdown' | 'swiping';
 
 export default function JamScreen({ route, navigation }: any) {
-  const mode = route?.params?.mode ?? 'restaurant';
   const [state, setState] = useState<JamState>('lobby');
   const [participants] = useState([
     { id: '1', username: 'gastronaute_paris', avatar: 'GP', ready: true },

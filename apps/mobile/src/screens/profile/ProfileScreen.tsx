@@ -318,6 +318,4 @@ const styles = StyleSheet.create({
   modalBtnCancelText: { color: '#888', fontWeight: '600', fontSize: 15 },
   collectionName: { color: '#ba0b2f', fontWeight: '700', fontSize: 13 },
   collectionCity: { color: 'rgba(186,11,47,0.8)', fontSize: 11, marginTop: 2 },
-  collectionStars: { flexDirection: 'row', marginTop: 4 },
-  collectionStar: { fontSize: 10 },
 });

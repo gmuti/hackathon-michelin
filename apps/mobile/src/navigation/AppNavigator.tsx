@@ -1,15 +1,13 @@
 import React from 'react';
-import { View, ActivityIndicator } from 'react-native';
+import { ActivityIndicator, Text, View } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { Text, View } from 'react-native';
 
 import RestaurantLogo from '../../logo/restaurant.svg';
 import HotelLogo from '../../logo/hotel.svg';
 import CommunityLogo from '../../logo/communaute.svg';
 import ProfileLogo from '../../logo/profil.svg';
-import { Text } from 'react-native';
 
 import { useAuth } from '../context/AuthContext';
 
@@ -78,8 +76,8 @@ export default function AppNavigator() {
 
   if (isLoading) {
     return (
-      <View style={{ flex: 1, backgroundColor: '#0A0A0A', justifyContent: 'center', alignItems: 'center' }}>
-        <ActivityIndicator color="#E8C547" size="large" />
+      <View style={{ flex: 1, backgroundColor: '#fff', justifyContent: 'center', alignItems: 'center' }}>
+        <ActivityIndicator color="#ba0b2f" size="large" />
       </View>
     );
   }
