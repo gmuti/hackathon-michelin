@@ -2,7 +2,12 @@ import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { Text, View } from 'react-native';
+
+import RestaurantLogo from '../../logo/restaurant.svg';
+import HotelLogo from '../../logo/hotel.svg';
+import CommunityLogo from '../../logo/communaute.svg';
+import ProfileLogo from '../../logo/profil.svg';
 
 import SwipeScreen from '../screens/swipe/SwipeScreen';
 import ProfileScreen from '../screens/profile/ProfileScreen';
@@ -11,8 +16,8 @@ import OnboardingScreen from '../screens/onboarding/OnboardingScreen';
 import JamScreen from '../screens/jam/JamScreen';
 
 export type RootTabParamList = {
-  Restaurants: undefined;
-  Hotels: undefined;
+  Restaurants: { mode: 'restaurant' } | undefined;
+  Hotels: { mode: 'hotel' } | undefined;
   Community: undefined;
   Profile: undefined;
 };
@@ -20,11 +25,11 @@ export type RootTabParamList = {
 const Tab = createBottomTabNavigator<RootTabParamList>();
 const Stack = createNativeStackNavigator();
 
-const TAB_ICONS: Record<string, string> = {
-  Restaurants: '🍽️',
-  Hotels: '🏨',
-  Community: '👥',
-  Profile: '👤',
+const TAB_ICONS: Record<string, React.ComponentType<any>> = {
+  Restaurants: RestaurantLogo,
+  Hotels: HotelLogo,
+  Community: CommunityLogo,
+  Profile: ProfileLogo,
 };
 
 function TabNavigator() {
@@ -33,22 +38,25 @@ function TabNavigator() {
       screenOptions={({ route }) => ({
         headerShown: false,
         tabBarStyle: {
-          backgroundColor: '#0D0D0D',
-          borderTopColor: '#1C1C1C',
+          backgroundColor: '#fff',
+          borderTopColor: '#ba0b2f',
           height: 80,
           paddingBottom: 16,
           paddingTop: 8,
         },
-        tabBarActiveTintColor: '#E8C547',
-        tabBarInactiveTintColor: '#444',
+        tabBarActiveTintColor: '#ba0b2f',
+        tabBarInactiveTintColor: 'rgba(186,11,47,0.55)',
         tabBarLabel: ({ color }) => (
-          <Text style={{ color, fontSize: 10, fontWeight: '600' }}>{route.name}</Text>
+          <Text style={{ color, fontSize: 10, fontWeight: '700' }}>{route.name}</Text>
         ),
-        tabBarIcon: ({ color }) => (
-          <Text style={{ fontSize: 22, opacity: color === '#E8C547' ? 1 : 0.5 }}>
-            {TAB_ICONS[route.name]}
-          </Text>
-        ),
+        tabBarIcon: () => {
+          const Logo = TAB_ICONS[route.name];
+          return (
+            <View style={{ alignItems: 'center', justifyContent: 'center' }}>
+              <Logo width={32} height={32} fill="#ba0b2f" />
+            </View>
+          );
+        },
       })}
     >
       <Tab.Screen name="Restaurants" component={SwipeScreen} initialParams={{ mode: 'restaurant' }} />

@@ -18,6 +18,8 @@
     "typescript": "^5.4.0"
   },
   "dependencies": {
-    "caniuse-lite": "^1.0.30001790"
+    "caniuse-lite": "^1.0.30001790",
+    "react-native-svg": "^15.15.4",
+    "react-native-svg-transformer": "^1.5.3"
   }
 }
