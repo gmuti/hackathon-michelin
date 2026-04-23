@@ -4,10 +4,11 @@ import {
   Animated, PanResponder, StatusBar, SafeAreaView,
   ActivityIndicator, TextInput, ScrollView, Modal, Linking,
 } from 'react-native';
-import MiniMap from '../../components/MiniMap';
 import * as Location from 'expo-location';
 import { useAuth } from '../../context/AuthContext';
 import { api } from '../../config/api';
+import MiniMap from "../../components/MiniMap.web";
+import { MichelinStar, MichelinStars } from '../../components/MichelinStar';
 
 const { width: W, height: H } = Dimensions.get('window');
 const SWIPE_THRESHOLD = W * 0.3;
@@ -592,7 +593,10 @@ export default function SwipeScreen({ route, navigation }: any) {
       {/* Match modal trigger if we have matches */}
       <TouchableOpacity style={[styles.reloadBtn, { marginTop: 10, backgroundColor: '#fff' }]}
         onPress={() => loadMatches()}>
-        <Text style={[styles.reloadBtnText, { color: '#ba0b2f' }]}>⭐ Voir mes favoris</Text>
+        <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
+          <MichelinStar size={15} />
+          <Text style={[styles.reloadBtnText, { color: '#ba0b2f' }]}>Voir mes favoris</Text>
+        </View>
       </TouchableOpacity>
     </View>
   );
@@ -674,13 +678,7 @@ export default function SwipeScreen({ route, navigation }: any) {
 
         {/* Card info overlay */}
         <View style={styles.gradient}>
-          {stars > 0 && (
-            <View style={styles.starsRow}>
-              {Array.from({ length: Math.min(stars, 3) }).map((_, i) => (
-                <Text key={i} style={styles.star}>⭐</Text>
-              ))}
-            </View>
-          )}
+          {stars > 0 && <MichelinStars count={stars} size={14} style={styles.starsRow} />}
           <Text style={styles.cardName}>{card.name}</Text>
           <View style={styles.cardMeta}>
             <Text style={styles.cardCity}>📍 {card.city}</Text>
@@ -709,7 +707,7 @@ export default function SwipeScreen({ route, navigation }: any) {
           <Text style={styles.indicatorText}>❌</Text>
         </Animated.View>
         <Animated.View style={[styles.indicator, styles.indicatorSuper, { opacity: superOpacity }]}>
-          <Text style={styles.indicatorText}>⭐</Text>
+          <MichelinStar size={28} />
         </Animated.View>
       </Animated.View>
 
@@ -719,7 +717,7 @@ export default function SwipeScreen({ route, navigation }: any) {
           <Text style={styles.actionIcon}>✕</Text>
         </TouchableOpacity>
         <TouchableOpacity style={[styles.actionBtn, styles.actionSuper]} onPress={() => swipeCard('up')}>
-          <Text style={styles.actionIcon}>⭐</Text>
+          <MichelinStar size={24} />
         </TouchableOpacity>
         <TouchableOpacity style={[styles.actionBtn, styles.actionLike]} onPress={() => swipeCard('right')}>
           <Text style={styles.actionIcon}>💛</Text>
@@ -737,9 +735,7 @@ export default function SwipeScreen({ route, navigation }: any) {
           <ScrollView style={styles.detailScroll} contentContainerStyle={styles.detailContent}>
             {/* Name + stars */}
             <Text style={styles.detailName}>{card.name}</Text>
-            {stars > 0 && (
-              <Text style={styles.detailStars}>{'⭐'.repeat(Math.min(stars, 3))}</Text>
-            )}
+            {stars > 0 && <MichelinStars count={stars} size={20} style={{ marginBottom: 16 }} />}
 
             {/* Chef */}
             {restaurant?.chef && (
@@ -802,7 +798,10 @@ export default function SwipeScreen({ route, navigation }: any) {
             {/* Reviews */}
             {reviews.length > 0 && (
               <>
-                <Text style={styles.detailSectionTitle}>⭐ Avis</Text>
+                <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6, marginVertical: 16 }}>
+                  <MichelinStar size={14} />
+                  <Text style={[styles.detailSectionTitle, { marginVertical: 0 }]}>Avis</Text>
+                </View>
                 <View style={styles.ratingBig}>
                   <Text style={styles.ratingBigNum}>{wRating.toFixed(1)}</Text>
                   <Text style={styles.ratingBigSub}>score pondéré · {reviews.length} avis certifiés</Text>
@@ -854,14 +853,20 @@ export default function SwipeScreen({ route, navigation }: any) {
       <Modal visible={showMatchModal} animationType="fade" transparent onRequestClose={() => setShowMatchModal(false)}>
         <View style={styles.matchOverlay}>
           <View style={styles.matchBox}>
-            <Text style={styles.matchTitle}>⭐ Tes Matches</Text>
+            <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 8, marginBottom: 6 }}>
+              <MichelinStar size={20} />
+              <Text style={[styles.matchTitle, { marginBottom: 0 }]}>Tes Matches</Text>
+              <MichelinStar size={20} />
+            </View>
             <Text style={styles.matchSub}>Basés sur ton historique de swipe</Text>
             <ScrollView style={{ maxHeight: 350 }}>
               {matches.map((m, idx) => {
                 const isSuperLike = (m as any).isSuperLike;
                 return (
                   <View key={m.id} style={styles.matchItem}>
-                    <Text style={styles.matchItemEmoji}>{isSuperLike ? '⭐' : '❤️'}</Text>
+                    {isSuperLike
+                      ? <MichelinStar size={24} />
+                      : <Text style={styles.matchItemEmoji}>❤️</Text>}
                     <View style={styles.matchItemInfo}>
                       <Text style={styles.matchItemName}>{m.name}</Text>
                       <Text style={styles.matchItemSub}>{m.city}</Text>
@@ -911,9 +916,9 @@ const styles = StyleSheet.create({
   // ── Inputs ──
   cityRow: { flexDirection: 'row', gap: 10, alignItems: 'center' },
   input: {
-    backgroundColor: '#fff', borderWidth: 1.5, borderColor: '#ba0b2f',
+    backgroundColor: '#f7f7f7', borderWidth: 1.5, borderColor: '#ba0b2f',
     borderRadius: 14, paddingHorizontal: 16, paddingVertical: 15,
-    color: '#1A1A1A', fontSize: 16, marginBottom: 8,
+    color: '#000000', fontSize: 16, marginBottom: 8,
   },
   gpsBtn: {
     width: 52, height: 52, borderRadius: 14, backgroundColor: '#fff',
@@ -942,7 +947,7 @@ const styles = StyleSheet.create({
     borderWidth: 1.5, borderColor: '#ba0b2f', alignItems: 'center', justifyContent: 'center',
   },
   counterBtnText: { color: '#ba0b2f', fontSize: 22, fontWeight: '700' },
-  counterValue: { color: '#fff', fontSize: 18, fontWeight: '700', flex: 1, textAlign: 'center' },
+  counterValue: { color: '#1A1A1A', fontSize: 18, fontWeight: '700', flex: 1, textAlign: 'center' },
 
   // ── Chips ──
   chipsWrap: { flexDirection: 'row', flexWrap: 'wrap', gap: 10 },
@@ -1052,53 +1057,53 @@ const styles = StyleSheet.create({
   reloadBtnText: { color: '#fff', fontWeight: '700', fontSize: 15 },
 
   // ── Detail Modal ──
-  detailModal: { flex: 1, backgroundColor: '#fff' },
+  detailModal: { flex: 1, backgroundColor: '#0A0A0A' },
   detailSafe: { backgroundColor: '#0D0D0D' },
   detailClose: { paddingHorizontal: 20, paddingVertical: 14 },
   detailCloseText: { color: '#ba0b2f', fontWeight: '700', fontSize: 15 },
   detailScroll: { flex: 1 },
   detailContent: { paddingHorizontal: 20, paddingBottom: 40 },
-  detailName: { color: '#fff', fontSize: 28, fontWeight: '900', letterSpacing: -0.5, marginBottom: 6 },
+  detailName: { color: '#ffffff', fontSize: 28, fontWeight: '900', letterSpacing: -0.5, marginBottom: 6 },
   detailStars: { fontSize: 20, marginBottom: 16 },
   detailRow: { flexDirection: 'row', alignItems: 'flex-start', gap: 14, marginBottom: 20 },
   detailIcon: { fontSize: 24, marginTop: 2 },
-  detailRowLabel: { color: '#666', fontSize: 12, fontWeight: '600', marginBottom: 2 },
-  detailRowValue: { color: '#fff', fontSize: 15, fontWeight: '600' },
+  detailRowLabel: { color: '#888', fontSize: 12, fontWeight: '600', marginBottom: 2 },
+  detailRowValue: { color: '#ffffff', fontSize: 15, fontWeight: '600' },
   detailSectionTitle: { color: '#ba0b2f', fontSize: 14, fontWeight: '800', letterSpacing: 1, marginVertical: 16 },
   miniMap: { marginBottom: 8 },
   detailAddress: { color: '#888', fontSize: 13, marginBottom: 16 },
 
   // ── Hours ──
-  hoursRow: { flexDirection: 'row', justifyContent: 'space-between', paddingVertical: 6, borderBottomWidth: 1, borderBottomColor: '#1A1A1A' },
-  hoursDay: { color: '#fff', fontSize: 14, fontWeight: '600', width: 100 },
+  hoursRow: { flexDirection: 'row', justifyContent: 'space-between', paddingVertical: 6, borderBottomWidth: 1, borderBottomColor: '#2A2A2A' },
+  hoursDay: { color: '#ffffff', fontSize: 14, fontWeight: '600', width: 100 },
   hoursValue: { color: '#aaa', fontSize: 13, flex: 1, textAlign: 'right' },
   hoursClosed: { color: '#FF4458' },
 
   // ── Amenities ──
   amenitiesWrap: { flexDirection: 'row', flexWrap: 'wrap', gap: 8, marginBottom: 8 },
-  amenityChip: { backgroundColor: '#1A1A1A', paddingHorizontal: 12, paddingVertical: 6, borderRadius: 20, borderWidth: 1, borderColor: '#2A2A2A' },
-  amenityChipText: { color: '#aaa', fontSize: 13 },
+  amenityChip: { backgroundColor: '#1A1A1A', paddingHorizontal: 12, paddingVertical: 6, borderRadius: 20, borderWidth: 1, borderColor: '#333' },
+  amenityChipText: { color: '#ccc', fontSize: 13 },
 
   // ── Reviews ──
   ratingBig: {
     backgroundColor: '#1A1A1A', borderRadius: 16, padding: 16, alignItems: 'center',
-    marginBottom: 16, borderWidth: 1, borderColor: '#2A2A2A',
+    marginBottom: 16, borderWidth: 1, borderColor: '#333',
   },
   ratingBigNum: { color: '#ba0b2f', fontSize: 42, fontWeight: '900' },
-  ratingBigSub: { color: '#666', fontSize: 12, marginTop: 4 },
+  ratingBigSub: { color: '#888', fontSize: 12, marginTop: 4 },
   reviewCard: {
     backgroundColor: '#141414', borderRadius: 14, padding: 16, marginBottom: 10,
-    borderWidth: 1, borderColor: '#1E1E1E',
+    borderWidth: 1, borderColor: '#222',
   },
   reviewHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 4 },
   reviewUser: { color: '#ba0b2f', fontWeight: '700', fontSize: 13 },
-  reviewBadge: { color: '#666', fontSize: 11, backgroundColor: '#1A1A1A', paddingHorizontal: 8, paddingVertical: 3, borderRadius: 10 },
+  reviewBadge: { color: '#999', fontSize: 11, backgroundColor: '#1A1A1A', paddingHorizontal: 8, paddingVertical: 3, borderRadius: 10 },
   reviewRating: { color: '#FFD700', fontSize: 13, marginBottom: 6 },
   reviewContent: { color: '#ccc', fontSize: 14, lineHeight: 20 },
-  reviewLikes: { color: '#666', fontSize: 12, marginTop: 8 },
+  reviewLikes: { color: '#888', fontSize: 12, marginTop: 8 },
 
   // ── Contact ──
-  contactRow: { flexDirection: 'row', alignItems: 'center', gap: 12, paddingVertical: 12, borderBottomWidth: 1, borderBottomColor: '#1A1A1A' },
+  contactRow: { flexDirection: 'row', alignItems: 'center', gap: 12, paddingVertical: 12, borderBottomWidth: 1, borderBottomColor: '#2A2A2A' },
   contactIcon: { fontSize: 20 },
   contactValue: { color: '#ba0b2f', fontSize: 14, fontWeight: '600', flex: 1 },
 

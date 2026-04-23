@@ -7,6 +7,7 @@ import MapView, { Marker, PROVIDER_DEFAULT } from 'react-native-maps';
 import * as Location from 'expo-location';
 import { useAuth } from '../../context/AuthContext';
 import { api } from '../../config/api';
+import { MichelinStars } from '../../components/MichelinStar';
 
 const { width: W, height: H } = Dimensions.get('window');
 
@@ -158,7 +159,7 @@ export default function MapScreen({ route, navigation }: any) {
                       <Text style={styles.markerEmoji}>{emoji}</Text>
                       {stars > 0 && (
                         <View style={styles.markerBadge}>
-                          <Text style={styles.markerBadgeText}>{'⭐'.repeat(Math.min(stars, 3))}</Text>
+                          <MichelinStars count={stars} size={8} white />
                         </View>
                       )}
                     </View>
@@ -177,9 +178,7 @@ export default function MapScreen({ route, navigation }: any) {
                     : `${(selectedPin as HotelPin).pricePerNight}€/nuit`}
                 </Text>
                 {isRestaurant && (selectedPin as RestaurantPin).michelinStars > 0 && (
-                  <Text style={styles.pinTooltipStars}>
-                    {'⭐'.repeat(Math.min((selectedPin as RestaurantPin).michelinStars, 3))}
-                  </Text>
+                  <MichelinStars count={(selectedPin as RestaurantPin).michelinStars} size={14} style={{ marginTop: 4 }} />
                 )}
                 <TouchableOpacity style={styles.pinTooltipClose} onPress={() => setSelectedPin(null)}>
                   <Text style={styles.pinTooltipCloseText}>✕</Text>
@@ -239,9 +238,7 @@ export default function MapScreen({ route, navigation }: any) {
                     </Text>
                   </View>
                   {isRestaurant && (item as RestaurantPin).michelinStars > 0 && (
-                    <Text style={styles.searchItemStars}>
-                      {'⭐'.repeat(Math.min((item as RestaurantPin).michelinStars, 3))}
-                    </Text>
+                    <MichelinStars count={(item as RestaurantPin).michelinStars} size={14} />
                   )}
                 </TouchableOpacity>
               ))}

@@ -6,6 +6,7 @@ import {
 import * as Location from 'expo-location';
 import { useAuth } from '../../context/AuthContext';
 import { api } from '../../config/api';
+import { MichelinStars, michelinStarsHtml } from '../../components/MichelinStar';
 
 const { width: W } = Dimensions.get('window');
 
@@ -37,7 +38,7 @@ function makeLeafletHtml(pins: AnyPin[], isRestaurant: boolean, centerLat: numbe
     const emoji = isRestaurant ? cuisineEmoji((p as RestaurantPin).cuisineType) : '🏨';
     const stars = isRestaurant ? (p as RestaurantPin).michelinStars : (p as HotelPin).stars;
     const starsHtml = stars > 0
-      ? `<span style="font-size:10px;position:absolute;top:-4px;right:-4px;background:#ba0b2f;border-radius:8px;padding:0 3px;color:#000;font-weight:bold;">${'⭐'.repeat(Math.min(stars, 3))}</span>`
+      ? `<span style="position:absolute;top:-4px;right:-4px;background:#ba0b2f;border-radius:8px;padding:1px 3px;display:inline-flex;align-items:center;gap:1px;">${michelinStarsHtml(stars, 8, '#ffffff')}</span>`
       : '';
     const label = `<div style="position:relative;display:inline-block;font-size:28px;line-height:1;">${emoji}${starsHtml}</div>`;
     return `
@@ -219,9 +220,7 @@ export default function MapScreen({ route, navigation }: any) {
                     : `${(selectedPin as HotelPin).pricePerNight}€/nuit`}
                 </Text>
                 {isRestaurant && (selectedPin as RestaurantPin).michelinStars > 0 && (
-                  <Text style={styles.pinTooltipStars}>
-                    {'⭐'.repeat(Math.min((selectedPin as RestaurantPin).michelinStars, 3))}
-                  </Text>
+                  <MichelinStars count={(selectedPin as RestaurantPin).michelinStars} size={14} style={{ marginTop: 4 }} />
                 )}
                 <TouchableOpacity style={styles.pinTooltipClose} onPress={() => setSelectedPin(null)}>
                   <Text style={styles.pinTooltipCloseText}>✕</Text>
@@ -282,9 +281,7 @@ export default function MapScreen({ route, navigation }: any) {
                     </Text>
                   </View>
                   {isRestaurant && (item as RestaurantPin).michelinStars > 0 && (
-                    <Text style={styles.searchItemStars}>
-                      {'⭐'.repeat(Math.min((item as RestaurantPin).michelinStars, 3))}
-                    </Text>
+                    <MichelinStars count={(item as RestaurantPin).michelinStars} size={14} />
                   )}
                 </TouchableOpacity>
               ))}
@@ -331,14 +328,14 @@ const styles = StyleSheet.create({
   pinTooltip: {
     position: 'absolute', bottom: 60, left: 16, right: 16,
     backgroundColor: '#fff', borderRadius: 16, padding: 16,
-    borderWidth: 1, borderColor: '#2A2A2A',
+    borderWidth: 1, borderColor: 'rgba(186,11,47,0.2)',
     shadowColor: '#000', shadowOffset: { width: 0, height: 4 }, shadowOpacity: 0.4, shadowRadius: 12,
   },
-  pinTooltipName: { color: '#fff', fontSize: 16, fontWeight: '800', marginBottom: 4 },
-  pinTooltipSub: { color: '#888', fontSize: 13 },
+  pinTooltipName: { color: '#1A1A1A', fontSize: 16, fontWeight: '800', marginBottom: 4 },
+  pinTooltipSub: { color: '#666', fontSize: 13 },
   pinTooltipStars: { fontSize: 14, marginTop: 4 },
   pinTooltipClose: { position: 'absolute', top: 12, right: 16, padding: 4 },
-  pinTooltipCloseText: { color: '#666', fontSize: 18 },
+  pinTooltipCloseText: { color: '#999', fontSize: 18 },
 
   legend: {
     position: 'absolute', top: 12, left: 12,
@@ -349,9 +346,9 @@ const styles = StyleSheet.create({
 
   searchContainer: { flex: 1, paddingHorizontal: 16, paddingTop: 8 },
   searchInput: {
-    backgroundColor: '#fff', borderWidth: 1.5, borderColor: '#2A2A2A',
+    backgroundColor: '#f7f7f7', borderWidth: 1.5, borderColor: '#ba0b2f',
     borderRadius: 14, paddingHorizontal: 16, paddingVertical: 14,
-    color: '#fff', fontSize: 16, marginBottom: 12,
+    color: '#000000', fontSize: 16, marginBottom: 12,
   },
   searchHint: { alignItems: 'center', paddingTop: 60, gap: 12 },
   searchHintEmoji: { fontSize: 48 },
@@ -359,11 +356,11 @@ const styles = StyleSheet.create({
   searchResults: { flex: 1 },
   searchItem: {
     flexDirection: 'row', alignItems: 'center', gap: 12,
-    paddingVertical: 14, borderBottomWidth: 1, borderBottomColor: '#fff',
+    paddingVertical: 14, borderBottomWidth: 1, borderBottomColor: '#eee',
   },
   searchItemEmoji: { fontSize: 28, width: 40, textAlign: 'center' },
   searchItemInfo: { flex: 1 },
-  searchItemName: { color: '#fff', fontSize: 15, fontWeight: '700' },
+  searchItemName: { color: '#1A1A1A', fontSize: 15, fontWeight: '700' },
   searchItemSub: { color: '#666', fontSize: 12, marginTop: 2 },
   searchItemStars: { fontSize: 14 },
   noResults: { paddingTop: 32, alignItems: 'center' },

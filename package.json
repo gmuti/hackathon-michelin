@@ -14,12 +14,12 @@
     "lint": "turbo run lint"
   },
   "devDependencies": {
+    "react-native-svg-transformer": "^1.5.3",
     "turbo": "^2.0.0",
     "typescript": "^5.4.0"
   },
   "dependencies": {
     "caniuse-lite": "^1.0.30001790",
-    "react-native-svg": "^15.15.4",
-    "react-native-svg-transformer": "^1.5.3"
+    "react-native-svg": "^15.15.4"
   }
 }

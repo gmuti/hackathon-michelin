@@ -8,6 +8,8 @@ import SettingsIcon from '../../../logo/settings.svg';
 import { useFocusEffect } from '@react-navigation/native';
 import { useAuth } from '../../context/AuthContext';
 import { api } from '../../config/api';
+import { MichelinStars } from '../../components/MichelinStar';
+import CalendarSuggestionsModal from '../calendar/CalendarSuggestionsModal';
 
 type ProfileData = {
   id: string;
@@ -63,6 +65,7 @@ export default function ProfileScreen() {
   const [collection, setCollection] = useState<CollectionItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [confirmLogout, setConfirmLogout] = useState(false);
+  const [showCalendarModal, setShowCalendarModal] = useState(false);
 
   // Preferences edit modal
   const [showPrefModal, setShowPrefModal] = useState(false);
@@ -131,6 +134,12 @@ export default function ProfileScreen() {
 
   return (
     <View style={styles.container}>
+      {/* Calendar connector modal */}
+      <CalendarSuggestionsModal
+        visible={showCalendarModal}
+        onClose={() => setShowCalendarModal(false)}
+      />
+
       {/* Logout modal */}
       <Modal visible={confirmLogout} transparent animationType="fade">
         <View style={styles.modalOverlay}>
@@ -335,11 +344,9 @@ export default function ProfileScreen() {
             <View style={styles.collectionGrid}>
               {collection.filter(item => item.restaurant).map(item => (
                 <View key={item.id} style={styles.collectionCard}>
-                  <Text style={styles.collectionThumb}>
-                    {item.restaurant!.michelinStars > 0
-                      ? '⭐'.repeat(Math.min(item.restaurant!.michelinStars, 3))
-                      : '🍽️'}
-                  </Text>
+                  {item.restaurant!.michelinStars > 0
+                    ? <MichelinStars count={item.restaurant!.michelinStars} size={24} style={{ minWidth: 44, justifyContent: 'center' }} />
+                    : <Text style={styles.collectionThumb}>🍽️</Text>}
                   <View style={styles.collectionInfo}>
                     <Text style={styles.collectionName} numberOfLines={1}>{item.restaurant!.name}</Text>
                     <Text style={styles.collectionCity}>{item.restaurant!.city}</Text>
@@ -348,6 +355,24 @@ export default function ProfileScreen() {
               ))}
             </View>
           )}
+        </View>
+
+        {/* Connecteurs */}
+        <View style={styles.section}>
+          <Text style={styles.sectionTitle}>Connecteurs</Text>
+          <TouchableOpacity
+            style={styles.connectorCard}
+            onPress={() => setShowCalendarModal(true)}
+          >
+            <Text style={styles.connectorEmoji}>📅</Text>
+            <View style={styles.connectorInfo}>
+              <Text style={styles.connectorName}>Google Calendar</Text>
+              <Text style={styles.connectorSub}>
+                Restaurants près de tes prochains événements
+              </Text>
+            </View>
+            <Text style={styles.connectorArrow}>›</Text>
+          </TouchableOpacity>
         </View>
 
         {/* Logout */}
@@ -480,4 +505,15 @@ const styles = StyleSheet.create({
   modalBtnCancelText: { color: '#ba0b2f', fontWeight: '600', fontSize: 15 },
   collectionName: { color: '#ba0b2f', fontWeight: '700', fontSize: 13 },
   collectionCity: { color: '#222326', fontSize: 11, marginTop: 2 },
+
+  connectorCard: {
+    flexDirection: 'row', alignItems: 'center', gap: 14,
+    backgroundColor: '#fff', borderRadius: 14, padding: 14,
+    borderWidth: 1.5, borderColor: 'rgba(186,11,47,0.25)',
+  },
+  connectorEmoji: { fontSize: 28, width: 40, textAlign: 'center' },
+  connectorInfo: { flex: 1 },
+  connectorName: { color: '#ba0b2f', fontSize: 15, fontWeight: '700' },
+  connectorSub: { color: '#888', fontSize: 12, marginTop: 2 },
+  connectorArrow: { color: '#ba0b2f', fontSize: 22, fontWeight: '600' },
 });

@@ -7,6 +7,7 @@ import { WebView } from 'react-native-webview';
 import * as Location from 'expo-location';
 import { useAuth } from '../../context/AuthContext';
 import { api } from '../../config/api';
+import { MichelinStars, michelinStarsHtml } from '../../components/MichelinStar';
 
 const { width: W, height: H } = Dimensions.get('window');
 
@@ -40,7 +41,7 @@ function makeLeafletHtml(pins: AnyPin[], isRestaurant: boolean, centerLat: numbe
       ? cuisineEmoji((p as RestaurantPin).cuisineType)
       : '🏨';
     const stars = isRest ? (p as RestaurantPin).michelinStars : (p as HotelPin).stars;
-    const starsHtml = stars > 0 ? `<span style="font-size:10px;position:absolute;top:-4px;right:-4px;background:#ba0b2f;border-radius:8px;padding:0 3px;color:#000;font-weight:bold;">${'⭐'.repeat(Math.min(stars, 3))}</span>` : '';
+    const starsHtml = stars > 0 ? `<span style="position:absolute;top:-4px;right:-4px;background:#ba0b2f;border-radius:8px;padding:1px 3px;display:inline-flex;align-items:center;gap:1px;">${michelinStarsHtml(stars, 8, '#ffffff')}</span>` : '';
     const label = `<div style="position:relative;display:inline-block;font-size:28px;line-height:1;">${emoji}${starsHtml}</div>`;
     return `
       var icon_${p.id.replace(/-/g, '_')} = L.divIcon({
@@ -218,9 +219,7 @@ export default function MapScreen({ route, navigation }: any) {
                     : `${(selectedPin as HotelPin).pricePerNight}€/nuit`}
                 </Text>
                 {isRestaurant && (selectedPin as RestaurantPin).michelinStars > 0 && (
-                  <Text style={styles.pinTooltipStars}>
-                    {'⭐'.repeat(Math.min((selectedPin as RestaurantPin).michelinStars, 3))}
-                  </Text>
+                  <MichelinStars count={(selectedPin as RestaurantPin).michelinStars} size={14} style={{ marginTop: 4 }} />
                 )}
                 <TouchableOpacity style={styles.pinTooltipClose} onPress={() => setSelectedPin(null)}>
                   <Text style={styles.pinTooltipCloseText}>✕</Text>
@@ -280,9 +279,7 @@ export default function MapScreen({ route, navigation }: any) {
                     </Text>
                   </View>
                   {isRestaurant && (item as RestaurantPin).michelinStars > 0 && (
-                    <Text style={styles.searchItemStars}>
-                      {'⭐'.repeat(Math.min((item as RestaurantPin).michelinStars, 3))}
-                    </Text>
+                    <MichelinStars count={(item as RestaurantPin).michelinStars} size={14} />
                   )}
                 </TouchableOpacity>
               ))}
