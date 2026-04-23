@@ -75,7 +75,7 @@ export default function CommunityScreen() {
   if (loading) {
     return (
       <View style={styles.loader}>
-        <ActivityIndicator color="#E8C547" size="large" />
+        <ActivityIndicator color="#ba0b2f" size="large" />
       </View>
     );
   }
@@ -91,7 +91,7 @@ export default function CommunityScreen() {
 
       <ScrollView
         showsVerticalScrollIndicator={false}
-        refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} tintColor="#E8C547" />}
+        refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} tintColor="#ba0b2f" />}
       >
         {reviews.length === 0 ? (
           <View style={styles.empty}>
@@ -162,11 +162,11 @@ const styles = StyleSheet.create({
   loader: { flex: 1, alignItems: 'center', justifyContent: 'center', backgroundColor: '#fff' },
   header: { paddingHorizontal: 20, paddingTop: 8, paddingBottom: 0 },
   title: { color: '#ba0b2f', fontSize: 24, fontWeight: '800', marginBottom: 14 },
-  subtitle: { color: 'rgba(186,11,47,0.8)', fontSize: 14, marginBottom: 8 },
+  subtitle: { color: '#222326', fontSize: 14, marginBottom: 8 },
   empty: { alignItems: 'center', paddingHorizontal: 24, paddingVertical: 36 },
   emptyEmoji: { fontSize: 44, marginBottom: 8 },
   emptyTitle: { color: '#ba0b2f', fontSize: 18, fontWeight: '700', marginBottom: 6 },
-  emptyText: { color: 'rgba(186,11,47,0.8)', textAlign: 'center', lineHeight: 20 },
+  emptyText: { color: '#222326', textAlign: 'center', lineHeight: 20 },
   feedContainer: { padding: 16, gap: 12 },
   post: { backgroundColor: '#fff', borderRadius: 16, padding: 16, borderWidth: 1, borderColor: 'rgba(186,11,47,0.28)' },
   postHeader: { flexDirection: 'row', alignItems: 'center', gap: 10, marginBottom: 10 },
@@ -177,8 +177,8 @@ const styles = StyleSheet.create({
   avatarText: { color: '#fff', fontWeight: '700', fontSize: 14 },
   postMeta: { flex: 1 },
   postAuthor: { color: '#ba0b2f', fontWeight: '700', fontSize: 14 },
-  postRole: { color: 'rgba(186,11,47,0.8)', fontSize: 12, marginTop: 1 },
-  postTime: { color: 'rgba(186,11,47,0.75)', fontSize: 12 },
+  postRole: { color: '#222326', fontSize: 12, marginTop: 1 },
+  postTime: { color: '#222326', fontSize: 12 },
   targetBadge: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -194,7 +194,7 @@ const styles = StyleSheet.create({
   },
   targetIcon: { fontSize: 14 },
   targetName: { color: '#ba0b2f', fontSize: 12, fontWeight: '600' },
-  postContent: { color: '#ba0b2f', lineHeight: 20, marginBottom: 12 },
+  postContent: { color: '#222326', lineHeight: 20, marginBottom: 12 },
   postFooter: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', gap: 16 },
   ratingRow: { flexDirection: 'row', alignItems: 'center', gap: 2 },
   star: { color: 'rgba(186,11,47,0.35)', fontSize: 14 },

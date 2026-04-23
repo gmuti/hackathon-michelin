@@ -63,7 +63,7 @@ export default function ProfileScreen() {
   if (loading) {
     return (
       <View style={styles.loader}>
-        <ActivityIndicator color="#E8C547" size="large" />
+        <ActivityIndicator color="#ba0b2f" size="large" />
       </View>
     );
   }
@@ -232,7 +232,7 @@ const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: '#fff' },
   header: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 20, paddingTop: 8 },
   title: { color: '#ba0b2f', fontSize: 24, fontWeight: '800' },
-  loader: { flex: 1, backgroundColor: '#0A0A0A', justifyContent: 'center', alignItems: 'center' },
+  loader: { flex: 1, backgroundColor: '#ffffff', justifyContent: 'center', alignItems: 'center' },
   settingsBtn: { padding: 4 },
   settingsIcon: { fontSize: 22 },
   hero: { alignItems: 'center', paddingVertical: 24, paddingHorizontal: 20 },
@@ -247,11 +247,11 @@ const styles = StyleSheet.create({
     color: '#fff', backgroundColor: '#ba0b2f', paddingHorizontal: 12,
     paddingVertical: 4, borderRadius: 20, fontSize: 13, fontWeight: '700', marginBottom: 8,
   },
-  bio: { color: 'rgba(186,11,47,0.8)', fontSize: 14, textAlign: 'center', lineHeight: 20, marginBottom: 20 },
+  bio: { color: '#222326', fontSize: 14, textAlign: 'center', lineHeight: 20, marginBottom: 20 },
   statsRow: { flexDirection: 'row', gap: 24, alignItems: 'center' },
   stat: { alignItems: 'center' },
   statNum: { color: '#ba0b2f', fontSize: 20, fontWeight: '800' },
-  statLabel: { color: 'rgba(186,11,47,0.8)', fontSize: 12, marginTop: 2 },
+  statLabel: { color: '#222326', fontSize: 12, marginTop: 2 },
   statDivider: { width: 1, height: 30, backgroundColor: 'rgba(186,11,47,0.35)' },
   section: { paddingHorizontal: 20, paddingBottom: 24 },
   sectionTitle: { color: '#ba0b2f', fontSize: 18, fontWeight: '700', marginBottom: 16 },
@@ -267,18 +267,18 @@ const styles = StyleSheet.create({
   roleLine: { flex: 1, height: 2, backgroundColor: 'rgba(186,11,47,0.35)' },
   roleLineDone: { backgroundColor: '#ba0b2f' },
   roleLabels: { flexDirection: 'row', justifyContent: 'space-between' },
-  roleLabel: { color: 'rgba(186,11,47,0.7)', fontSize: 9, textAlign: 'center', flex: 1 },
+  roleLabel: { color: '#222326', fontSize: 9, textAlign: 'center', flex: 1 },
   roleLabelDone: { color: '#ba0b2f' },
   nextRoleBox: {
-    backgroundColor: '#141414', borderRadius: 12, padding: 14,
-    borderWidth: 1, borderColor: '#2A2A2A', alignItems: 'center',
+    backgroundColor: '#fff', borderRadius: 12, padding: 14,
+    borderWidth: 1, borderColor: 'rgba(186,11,47,0.35)', alignItems: 'center',
   },
-  nextRoleText: { color: '#fff', fontWeight: '700', fontSize: 14 },
-  nextRoleCount: { color: '#E8C547', fontSize: 12, marginTop: 4 },
+  nextRoleText: { color: '#ba0b2f', fontWeight: '700', fontSize: 14 },
+  nextRoleCount: { color: '#222326', fontSize: 12, marginTop: 4 },
   emptyBox: { alignItems: 'center', paddingVertical: 24, gap: 8 },
   emptyBoxEmoji: { fontSize: 40 },
-  emptyBoxText: { color: '#555', fontSize: 14, textAlign: 'center', lineHeight: 20 },
-  roleCircleTextDone: { color: '#0A0A0A' },
+  emptyBoxText: { color: '#222326', fontSize: 14, textAlign: 'center', lineHeight: 20 },
+  roleCircleTextDone: { color: '#fff' },
   collectionGrid: { flexDirection: 'row', flexWrap: 'wrap', gap: 10 },
   collectionCard: {
     width: '47%', backgroundColor: '#fff', borderRadius: 14,
@@ -289,33 +289,33 @@ const styles = StyleSheet.create({
   collectionInfo: { flex: 1 },
   prefsRow: { flexDirection: 'row', flexWrap: 'wrap', gap: 8 },
   prefChip: {
-    backgroundColor: 'rgba(232,197,71,0.12)', borderWidth: 1.5, borderColor: '#E8C547',
+    backgroundColor: 'rgba(186,11,47,0.1)', borderWidth: 1.5, borderColor: 'rgba(186,11,47,0.35)',
     paddingHorizontal: 12, paddingVertical: 6, borderRadius: 20,
   },
-  prefChipText: { color: '#E8C547', fontSize: 13, fontWeight: '600' },
+  prefChipText: { color: '#ba0b2f', fontSize: 13, fontWeight: '600' },
   logoutBtn: {
     marginHorizontal: 20, paddingVertical: 14, borderRadius: 14,
-    borderWidth: 1.5, borderColor: '#FF4458', alignItems: 'center',
+    borderWidth: 1.5, borderColor: '#ba0b2f', alignItems: 'center',
   },
-  logoutText: { color: '#FF4458', fontWeight: '700', fontSize: 15 },
+  logoutText: { color: '#ba0b2f', fontWeight: '700', fontSize: 15 },
   modalOverlay: {
-    flex: 1, backgroundColor: 'rgba(0,0,0,0.75)',
+    flex: 1, backgroundColor: 'rgba(186,11,47,0.35)',
     justifyContent: 'center', alignItems: 'center', padding: 32,
   },
   modalBox: {
-    backgroundColor: '#1A1A1A', borderRadius: 20, padding: 24,
+    backgroundColor: '#fff', borderRadius: 20, padding: 24,
     width: '100%', gap: 12,
   },
-  modalTitle: { color: '#fff', fontSize: 20, fontWeight: '800', textAlign: 'center' },
-  modalSub: { color: '#666', fontSize: 14, textAlign: 'center', marginBottom: 4 },
+  modalTitle: { color: '#ba0b2f', fontSize: 20, fontWeight: '800', textAlign: 'center' },
+  modalSub: { color: '#222326', fontSize: 14, textAlign: 'center', marginBottom: 4 },
   modalBtnDanger: {
-    backgroundColor: '#FF4458', paddingVertical: 14, borderRadius: 12, alignItems: 'center',
+    backgroundColor: '#ba0b2f', paddingVertical: 14, borderRadius: 12, alignItems: 'center',
   },
   modalBtnDangerText: { color: '#fff', fontWeight: '800', fontSize: 16 },
   modalBtnCancel: {
-    backgroundColor: '#2A2A2A', paddingVertical: 14, borderRadius: 12, alignItems: 'center',
+    backgroundColor: '#fff', paddingVertical: 14, borderRadius: 12, alignItems: 'center', borderWidth: 1, borderColor: 'rgba(186,11,47,0.35)',
   },
-  modalBtnCancelText: { color: '#888', fontWeight: '600', fontSize: 15 },
+  modalBtnCancelText: { color: '#ba0b2f', fontWeight: '600', fontSize: 15 },
   collectionName: { color: '#ba0b2f', fontWeight: '700', fontSize: 13 },
-  collectionCity: { color: 'rgba(186,11,47,0.8)', fontSize: 11, marginTop: 2 },
+  collectionCity: { color: '#222326', fontSize: 11, marginTop: 2 },
 });

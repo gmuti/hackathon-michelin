@@ -321,7 +321,7 @@ export default function SwipeScreen({ route, navigation }: any) {
                     value={cityInput}
                     onChangeText={setCityInput}
                     placeholder="Paris, Lyon, Nantes…"
-                    placeholderTextColor="#555"
+                    placeholderTextColor="rgba(186,11,47,0.6)"
                     returnKeyType="next"
                   />
                   <TouchableOpacity style={styles.gpsBtn} onPress={() => getGPSCity(setCityInput)}>
@@ -396,7 +396,7 @@ export default function SwipeScreen({ route, navigation }: any) {
                     value={hotelCity}
                     onChangeText={setHotelCity}
                     placeholder="Paris, Bordeaux, Nice…"
-                    placeholderTextColor="#555"
+                    placeholderTextColor="rgba(186,11,47,0.6)"
                     returnKeyType="next"
                   />
                   <TouchableOpacity style={styles.gpsBtn} onPress={() => getGPSCity(setHotelCity)}>
@@ -417,7 +417,7 @@ export default function SwipeScreen({ route, navigation }: any) {
                   value={checkIn}
                   onChangeText={setCheckIn}
                   placeholder="AAAA-MM-JJ"
-                  placeholderTextColor="#555"
+                  placeholderTextColor="rgba(186,11,47,0.6)"
                 />
                 <Text style={[styles.groupLabel, { marginTop: 16 }]}>Check-out</Text>
                 <TextInput
@@ -425,7 +425,7 @@ export default function SwipeScreen({ route, navigation }: any) {
                   value={checkOut}
                   onChangeText={setCheckOut}
                   placeholder="AAAA-MM-JJ"
-                  placeholderTextColor="#555"
+                  placeholderTextColor="rgba(186,11,47,0.6)"
                 />
               </>
             )}
@@ -453,7 +453,7 @@ export default function SwipeScreen({ route, navigation }: any) {
   // ── Loading ───────────────────────────────────────────────────
   if (loading) return (
     <View style={styles.empty}>
-      <ActivityIndicator color="#E8C547" size="large" />
+      <ActivityIndicator color="#ba0b2f" size="large" />
       <Text style={styles.emptyLabel}>Chargement…</Text>
     </View>
   );
@@ -577,72 +577,71 @@ export default function SwipeScreen({ route, navigation }: any) {
 // ── Styles ────────────────────────────────────────────────────────
 const styles = StyleSheet.create({
   // ── Filtre ──
-  filterScreen: { flex: 1, backgroundColor: '#0A0A0A' },
+  filterScreen: { flex: 1, backgroundColor: '#fff' },
   filterHeader: {
     flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between',
     paddingHorizontal: 20, paddingVertical: 14,
-    borderBottomWidth: 1, borderBottomColor: '#1A1A1A',
+    borderBottomWidth: 1, borderBottomColor: 'rgba(186,11,47,0.35)',
   },
   backBtn: { width: 72 },
-  backBtnText: { color: '#E8C547', fontSize: 14, fontWeight: '600' },
+  backBtnText: { color: '#ba0b2f', fontSize: 14, fontWeight: '600' },
   closeBtn: { width: 72, alignItems: 'flex-end' },
-  closeBtnText: { color: '#666', fontSize: 22, fontWeight: '600' },
+  closeBtnText: { color: '#222326', fontSize: 22, fontWeight: '600' },
   progressDots: { flexDirection: 'row', gap: 6 },
-  progressDot: { width: 8, height: 8, borderRadius: 4, backgroundColor: '#2A2A2A' },
-  progressDotActive: { backgroundColor: '#E8C547', width: 24 },
+  progressDot: { width: 8, height: 8, borderRadius: 4, backgroundColor: 'rgba(186,11,47,0.22)' },
+  progressDotActive: { backgroundColor: '#ba0b2f', width: 24 },
   stepTitleBlock: { paddingHorizontal: 24, paddingTop: 28, paddingBottom: 8 },
-  stepTitle: { color: '#fff', fontSize: 26, fontWeight: '800', letterSpacing: -0.5, marginBottom: 6 },
-  stepSub: { color: '#666', fontSize: 15 },
+  stepTitle: { color: '#ba0b2f', fontSize: 26, fontWeight: '800', letterSpacing: -0.5, marginBottom: 6 },
+  stepSub: { color: '#222326', fontSize: 15 },
   stepContent: { paddingHorizontal: 24, paddingTop: 24, paddingBottom: 12 },
   filterFooter: { paddingHorizontal: 24, paddingBottom: 24, paddingTop: 8, gap: 10 },
-  errorText: { color: '#FF4458', fontSize: 13, textAlign: 'center' },
+  errorText: { color: '#ba0b2f', fontSize: 13, textAlign: 'center' },
   nextBtn: {
-    backgroundColor: '#E8C547', paddingVertical: 17, borderRadius: 16, alignItems: 'center',
+    backgroundColor: '#ba0b2f', paddingVertical: 17, borderRadius: 16, alignItems: 'center',
   },
-  nextBtnText: { color: '#0A0A0A', fontSize: 17, fontWeight: '800' },
+  nextBtnText: { color: '#fff', fontSize: 17, fontWeight: '800' },
 
   // ── Champs ──
   cityRow: { flexDirection: 'row', gap: 10, alignItems: 'center' },
   input: {
-    backgroundColor: '#141414', borderWidth: 1.5, borderColor: '#2A2A2A',
+    backgroundColor: '#fff', borderWidth: 1.5, borderColor: '#ba0b2f',
     borderRadius: 14, paddingHorizontal: 16, paddingVertical: 15,
-    color: '#fff', fontSize: 16,
+    color: '#ba0b2f', fontSize: 16,
   },
   gpsBtn: {
-    width: 52, height: 52, borderRadius: 14, backgroundColor: '#141414',
-    borderWidth: 1.5, borderColor: '#2A2A2A', alignItems: 'center', justifyContent: 'center',
+    width: 52, height: 52, borderRadius: 14, backgroundColor: '#ba0b2f',
+    borderWidth: 1.5, borderColor: '#ba0b2f', alignItems: 'center', justifyContent: 'center',
   },
   gpsBtnText: { fontSize: 24 },
-  hint: { color: '#444', fontSize: 12, marginTop: 8 },
-  groupLabel: { color: '#888', fontSize: 13, fontWeight: '600', marginBottom: 12 },
+  hint: { color: '#222326', fontSize: 12, marginTop: 8 },
+  groupLabel: { color: '#222326', fontSize: 13, fontWeight: '600', marginBottom: 12 },
 
   // ── Transport ──
   transportGrid: { gap: 12 },
   transportCard: {
     flexDirection: 'row', alignItems: 'center', gap: 16,
-    backgroundColor: '#141414', padding: 18, borderRadius: 16,
-    borderWidth: 1.5, borderColor: '#2A2A2A',
+    backgroundColor: '#fff', padding: 18, borderRadius: 16,
+    borderWidth: 1.5, borderColor: 'rgba(186,11,47,0.35)',
   },
-  transportCardActive: { borderColor: '#E8C547', backgroundColor: 'rgba(232,197,71,0.1)' },
+  transportCardActive: { borderColor: '#ba0b2f', backgroundColor: 'rgba(186,11,47,0.1)' },
   transportEmoji: { fontSize: 30 },
-  transportLabel: { color: '#888', fontSize: 16, fontWeight: '700', flex: 1 },
-  transportLabelActive: { color: '#E8C547' },
-  transportSub: { color: '#444', fontSize: 13 },
+  transportLabel: { color: '#222326', fontSize: 16, fontWeight: '700', flex: 1 },
+  transportLabelActive: { color: '#ba0b2f' },
+  transportSub: { color: '#222326', fontSize: 13 },
 
   // ── Chips ──
   chipsWrap: { flexDirection: 'row', flexWrap: 'wrap', gap: 10 },
   chip: {
     flexDirection: 'row', alignItems: 'center', gap: 6,
-    backgroundColor: '#141414', paddingHorizontal: 14, paddingVertical: 10,
-    borderRadius: 50, borderWidth: 1.5, borderColor: '#2A2A2A',
+    backgroundColor: '#fff', paddingHorizontal: 14, paddingVertical: 10,
+    borderRadius: 50, borderWidth: 1.5, borderColor: 'rgba(186,11,47,0.35)',
   },
-  chipActive: { backgroundColor: 'rgba(232,197,71,0.15)', borderColor: '#E8C547' },
+  chipActive: { backgroundColor: 'rgba(186,11,47,0.1)', borderColor: '#ba0b2f' },
   chipEmoji: { fontSize: 18 },
-  chipLabel: { color: '#888', fontSize: 14, fontWeight: '600' },
-  chipLabelActive: { color: '#E8C547' },
+  chipLabel: { color: '#222326', fontSize: 14, fontWeight: '600' },
+  chipLabelActive: { color: '#ba0b2f' },
 
   // ── Swipe screen ──
-  container: { flex: 1, backgroundColor: '#0A0A0A', alignItems: 'center' },
   container: { flex: 1, backgroundColor: '#fff', alignItems: 'center' },
   header: {
     width: '100%', flexDirection: 'row', justifyContent: 'space-between',
@@ -656,19 +655,20 @@ const styles = StyleSheet.create({
   jamBtnText: { color: '#fff', fontWeight: '700', fontSize: 13 },
   headerRight: { flexDirection: 'row', alignItems: 'center', gap: 10 },
   filterIconBtn: {
-    width: 36, height: 36, borderRadius: 18, backgroundColor: '#1A1A1A',
-    alignItems: 'center', justifyContent: 'center', borderWidth: 1, borderColor: '#2A2A2A',
+    width: 36, height: 36, borderRadius: 18, backgroundColor: '#fff',
+    alignItems: 'center', justifyContent: 'center', borderWidth: 1, borderColor: 'rgba(186,11,47,0.35)',
   },
+  filterIconText: { color: '#ba0b2f', fontSize: 16 },
   card: {
     position: 'absolute', top: 80, width: W - 24, height: H * 0.65,
     borderRadius: 20, overflow: 'hidden',
     shadowColor: '#ba0b2f', shadowOffset: { width: 0, height: 8 }, shadowOpacity: 0.25, shadowRadius: 20,
   },
   photo: { width: '100%', height: '100%', position: 'absolute' },
-  hotelBg: { flex: 1, backgroundColor: '#1A1A1A', alignItems: 'center', justifyContent: 'center', gap: 12 },
+  hotelBg: { flex: 1, backgroundColor: '#ba0b2f', alignItems: 'center', justifyContent: 'center', gap: 12 },
   hotelBgEmoji: { fontSize: 72 },
   hotelBgName: { color: '#fff', fontSize: 22, fontWeight: '800', textAlign: 'center', paddingHorizontal: 20 },
-  hotelBgEnv: { color: '#E8C547', fontSize: 16, fontWeight: '600' },
+  hotelBgEnv: { color: '#ba0b2f', fontSize: 16, fontWeight: '600' },
   photoDots: {
     position: 'absolute', top: 12, left: 0, right: 0, flexDirection: 'row', justifyContent: 'center', gap: 4,
   },
@@ -678,7 +678,7 @@ const styles = StyleSheet.create({
   photoNavRight: { position: 'absolute', right: 0, top: 0, width: W * 0.35, height: '70%' },
   gradient: {
     position: 'absolute', bottom: 0, left: 0, right: 0, padding: 20, paddingBottom: 28,
-    backgroundColor: 'rgba(0,0,0,0.55)',
+    backgroundColor: 'rgba(186,11,47,0.7)',
   },
   starsRow: { flexDirection: 'row', marginBottom: 4 },
   star: { fontSize: 14, marginRight: 2 },
@@ -687,7 +687,7 @@ const styles = StyleSheet.create({
   cardCity: { color: 'rgba(255,255,255,0.85)', fontSize: 14 },
   cardCuisine: { color: '#fff', fontSize: 13, fontWeight: '700' },
   cardPrice: { color: 'rgba(255,255,255,0.85)', fontSize: 14, marginLeft: 'auto' },
-  amenities: { color: '#AAA', fontSize: 12, marginTop: 6 },
+  amenities: { color: '#fff', fontSize: 12, marginTop: 6 },
   indicator: {
     position: 'absolute', top: 40, padding: 10, paddingHorizontal: 20,
     borderWidth: 3, borderRadius: 8,
@@ -721,7 +721,7 @@ const styles = StyleSheet.create({
   actionIcon: { fontSize: 24 },
   empty: { flex: 1, alignItems: 'center', justifyContent: 'center', backgroundColor: '#fff' },
   emptyEmoji: { fontSize: 60 },
-  emptyLabel: { color: '#ba0b2f', marginTop: 12, fontSize: 16 },
-  reloadBtn: { marginTop: 8, backgroundColor: '#E8C547', paddingHorizontal: 20, paddingVertical: 12, borderRadius: 14 },
-  reloadBtnText: { color: '#0A0A0A', fontWeight: '700', fontSize: 15 },
+  emptyLabel: { color: '#222326', marginTop: 12, fontSize: 16 },
+  reloadBtn: { marginTop: 8, backgroundColor: '#ba0b2f', paddingHorizontal: 20, paddingVertical: 12, borderRadius: 14 },
+  reloadBtnText: { color: '#fff', fontWeight: '700', fontSize: 15 },
 });

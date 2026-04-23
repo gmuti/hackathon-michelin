@@ -50,14 +50,14 @@ function TabNavigator() {
         },
         tabBarActiveTintColor: '#ba0b2f',
         tabBarInactiveTintColor: 'rgba(186,11,47,0.55)',
-        tabBarLabel: ({ color }) => (
-          <Text style={{ color, fontSize: 10, fontWeight: '700' }}>{route.name}</Text>
-        ),
-        tabBarIcon: () => {
+        tabBarLabel: () => null, // Remove text labels
+        tabBarIcon: ({ focused }) => {
           const Logo = TAB_ICONS[route.name];
+          // Always use #ba0b2f when active, light red when inactive
+          const fillColor = focused ? '#ba0b2f' : '#f8bfc9';
           return (
             <View style={{ alignItems: 'center', justifyContent: 'center' }}>
-              <Logo width={32} height={32} fill="#ba0b2f" />
+              <Logo width={36} height={36} fill={fillColor} />
             </View>
           );
         },

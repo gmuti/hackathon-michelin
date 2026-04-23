@@ -162,7 +162,7 @@ export default function OnboardingScreen() {
 
         <TouchableOpacity style={styles.nextBtn} onPress={next} disabled={saving}>
           {saving
-            ? <ActivityIndicator color="#0A0A0A" />
+            ? <ActivityIndicator color="#fff" />
             : <Text style={styles.nextBtnText}>{step < 2 ? 'Continuer →' : '🚀 Démarrer !'}</Text>
           }
         </TouchableOpacity>
@@ -178,7 +178,7 @@ const styles = StyleSheet.create({
   progressDotActive: { backgroundColor: '#ba0b2f', width: 24 },
   stepContainer: { flex: 1, paddingHorizontal: 20, paddingTop: 20 },
   stepTitle: { color: '#ba0b2f', fontSize: 26, fontWeight: '800', marginBottom: 6, letterSpacing: -0.5 },
-  stepSub: { color: 'rgba(186,11,47,0.8)', fontSize: 15, marginBottom: 24 },
+  stepSub: { color: '#222326', fontSize: 15, marginBottom: 24 },
   grid: { flexDirection: 'row', flexWrap: 'wrap', gap: 10 },
   chip: {
     flexDirection: 'row', alignItems: 'center', gap: 6,
@@ -187,7 +187,7 @@ const styles = StyleSheet.create({
   },
   chipActive: { backgroundColor: 'rgba(186,11,47,0.1)', borderColor: '#ba0b2f' },
   chipEmoji: { fontSize: 18 },
-  chipLabel: { color: 'rgba(186,11,47,0.8)', fontSize: 14, fontWeight: '600' },
+  chipLabel: { color: '#222326', fontSize: 14, fontWeight: '600' },
   chipLabelActive: { color: '#ba0b2f' },
   transportGrid: { gap: 12 },
   transportCard: {
@@ -197,9 +197,9 @@ const styles = StyleSheet.create({
   },
   transportCardActive: { borderColor: '#ba0b2f', backgroundColor: 'rgba(186,11,47,0.1)' },
   transportEmoji: { fontSize: 30 },
-  transportLabel: { color: 'rgba(186,11,47,0.8)', fontSize: 16, fontWeight: '700', flex: 1 },
+  transportLabel: { color: '#222326', fontSize: 16, fontWeight: '700', flex: 1 },
   transportLabelActive: { color: '#ba0b2f' },
-  transportSub: { color: 'rgba(186,11,47,0.7)', fontSize: 13 },
+  transportSub: { color: '#222326', fontSize: 13 },
   nextBtn: {
     marginHorizontal: 20, marginBottom: 24, backgroundColor: '#ba0b2f',
     paddingVertical: 16, borderRadius: 16, alignItems: 'center',

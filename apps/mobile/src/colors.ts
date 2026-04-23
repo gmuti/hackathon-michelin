@@ -5,4 +5,5 @@ export const COLORS = {
   redSoft: 'rgba(186,11,47,0.1)',
   redMedium: 'rgba(186,11,47,0.35)',
   redMuted: 'rgba(186,11,47,0.8)',
+  darkText: '#222326', // gris foncé pour les longs textes
 };
