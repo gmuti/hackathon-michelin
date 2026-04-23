@@ -390,7 +390,7 @@ export default function SwipeScreen({ route, navigation }: any) {
               </TouchableOpacity>
             ) : (
               <TouchableOpacity onPress={() => navigation?.goBack()} style={styles.backBtn}>
-                <Text style={styles.backBtnText}>← Carte</Text>
+                <Text style={styles.backBtnText}>← Retour</Text>
               </TouchableOpacity>
             )}
             <View style={styles.progressDots}>
@@ -421,8 +421,11 @@ export default function SwipeScreen({ route, navigation }: any) {
                 <View style={styles.cityRow}>
                   <TextInput
                     style={[styles.input, { flex: 1 }]}
-                    value={cityInput} onChangeText={setCityInput}
-                    placeholder="Paris, Lyon, Nantes…" placeholderTextColor="#555"
+                    value={cityInput}
+                    onChangeText={setCityInput}
+                    placeholder="Paris, Lyon, Nantes…"
+                    placeholderTextColor="rgba(186,11,47,0.6)"
+                    returnKeyType="next"
                   />
                   <TouchableOpacity style={styles.gpsBtn} onPress={() => getGPSCity(setCityInput)}>
                     <Text style={styles.gpsBtnText}>📍</Text>
@@ -485,8 +488,11 @@ export default function SwipeScreen({ route, navigation }: any) {
                 <View style={styles.cityRow}>
                   <TextInput
                     style={[styles.input, { flex: 1 }]}
-                    value={hotelCity} onChangeText={setHotelCity}
-                    placeholder="Paris, Bordeaux, Nice…" placeholderTextColor="#555"
+                    value={hotelCity}
+                    onChangeText={setHotelCity}
+                    placeholder="Paris, Bordeaux, Nice…"
+                    placeholderTextColor="rgba(186,11,47,0.6)"
+                    returnKeyType="next"
                   />
                   <TouchableOpacity style={styles.gpsBtn} onPress={() => getGPSCity(setHotelCity)}>
                     <Text style={styles.gpsBtnText}>📍</Text>
@@ -517,6 +523,22 @@ export default function SwipeScreen({ route, navigation }: any) {
 
             {mode === 'hotel' && filterStep === 2 && (
               <>
+                <Text style={styles.groupLabel}>Check-in</Text>
+                <TextInput
+                  style={styles.input}
+                  value={checkIn}
+                  onChangeText={setCheckIn}
+                  placeholder="AAAA-MM-JJ"
+                  placeholderTextColor="rgba(186,11,47,0.6)"
+                />
+                <Text style={[styles.groupLabel, { marginTop: 16 }]}>Check-out</Text>
+                <TextInput
+                  style={styles.input}
+                  value={checkOut}
+                  onChangeText={setCheckOut}
+                  placeholder="AAAA-MM-JJ"
+                  placeholderTextColor="rgba(186,11,47,0.6)"
+                />
                 <Text style={styles.groupLabel}>Voyageurs</Text>
                 <View style={styles.counterRow}>
                   <TouchableOpacity style={styles.counterBtn} onPress={() => setGuestCount(g => Math.max(1, g - 1))}>
@@ -595,7 +617,7 @@ export default function SwipeScreen({ route, navigation }: any) {
   // ── Loading ───────────────────────────────────────────────────────────────
   if (loading) return (
     <View style={styles.empty}>
-      <ActivityIndicator color="#E8C547" size="large" />
+      <ActivityIndicator color="#ba0b2f" size="large" />
       <Text style={styles.emptyLabel}>Chargement…</Text>
     </View>
   );
@@ -609,9 +631,9 @@ export default function SwipeScreen({ route, navigation }: any) {
         <Text style={styles.reloadBtnText}>🔍 Modifier les filtres</Text>
       </TouchableOpacity>
       {/* Match modal trigger if we have matches */}
-      <TouchableOpacity style={[styles.reloadBtn, { marginTop: 10, backgroundColor: '#1A1A1A' }]}
+      <TouchableOpacity style={[styles.reloadBtn, { marginTop: 10, backgroundColor: '#fff', borderWidth: 1.5, borderColor: '#ba0b2f' }]}
         onPress={() => loadMatches()}>
-        <Text style={[styles.reloadBtnText, { color: '#E8C547' }]}>⭐ Voir mes favoris</Text>
+        <Text style={[styles.reloadBtnText, { color: '#ba0b2f' }]}>⭐ Voir mes favoris</Text>
       </TouchableOpacity>
     </View>
   );
@@ -912,115 +934,118 @@ export default function SwipeScreen({ route, navigation }: any) {
 
 // ── Styles ──────────────────────────────────────────────────────────────────
 const styles = StyleSheet.create({
-  // ── Filter ──
-  filterScreen: { flex: 1, backgroundColor: '#0A0A0A' },
+  // ── Filtre ──
+  filterScreen: { flex: 1, backgroundColor: '#fff' },
   filterHeader: {
     flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between',
     paddingHorizontal: 20, paddingVertical: 14,
-    borderBottomWidth: 1, borderBottomColor: '#1A1A1A',
+    borderBottomWidth: 1, borderBottomColor: 'rgba(186,11,47,0.35)',
   },
   backBtn: { width: 72 },
-  backBtnText: { color: '#E8C547', fontSize: 14, fontWeight: '600' },
+  backBtnText: { color: '#ba0b2f', fontSize: 14, fontWeight: '600' },
   closeBtn: { width: 72, alignItems: 'flex-end' },
-  closeBtnText: { color: '#666', fontSize: 22, fontWeight: '600' },
+  closeBtnText: { color: '#222326', fontSize: 22, fontWeight: '600' },
   progressDots: { flexDirection: 'row', gap: 6 },
-  progressDot: { width: 8, height: 8, borderRadius: 4, backgroundColor: '#2A2A2A' },
-  progressDotActive: { backgroundColor: '#E8C547', width: 24 },
+  progressDot: { width: 8, height: 8, borderRadius: 4, backgroundColor: 'rgba(186,11,47,0.22)' },
+  progressDotActive: { backgroundColor: '#ba0b2f', width: 24 },
   stepTitleBlock: { paddingHorizontal: 24, paddingTop: 28, paddingBottom: 8 },
-  stepTitle: { color: '#fff', fontSize: 26, fontWeight: '800', letterSpacing: -0.5, marginBottom: 6 },
-  stepSub: { color: '#666', fontSize: 15 },
+  stepTitle: { color: '#ba0b2f', fontSize: 26, fontWeight: '800', letterSpacing: -0.5, marginBottom: 6 },
+  stepSub: { color: '#222326', fontSize: 15 },
   stepContent: { paddingHorizontal: 24, paddingTop: 24, paddingBottom: 12 },
   filterFooter: { paddingHorizontal: 24, paddingBottom: 24, paddingTop: 8, gap: 10 },
-  errorText: { color: '#FF4458', fontSize: 13, textAlign: 'center' },
-  nextBtn: { backgroundColor: '#E8C547', paddingVertical: 17, borderRadius: 16, alignItems: 'center' },
-  nextBtnText: { color: '#0A0A0A', fontSize: 17, fontWeight: '800' },
+  errorText: { color: '#ba0b2f', fontSize: 13, textAlign: 'center' },
+  nextBtn: {
+    backgroundColor: '#ba0b2f', paddingVertical: 17, borderRadius: 16, alignItems: 'center',
+  },
+  nextBtnText: { color: '#fff', fontSize: 17, fontWeight: '800' },
 
   // ── Inputs ──
   cityRow: { flexDirection: 'row', gap: 10, alignItems: 'center' },
   input: {
-    backgroundColor: '#141414', borderWidth: 1.5, borderColor: '#2A2A2A',
+    backgroundColor: '#fff', borderWidth: 1.5, borderColor: '#ba0b2f',
     borderRadius: 14, paddingHorizontal: 16, paddingVertical: 15,
-    color: '#fff', fontSize: 16, marginBottom: 8,
+    color: '#ba0b2f', fontSize: 16,
   },
   gpsBtn: {
-    width: 52, height: 52, borderRadius: 14, backgroundColor: '#141414',
-    borderWidth: 1.5, borderColor: '#2A2A2A', alignItems: 'center', justifyContent: 'center',
+    width: 52, height: 52, borderRadius: 14, backgroundColor: '#ba0b2f',
+    borderWidth: 1.5, borderColor: '#ba0b2f', alignItems: 'center', justifyContent: 'center',
   },
   gpsBtnText: { fontSize: 24 },
-  hint: { color: '#444', fontSize: 12, marginTop: 4 },
-  groupLabel: { color: '#888', fontSize: 13, fontWeight: '600', marginBottom: 12 },
+  hint: { color: '#222326', fontSize: 12, marginTop: 8 },
+  groupLabel: { color: '#222326', fontSize: 13, fontWeight: '600', marginBottom: 12 },
 
   // ── Distance ──
   distanceGrid: { gap: 12 },
   distanceCard: {
     flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 12,
-    backgroundColor: '#141414', padding: 20, borderRadius: 16,
-    borderWidth: 1.5, borderColor: '#2A2A2A',
+    backgroundColor: '#fff', padding: 20, borderRadius: 16,
+    borderWidth: 1.5, borderColor: 'rgba(186,11,47,0.35)',
   },
-  distanceCardActive: { borderColor: '#E8C547', backgroundColor: 'rgba(232,197,71,0.1)' },
-  distanceLabel: { color: '#888', fontSize: 17, fontWeight: '700' },
-  distanceLabelActive: { color: '#E8C547' },
+  distanceCardActive: { borderColor: '#ba0b2f', backgroundColor: 'rgba(186,11,47,0.1)' },
+  distanceLabel: { color: '#222326', fontSize: 17, fontWeight: '700' },
+  distanceLabelActive: { color: '#ba0b2f' },
   accomEmoji: { fontSize: 24 },
 
   // ── Counter ──
   counterRow: { flexDirection: 'row', alignItems: 'center', gap: 20 },
   counterBtn: {
-    width: 44, height: 44, borderRadius: 22, backgroundColor: '#1A1A1A',
-    borderWidth: 1.5, borderColor: '#2A2A2A', alignItems: 'center', justifyContent: 'center',
+    width: 44, height: 44, borderRadius: 22, backgroundColor: '#fff',
+    borderWidth: 1.5, borderColor: 'rgba(186,11,47,0.35)', alignItems: 'center', justifyContent: 'center',
   },
-  counterBtnText: { color: '#E8C547', fontSize: 22, fontWeight: '700' },
-  counterValue: { color: '#fff', fontSize: 18, fontWeight: '700', flex: 1, textAlign: 'center' },
+  counterBtnText: { color: '#ba0b2f', fontSize: 22, fontWeight: '700' },
+  counterValue: { color: '#222326', fontSize: 18, fontWeight: '700', flex: 1, textAlign: 'center' },
 
   // ── Chips ──
   chipsWrap: { flexDirection: 'row', flexWrap: 'wrap', gap: 10 },
   chip: {
     flexDirection: 'row', alignItems: 'center', gap: 6,
-    backgroundColor: '#141414', paddingHorizontal: 14, paddingVertical: 10,
-    borderRadius: 50, borderWidth: 1.5, borderColor: '#2A2A2A',
+    backgroundColor: '#fff', paddingHorizontal: 14, paddingVertical: 10,
+    borderRadius: 50, borderWidth: 1.5, borderColor: 'rgba(186,11,47,0.35)',
   },
-  chipActive: { backgroundColor: 'rgba(232,197,71,0.15)', borderColor: '#E8C547' },
+  chipActive: { backgroundColor: 'rgba(186,11,47,0.1)', borderColor: '#ba0b2f' },
   chipEmoji: { fontSize: 18 },
-  chipLabel: { color: '#888', fontSize: 14, fontWeight: '600' },
-  chipLabelActive: { color: '#E8C547' },
+  chipLabel: { color: '#222326', fontSize: 14, fontWeight: '600' },
+  chipLabelActive: { color: '#ba0b2f' },
 
   // ── Countdown ──
-  countdown: { flex: 1, backgroundColor: '#0A0A0A', alignItems: 'center', justifyContent: 'center' },
-  countdownNum: { fontSize: 120, fontWeight: '900', color: '#E8C547' },
-  countdownLabel: { color: '#888', fontSize: 22, marginTop: 12, fontWeight: '600' },
+  countdown: { flex: 1, backgroundColor: '#fff', alignItems: 'center', justifyContent: 'center' },
+  countdownNum: { fontSize: 120, fontWeight: '900', color: '#ba0b2f' },
+  countdownLabel: { color: 'rgba(186,11,47,0.8)', fontSize: 22, marginTop: 12, fontWeight: '600' },
 
   // ── Swipe screen ──
-  container: { flex: 1, backgroundColor: '#0A0A0A', alignItems: 'center' },
+  container: { flex: 1, backgroundColor: '#fff', alignItems: 'center' },
   header: {
     width: '100%', flexDirection: 'row', justifyContent: 'space-between',
     alignItems: 'center', paddingHorizontal: 16, paddingTop: 8, zIndex: 10,
   },
-  backArrow: { padding: 8 },
-  backArrowText: { color: '#E8C547', fontSize: 22, fontWeight: '700' },
-  headerTitle: { color: '#E8C547', fontSize: 16, fontWeight: '700', letterSpacing: 0.5 },
-  headerRight: { flexDirection: 'row', alignItems: 'center', gap: 8 },
-  filterIconBtn: {
-    width: 36, height: 36, borderRadius: 18, backgroundColor: '#1A1A1A',
-    alignItems: 'center', justifyContent: 'center', borderWidth: 1, borderColor: '#2A2A2A',
+  headerTitle: { color: '#ba0b2f', fontSize: 18, fontWeight: '700', letterSpacing: 1 },
+  jamBtn: {
+    backgroundColor: '#ba0b2f', paddingHorizontal: 14, paddingVertical: 7,
+    borderRadius: 20,
   },
-  filterIconText: { fontSize: 16 },
-  jamBtn: { backgroundColor: '#E8C547', paddingHorizontal: 12, paddingVertical: 6, borderRadius: 20 },
-  jamBtnText: { color: '#0A0A0A', fontWeight: '700', fontSize: 12 },
-
-  // ── Cards ──
+  jamBtnText: { color: '#fff', fontWeight: '700', fontSize: 13 },
+  headerRight: { flexDirection: 'row', alignItems: 'center', gap: 10 },
+  backArrowText: { color: '#ba0b2f', fontSize: 22, fontWeight: '700' },
+  backArrow: { padding: 8 },
+  filterIconBtn: {
+    width: 36, height: 36, borderRadius: 18, backgroundColor: '#fff',
+    alignItems: 'center', justifyContent: 'center', borderWidth: 1, borderColor: 'rgba(186,11,47,0.35)',
+  },
+  filterIconText: { color: '#ba0b2f', fontSize: 16 },
   card: {
     position: 'absolute', top: 80, width: W - 24, height: H * 0.65,
     borderRadius: 20, overflow: 'hidden',
-    shadowColor: '#000', shadowOffset: { width: 0, height: 8 }, shadowOpacity: 0.4, shadowRadius: 20,
+    shadowColor: '#ba0b2f', shadowOffset: { width: 0, height: 8 }, shadowOpacity: 0.25, shadowRadius: 20,
   },
   cardBehind: {
     top: 86, transform: [{ scale: 0.97 }],
     shadowOpacity: 0.2, zIndex: -1,
   },
   photo: { width: '100%', height: '100%', position: 'absolute' },
-  hotelBg: { flex: 1, backgroundColor: '#1A1A1A', alignItems: 'center', justifyContent: 'center', gap: 12 },
+  hotelBg: { flex: 1, backgroundColor: '#ba0b2f', alignItems: 'center', justifyContent: 'center', gap: 12 },
   hotelBgEmoji: { fontSize: 72 },
   hotelBgName: { color: '#fff', fontSize: 22, fontWeight: '800', textAlign: 'center', paddingHorizontal: 20 },
-  hotelBgEnv: { color: '#E8C547', fontSize: 16, fontWeight: '600' },
+  hotelBgEnv: { color: '#fff', fontSize: 16, fontWeight: '600' },
   photoDots: {
     position: 'absolute', top: 12, left: 0, right: 0, flexDirection: 'row', justifyContent: 'center', gap: 4,
   },
@@ -1031,117 +1056,127 @@ const styles = StyleSheet.create({
 
   // ── Card overlay ──
   gradient: {
-    position: 'absolute', bottom: 0, left: 0, right: 0, padding: 20, paddingBottom: 20,
-    backgroundColor: 'rgba(0,0,0,0.65)',
+    position: 'absolute', bottom: 0, left: 0, right: 0, padding: 20, paddingBottom: 28,
+    backgroundColor: 'rgba(186,11,47,0.7)',
   },
   starsRow: { flexDirection: 'row', marginBottom: 4 },
   star: { fontSize: 14, marginRight: 2 },
-  cardName: { color: '#fff', fontSize: 24, fontWeight: '800', letterSpacing: -0.5 },
-  cardMeta: { flexDirection: 'row', alignItems: 'center', gap: 8, marginTop: 4, flexWrap: 'wrap' },
-  cardCity: { color: 'rgba(255,255,255,0.75)', fontSize: 13 },
-  cardCuisine: { color: '#E8C547', fontSize: 12, fontWeight: '600' },
-  cardPrice: { color: 'rgba(255,255,255,0.75)', fontSize: 13, marginLeft: 'auto' },
-  cardRating: { color: '#E8C547', fontSize: 12, fontWeight: '600', marginTop: 4 },
+  cardName: { color: '#fff', fontSize: 26, fontWeight: '800', letterSpacing: -0.5 },
+  cardMeta: { flexDirection: 'row', alignItems: 'center', gap: 10, marginTop: 6 },
+  cardCity: { color: 'rgba(255,255,255,0.85)', fontSize: 14 },
+  cardCuisine: { color: '#fff', fontSize: 13, fontWeight: '700' },
+  cardPrice: { color: 'rgba(255,255,255,0.85)', fontSize: 14, marginLeft: 'auto' },
+  amenities: { color: '#fff', fontSize: 12, marginTop: 6 },
+  cardRating: { color: '#fff', fontSize: 12, fontWeight: '700', marginTop: 4 },
   detailBtn: {
     marginTop: 10, paddingVertical: 8, paddingHorizontal: 16,
-    backgroundColor: 'rgba(232,197,71,0.15)', borderRadius: 20, alignSelf: 'flex-start',
-    borderWidth: 1, borderColor: 'rgba(232,197,71,0.4)',
+    backgroundColor: 'rgba(255,255,255,0.18)', borderRadius: 20, alignSelf: 'flex-start',
+    borderWidth: 1, borderColor: 'rgba(255,255,255,0.4)',
   },
-  detailBtnText: { color: '#E8C547', fontSize: 13, fontWeight: '700' },
-
+  detailBtnText: { color: '#fff', fontSize: 13, fontWeight: '700' },
   // ── Progressive indicators ──
+
   indicator: {
     position: 'absolute', top: '30%', padding: 14, paddingHorizontal: 24,
     borderWidth: 3, borderRadius: 12, backgroundColor: 'rgba(0,0,0,0.4)',
   },
-  indicatorLike: { left: 20, borderColor: '#00E676', transform: [{ rotate: '-15deg' }] },
-  indicatorNope: { right: 20, borderColor: '#FF4458', transform: [{ rotate: '15deg' }] },
-  indicatorSuper: { alignSelf: 'center', left: W / 2 - 60, bottom: 100, top: undefined, borderColor: '#E8C547' },
-  indicatorText: { fontSize: 28, fontWeight: '900' },
-
-  // ── Actions ──
-  actions: { position: 'absolute', bottom: 24, flexDirection: 'row', gap: 20, alignItems: 'center' },
-  actionBtn: {
-    width: 60, height: 60, borderRadius: 30, backgroundColor: '#1A1A1A',
-    alignItems: 'center', justifyContent: 'center',
-    shadowColor: '#000', shadowOffset: { width: 0, height: 4 }, shadowOpacity: 0.3, shadowRadius: 8,
+  indicatorLike: { left: 20, borderColor: '#ba0b2f', transform: [{ rotate: '-15deg' }] },
+  indicatorNope: { right: 20, borderColor: '#ba0b2f', transform: [{ rotate: '15deg' }] },
+  indicatorSuper: { left: '50%', bottom: 40, borderColor: '#ba0b2f' },
+  indicatorText: { fontSize: 18, fontWeight: '800', color: '#fff' },
+  categoryBar: {
+    position: 'absolute', bottom: 100, flexDirection: 'row', gap: 8,
+    paddingHorizontal: 20, paddingVertical: 10, borderRadius: 30,
+    backgroundColor: 'rgba(186,11,47,0.88)',
   },
-  actionNope: { borderColor: '#FF4458', borderWidth: 2 },
-  actionSuper: { width: 50, height: 50, borderRadius: 25, borderColor: '#E8C547', borderWidth: 2 },
-  actionLike: { borderColor: '#00E676', borderWidth: 2 },
+  categoryItem: {
+    width: 44, height: 44, borderRadius: 22, backgroundColor: '#fff',
+    alignItems: 'center', justifyContent: 'center',
+  },
+  categoryItemActive: { backgroundColor: '#ba0b2f' },
+  categoryEmoji: { fontSize: 22 },
+  actions: {
+    position: 'absolute', bottom: 24, flexDirection: 'row', gap: 20, alignItems: 'center',
+  },
+  actionBtn: {
+    width: 60, height: 60, borderRadius: 30, backgroundColor: '#fff',
+    alignItems: 'center', justifyContent: 'center',
+    shadowColor: '#ba0b2f', shadowOffset: { width: 0, height: 4 }, shadowOpacity: 0.2, shadowRadius: 8,
+  },
+  actionNope: { borderColor: '#ba0b2f', borderWidth: 2 },
+  actionSuper: { width: 50, height: 50, borderRadius: 25, borderColor: '#ba0b2f', borderWidth: 2 },
+  actionLike: { borderColor: '#ba0b2f', borderWidth: 2 },
   actionIcon: { fontSize: 24 },
-
-  // ── Empty ──
-  empty: { flex: 1, alignItems: 'center', justifyContent: 'center', backgroundColor: '#0A0A0A', gap: 12 },
+  empty: { flex: 1, alignItems: 'center', justifyContent: 'center', backgroundColor: '#fff' },
   emptyEmoji: { fontSize: 60 },
-  emptyLabel: { color: '#555', fontSize: 16, textAlign: 'center', paddingHorizontal: 32 },
-  reloadBtn: { marginTop: 8, backgroundColor: '#E8C547', paddingHorizontal: 20, paddingVertical: 12, borderRadius: 14 },
-  reloadBtnText: { color: '#0A0A0A', fontWeight: '700', fontSize: 15 },
+  emptyLabel: { color: '#222326', marginTop: 12, fontSize: 16 },
+  reloadBtn: { marginTop: 8, backgroundColor: '#ba0b2f', paddingHorizontal: 20, paddingVertical: 12, borderRadius: 14 },
+  reloadBtnText: { color: '#fff', fontWeight: '700', fontSize: 15 },
 
   // ── Detail Modal ──
-  detailModal: { flex: 1, backgroundColor: '#0D0D0D' },
-  detailSafe: { backgroundColor: '#0D0D0D' },
+  detailModal: { flex: 1, backgroundColor: '#fff' },
+  detailSafe: { backgroundColor: '#fff' },
   detailClose: { paddingHorizontal: 20, paddingVertical: 14 },
-  detailCloseText: { color: '#E8C547', fontWeight: '700', fontSize: 15 },
+  detailCloseText: { color: '#ba0b2f', fontWeight: '700', fontSize: 15 },
   detailScroll: { flex: 1 },
   detailContent: { paddingHorizontal: 20, paddingBottom: 40 },
-  detailName: { color: '#fff', fontSize: 28, fontWeight: '900', letterSpacing: -0.5, marginBottom: 6 },
+  detailName: { color: '#ba0b2f', fontSize: 28, fontWeight: '900', letterSpacing: -0.5, marginBottom: 6 },
   detailStars: { fontSize: 20, marginBottom: 16 },
   detailRow: { flexDirection: 'row', alignItems: 'flex-start', gap: 14, marginBottom: 20 },
   detailIcon: { fontSize: 24, marginTop: 2 },
-  detailRowLabel: { color: '#666', fontSize: 12, fontWeight: '600', marginBottom: 2 },
-  detailRowValue: { color: '#fff', fontSize: 15, fontWeight: '600' },
-  detailSectionTitle: { color: '#E8C547', fontSize: 14, fontWeight: '800', letterSpacing: 1, marginVertical: 16 },
+  detailRowLabel: { color: '#222326', fontSize: 12, fontWeight: '600', marginBottom: 2 },
+  detailRowValue: { color: '#222326', fontSize: 15, fontWeight: '600' },
+  detailSectionTitle: { color: '#ba0b2f', fontSize: 14, fontWeight: '800', letterSpacing: 1, marginVertical: 16 },
   miniMapContainer: { height: 180, borderRadius: 14, overflow: 'hidden', marginBottom: 8 },
   miniMap: { flex: 1 },
-  detailAddress: { color: '#888', fontSize: 13, marginBottom: 16 },
+  detailAddress: { color: '#222326', fontSize: 13, marginBottom: 16 },
 
   // ── Hours ──
-  hoursRow: { flexDirection: 'row', justifyContent: 'space-between', paddingVertical: 6, borderBottomWidth: 1, borderBottomColor: '#1A1A1A' },
-  hoursDay: { color: '#fff', fontSize: 14, fontWeight: '600', width: 100 },
-  hoursValue: { color: '#aaa', fontSize: 13, flex: 1, textAlign: 'right' },
-  hoursClosed: { color: '#FF4458' },
+  hoursRow: { flexDirection: 'row', justifyContent: 'space-between', paddingVertical: 6, borderBottomWidth: 1, borderBottomColor: 'rgba(186,11,47,0.2)' },
+  hoursDay: { color: '#222326', fontSize: 14, fontWeight: '600', width: 100 },
+  hoursValue: { color: '#222326', fontSize: 13, flex: 1, textAlign: 'right' },
+  hoursClosed: { color: '#ba0b2f' },
 
   // ── Amenities ──
   amenitiesWrap: { flexDirection: 'row', flexWrap: 'wrap', gap: 8, marginBottom: 8 },
-  amenityChip: { backgroundColor: '#1A1A1A', paddingHorizontal: 12, paddingVertical: 6, borderRadius: 20, borderWidth: 1, borderColor: '#2A2A2A' },
-  amenityChipText: { color: '#aaa', fontSize: 13 },
+  amenityChip: { backgroundColor: 'rgba(186,11,47,0.1)', paddingHorizontal: 12, paddingVertical: 6, borderRadius: 20, borderWidth: 1, borderColor: 'rgba(186,11,47,0.35)' },
+  amenityChipText: { color: '#ba0b2f', fontSize: 13 },
 
   // ── Reviews ──
   ratingBig: {
-    backgroundColor: '#1A1A1A', borderRadius: 16, padding: 16, alignItems: 'center',
-    marginBottom: 16, borderWidth: 1, borderColor: '#2A2A2A',
+    backgroundColor: '#fff', borderRadius: 16, padding: 16, alignItems: 'center',
+    marginBottom: 16, borderWidth: 1, borderColor: 'rgba(186,11,47,0.35)',
   },
-  ratingBigNum: { color: '#E8C547', fontSize: 42, fontWeight: '900' },
-  ratingBigSub: { color: '#666', fontSize: 12, marginTop: 4 },
+  ratingBigNum: { color: '#ba0b2f', fontSize: 42, fontWeight: '900' },
+  ratingBigSub: { color: '#222326', fontSize: 12, marginTop: 4 },
   reviewCard: {
-    backgroundColor: '#141414', borderRadius: 14, padding: 16, marginBottom: 10,
-    borderWidth: 1, borderColor: '#1E1E1E',
+    backgroundColor: '#fff', borderRadius: 14, padding: 16, marginBottom: 10,
+    borderWidth: 1, borderColor: 'rgba(186,11,47,0.25)',
   },
   reviewHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 4 },
-  reviewUser: { color: '#E8C547', fontWeight: '700', fontSize: 13 },
-  reviewBadge: { color: '#666', fontSize: 11, backgroundColor: '#1A1A1A', paddingHorizontal: 8, paddingVertical: 3, borderRadius: 10 },
-  reviewRating: { color: '#FFD700', fontSize: 13, marginBottom: 6 },
-  reviewContent: { color: '#ccc', fontSize: 14, lineHeight: 20 },
-  reviewLikes: { color: '#666', fontSize: 12, marginTop: 8 },
+  reviewUser: { color: '#ba0b2f', fontWeight: '700', fontSize: 13 },
+  reviewBadge: { color: '#ba0b2f', fontSize: 11, backgroundColor: 'rgba(186,11,47,0.1)', paddingHorizontal: 8, paddingVertical: 3, borderRadius: 10 },
+  reviewRating: { color: '#ba0b2f', fontSize: 13, marginBottom: 6 },
+  reviewContent: { color: '#222326', fontSize: 14, lineHeight: 20 },
+  reviewLikes: { color: '#222326', fontSize: 12, marginTop: 8 },
 
   // ── Contact ──
-  contactRow: { flexDirection: 'row', alignItems: 'center', gap: 12, paddingVertical: 12, borderBottomWidth: 1, borderBottomColor: '#1A1A1A' },
+  contactRow: { flexDirection: 'row', alignItems: 'center', gap: 12, paddingVertical: 12, borderBottomWidth: 1, borderBottomColor: 'rgba(186,11,47,0.2)' },
   contactIcon: { fontSize: 20 },
-  contactValue: { color: '#E8C547', fontSize: 14, fontWeight: '600', flex: 1 },
+  contactValue: { color: '#ba0b2f', fontSize: 14, fontWeight: '600', flex: 1 },
 
   // ── Match Modal ──
-  matchOverlay: { flex: 1, backgroundColor: 'rgba(0,0,0,0.85)', justifyContent: 'center', alignItems: 'center', padding: 24 },
-  matchBox: { backgroundColor: '#1A1A1A', borderRadius: 24, padding: 24, width: '100%', borderWidth: 1, borderColor: '#E8C547' },
-  matchTitle: { color: '#E8C547', fontSize: 26, fontWeight: '900', textAlign: 'center', marginBottom: 6 },
-  matchSub: { color: '#666', fontSize: 14, textAlign: 'center', marginBottom: 20 },
-  matchItem: { flexDirection: 'row', alignItems: 'center', gap: 12, paddingVertical: 10, borderBottomWidth: 1, borderBottomColor: '#2A2A2A' },
+  matchOverlay: { flex: 1, backgroundColor: 'rgba(186,11,47,0.2)', justifyContent: 'center', alignItems: 'center', padding: 24 },
+  matchBox: { backgroundColor: '#fff', borderRadius: 24, padding: 24, width: '100%', borderWidth: 1, borderColor: 'rgba(186,11,47,0.35)' },
+  matchTitle: { color: '#ba0b2f', fontSize: 26, fontWeight: '900', textAlign: 'center', marginBottom: 6 },
+  matchSub: { color: '#222326', fontSize: 14, textAlign: 'center', marginBottom: 20 },
+  matchItem: { flexDirection: 'row', alignItems: 'center', gap: 12, paddingVertical: 10, borderBottomWidth: 1, borderBottomColor: 'rgba(186,11,47,0.2)' },
   matchItemEmoji: { fontSize: 24 },
   matchItemInfo: { flex: 1 },
-  matchItemName: { color: '#fff', fontWeight: '700', fontSize: 15 },
-  matchItemSub: { color: '#666', fontSize: 12, marginTop: 2 },
-  matchClose: { backgroundColor: '#E8C547', paddingVertical: 14, borderRadius: 14, alignItems: 'center', marginTop: 20 },
-  matchCloseText: { color: '#0A0A0A', fontWeight: '800', fontSize: 15 },
+  matchItemName: { color: '#ba0b2f', fontWeight: '700', fontSize: 15 },
+  matchItemSub: { color: '#222326', fontSize: 12, marginTop: 2 },
+  matchClose: { backgroundColor: '#ba0b2f', paddingVertical: 14, borderRadius: 14, alignItems: 'center', marginTop: 20 },
+  matchCloseText: { color: '#fff', fontWeight: '800', fontSize: 15 },
   matchCloseSecondary: { paddingVertical: 12, alignItems: 'center', marginTop: 8 },
-  matchCloseSecondaryText: { color: '#666', fontSize: 14 },
+  matchCloseSecondaryText: { color: '#ba0b2f', fontSize: 14 },
 });

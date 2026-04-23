@@ -65,7 +65,7 @@ function makeLeafletHtml(pins: AnyPin[], isRestaurant: boolean, centerLat: numbe
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
-    body { background: #0A0A0A; }
+    body { background: #fff; }
     #map { width: 100vw; height: 100vh; }
     .leaflet-tile { filter: brightness(0.85) saturate(0.9); }
   </style>
@@ -154,6 +154,11 @@ export default function MapScreen({ route, navigation }: any) {
 
   return (
     <View style={styles.container}>
+      <SafeAreaView>
+        <View style={styles.header}>
+          {isRestaurant ? (<Text style={styles.title}>Restaurants</Text>) : (<Text style={styles.title}>Hôtels</Text>)}
+        </View>
+      </SafeAreaView>
       <SafeAreaView style={styles.safe}>
         {/* ── 3 top buttons ── */}
         <View style={styles.topBar}>
@@ -170,7 +175,7 @@ export default function MapScreen({ route, navigation }: any) {
               }}
             >
               <Text style={[styles.topBtnText, viewMode === m && styles.topBtnTextActive]}>
-                {m === 'map' ? '🗺️ Carte' : m === 'search' ? '🔍 Recherche' : '💫 Swipe'}
+                {m === 'map' ? 'Carte' : m === 'search' ? 'Recherche' : 'Swipe'}
               </Text>
             </TouchableOpacity>
           ))}
@@ -295,26 +300,27 @@ export default function MapScreen({ route, navigation }: any) {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: '#0A0A0A' },
+  container: { flex: 1, backgroundColor: '#fff' },
   safe: { flex: 1 },
-
+  header: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 20, paddingTop: 8 },
+  title: { color: '#ba0b2f', fontSize: 24, fontWeight: '800' },
   // ── Top bar ──
   topBar: {
     flexDirection: 'row',
     paddingHorizontal: 12,
     paddingVertical: 10,
     gap: 8,
-    backgroundColor: '#0A0A0A',
+    backgroundColor: '#fff',
     zIndex: 10,
   },
   topBtn: {
     flex: 1, paddingVertical: 10, borderRadius: 12,
-    backgroundColor: '#1A1A1A', alignItems: 'center',
+    backgroundColor: '#ba0b2f', alignItems: 'center',
     borderWidth: 1.5, borderColor: '#2A2A2A',
   },
-  topBtnActive: { backgroundColor: 'rgba(232,197,71,0.15)', borderColor: '#E8C547' },
-  topBtnText: { color: '#666', fontSize: 13, fontWeight: '700' },
-  topBtnTextActive: { color: '#E8C547' },
+  topBtnActive: { backgroundColor: 'rgba(232,197,71,0.15)', borderColor: '#ba0b2f' },
+  topBtnText: { color: '#fff', fontSize: 13, fontWeight: '700' },
+  topBtnTextActive: { color: '#ba0b2f' },
 
   // ── Map ──
   mapContainer: { flex: 1, position: 'relative' },
@@ -342,7 +348,7 @@ const styles = StyleSheet.create({
   // ── Legend ──
   legend: {
     position: 'absolute', top: 12, left: 12,
-    backgroundColor: 'rgba(10,10,10,0.85)', paddingHorizontal: 12, paddingVertical: 6,
+    backgroundColor: '#fff', paddingHorizontal: 12, paddingVertical: 6,
     borderRadius: 20, borderWidth: 1, borderColor: '#2A2A2A',
   },
   legendText: { color: '#888', fontSize: 12, fontWeight: '600' },
@@ -350,9 +356,9 @@ const styles = StyleSheet.create({
   // ── Search ──
   searchContainer: { flex: 1, paddingHorizontal: 16, paddingTop: 8 },
   searchInput: {
-    backgroundColor: '#141414', borderWidth: 1.5, borderColor: '#2A2A2A',
+    backgroundColor: '#fff', borderWidth: 1.5, borderColor: '#2A2A2A',
     borderRadius: 14, paddingHorizontal: 16, paddingVertical: 14,
-    color: '#fff', fontSize: 16, marginBottom: 12,
+    color: '#141414', fontSize: 16, marginBottom: 12,
   },
   searchHint: { alignItems: 'center', paddingTop: 60, gap: 12 },
   searchHintEmoji: { fontSize: 48 },

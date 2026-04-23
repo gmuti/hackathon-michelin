@@ -38,7 +38,7 @@ export default function LoginScreen({ navigation }: any) {
           <TextInput
             style={styles.input}
             placeholder="Email"
-            placeholderTextColor="#555"
+            placeholderTextColor="rgba(186,11,47,0.6)"
             value={email}
             onChangeText={setEmail}
             keyboardType="email-address"
@@ -48,7 +48,7 @@ export default function LoginScreen({ navigation }: any) {
           <TextInput
             style={styles.input}
             placeholder="Mot de passe"
-            placeholderTextColor="#555"
+            placeholderTextColor="rgba(186,11,47,0.6)"
             value={password}
             onChangeText={setPassword}
             secureTextEntry
@@ -56,7 +56,7 @@ export default function LoginScreen({ navigation }: any) {
 
           <TouchableOpacity style={styles.btn} onPress={handleLogin} disabled={loading}>
             {loading
-              ? <ActivityIndicator color="#0A0A0A" />
+              ? <ActivityIndicator color="#fff" />
               : <Text style={styles.btnText}>Se connecter</Text>
             }
           </TouchableOpacity>
@@ -74,32 +74,32 @@ export default function LoginScreen({ navigation }: any) {
 }
 
 const styles = StyleSheet.create({
-  safe: { flex: 1, backgroundColor: '#0A0A0A' },
+  safe: { flex: 1, backgroundColor: '#fff' },
   container: { flex: 1, justifyContent: 'center', paddingHorizontal: 24 },
   header: { alignItems: 'center', marginBottom: 52 },
   logo: { fontSize: 72, marginBottom: 16 },
-  title: { color: '#fff', fontSize: 34, fontWeight: '900', letterSpacing: -1 },
-  subtitle: { color: '#555', fontSize: 15, marginTop: 6 },
+  title: { color: '#ba0b2f', fontSize: 34, fontWeight: '900', letterSpacing: -1 },
+  subtitle: { color: '#222326', fontSize: 15, marginTop: 6 },
   form: { gap: 14 },
   input: {
-    backgroundColor: '#141414',
+    backgroundColor: '#fff',
     borderWidth: 1.5,
-    borderColor: '#2A2A2A',
+    borderColor: 'rgba(186,11,47,0.35)',
     borderRadius: 14,
     paddingHorizontal: 18,
     paddingVertical: 16,
-    color: '#fff',
+    color: '#ba0b2f',
     fontSize: 16,
   },
   btn: {
-    backgroundColor: '#E8C547',
+    backgroundColor: '#ba0b2f',
     paddingVertical: 17,
     borderRadius: 14,
     alignItems: 'center',
     marginTop: 6,
   },
-  btnText: { color: '#0A0A0A', fontSize: 17, fontWeight: '800' },
+  btnText: { color: '#fff', fontSize: 17, fontWeight: '800' },
   linkBtn: { alignItems: 'center', paddingVertical: 10 },
-  linkText: { color: '#555', fontSize: 14 },
-  linkAccent: { color: '#E8C547', fontWeight: '700' },
+  linkText: { color: '#222326', fontSize: 14 },
+  linkAccent: { color: '#ba0b2f', fontWeight: '700' },
 });
