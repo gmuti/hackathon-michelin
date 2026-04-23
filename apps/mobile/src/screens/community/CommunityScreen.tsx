@@ -75,7 +75,7 @@ export default function CommunityScreen() {
   if (loading) {
     return (
       <View style={styles.loader}>
-        <ActivityIndicator color="#E8C547" size="large" />
+        <ActivityIndicator color="#ba0b2f" size="large" />
       </View>
     );
   }
@@ -91,7 +91,7 @@ export default function CommunityScreen() {
 
       <ScrollView
         showsVerticalScrollIndicator={false}
-        refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} tintColor="#E8C547" />}
+        refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} tintColor="#ba0b2f" />}
       >
         {reviews.length === 0 ? (
           <View style={styles.empty}>
@@ -158,44 +158,55 @@ export default function CommunityScreen() {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: '#0A0A0A' },
-  loader: { flex: 1, backgroundColor: '#0A0A0A', justifyContent: 'center', alignItems: 'center' },
-  header: { paddingHorizontal: 20, paddingTop: 8, paddingBottom: 12 },
-  title: { color: '#E8C547', fontSize: 24, fontWeight: '800' },
-  subtitle: { color: '#555', fontSize: 13, marginTop: 2 },
-  empty: { alignItems: 'center', paddingTop: 80, paddingHorizontal: 32, gap: 10 },
-  emptyEmoji: { fontSize: 52 },
-  emptyTitle: { color: '#fff', fontSize: 18, fontWeight: '700', textAlign: 'center' },
-  emptyText: { color: '#555', fontSize: 14, textAlign: 'center', lineHeight: 20 },
+  container: { flex: 1, backgroundColor: '#fff' },
+  loader: { flex: 1, alignItems: 'center', justifyContent: 'center', backgroundColor: '#fff' },
+  header: { paddingHorizontal: 20, paddingTop: 8, paddingBottom: 0 },
+  title: { color: '#ba0b2f', fontSize: 24, fontWeight: '800', marginBottom: 14 },
+  subtitle: { color: '#222326', fontSize: 14, marginBottom: 8 },
+  empty: { alignItems: 'center', paddingHorizontal: 24, paddingVertical: 36 },
+  emptyEmoji: { fontSize: 44, marginBottom: 8 },
+  emptyTitle: { color: '#ba0b2f', fontSize: 18, fontWeight: '700', marginBottom: 6 },
+  emptyText: { color: '#222326', textAlign: 'center', lineHeight: 20 },
   feedContainer: { padding: 16, gap: 12 },
-  post: { backgroundColor: '#141414', borderRadius: 16, padding: 16, gap: 10 },
-  postHeader: { flexDirection: 'row', alignItems: 'center', gap: 10 },
+  post: { backgroundColor: '#fff', borderRadius: 16, padding: 16, borderWidth: 1, borderColor: 'rgba(186,11,47,0.28)' },
+  postHeader: { flexDirection: 'row', alignItems: 'center', gap: 10, marginBottom: 10 },
   avatar: {
-    width: 40, height: 40, borderRadius: 20, backgroundColor: '#E8C547',
+    width: 40, height: 40, borderRadius: 20, backgroundColor: '#ba0b2f',
     alignItems: 'center', justifyContent: 'center',
   },
-  avatarText: { color: '#0A0A0A', fontWeight: '700', fontSize: 14 },
+  avatarText: { color: '#fff', fontWeight: '700', fontSize: 14 },
   postMeta: { flex: 1 },
-  postAuthor: { color: '#fff', fontWeight: '700', fontSize: 14 },
-  postRole: { color: '#666', fontSize: 12, marginTop: 1 },
-  postTime: { color: '#444', fontSize: 12 },
+  postAuthor: { color: '#ba0b2f', fontWeight: '700', fontSize: 14 },
+  postRole: { color: '#222326', fontSize: 12, marginTop: 1 },
+  postTime: { color: '#222326', fontSize: 12 },
   targetBadge: {
-    flexDirection: 'row', alignItems: 'center', gap: 6,
-    backgroundColor: 'rgba(232,197,71,0.1)', paddingHorizontal: 10, paddingVertical: 5,
-    borderRadius: 8, borderWidth: 1, borderColor: 'rgba(232,197,71,0.3)',
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+    backgroundColor: 'rgba(186,11,47,0.08)',
+    borderWidth: 1,
+    borderColor: 'rgba(186,11,47,0.24)',
+    borderRadius: 999,
+    paddingHorizontal: 10,
+    paddingVertical: 6,
     alignSelf: 'flex-start',
+    marginBottom: 10,
   },
   targetIcon: { fontSize: 14 },
-  targetName: { color: '#E8C547', fontSize: 13, fontWeight: '600' },
-  postContent: { color: '#CCC', lineHeight: 21, fontSize: 14 },
-  postFooter: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' },
+  targetName: { color: '#ba0b2f', fontSize: 12, fontWeight: '600' },
+  postContent: { color: '#222326', lineHeight: 20, marginBottom: 12 },
+  postFooter: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', gap: 16 },
   ratingRow: { flexDirection: 'row', alignItems: 'center', gap: 2 },
-  star: { color: '#333', fontSize: 16 },
-  starActive: { color: '#E8C547' },
-  ratingNum: { color: '#888', fontSize: 13, marginLeft: 4 },
+  star: { color: 'rgba(186,11,47,0.35)', fontSize: 14 },
+  starActive: { color: '#ba0b2f' },
+  ratingNum: { color: '#ba0b2f', fontSize: 12, fontWeight: '700', marginLeft: 6 },
   certifiedBadge: {
-    backgroundColor: 'rgba(0,200,100,0.15)', paddingHorizontal: 8, paddingVertical: 3,
-    borderRadius: 6, borderWidth: 1, borderColor: 'rgba(0,200,100,0.4)',
+    backgroundColor: 'rgba(186,11,47,0.1)',
+    borderWidth: 1,
+    borderColor: 'rgba(186,11,47,0.35)',
+    borderRadius: 999,
+    paddingHorizontal: 10,
+    paddingVertical: 4,
   },
-  certifiedText: { color: '#00C864', fontSize: 11, fontWeight: '700' },
+  certifiedText: { color: '#ba0b2f', fontSize: 11, fontWeight: '700' },
 });

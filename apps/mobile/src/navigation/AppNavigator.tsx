@@ -1,9 +1,13 @@
 import React from 'react';
-import { View, ActivityIndicator } from 'react-native';
+import { ActivityIndicator, Text, View } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { Text } from 'react-native';
+
+import RestaurantLogo from '../../logo/restaurant.svg';
+import HotelLogo from '../../logo/hotel.svg';
+import CommunityLogo from '../../logo/communaute.svg';
+import ProfileLogo from '../../logo/profil.svg';
 
 import { useAuth } from '../context/AuthContext';
 
@@ -17,8 +21,8 @@ import LoginScreen from '../screens/auth/LoginScreen';
 import RegisterScreen from '../screens/auth/RegisterScreen';
 
 export type RootTabParamList = {
-  Restaurants: { mode: string };
-  Hotels: { mode: string };
+  Restaurants: { mode: 'restaurant' } | undefined;
+  Hotels: { mode: 'hotel' } | undefined;
   Community: undefined;
   Profile: undefined;
 };
@@ -26,11 +30,11 @@ export type RootTabParamList = {
 const Tab = createBottomTabNavigator<RootTabParamList>();
 const Stack = createNativeStackNavigator();
 
-const TAB_ICONS: Record<string, string> = {
-  Restaurants: '🍽️',
-  Hotels: '🏨',
-  Community: '👥',
-  Profile: '👤',
+const TAB_ICONS: Record<string, React.ComponentType<any>> = {
+  Restaurants: RestaurantLogo,
+  Hotels: HotelLogo,
+  Community: CommunityLogo,
+  Profile: ProfileLogo,
 };
 
 function TabNavigator() {
@@ -39,22 +43,25 @@ function TabNavigator() {
       screenOptions={({ route }) => ({
         headerShown: false,
         tabBarStyle: {
-          backgroundColor: '#0D0D0D',
-          borderTopColor: '#1C1C1C',
+          backgroundColor: '#fff',
+          borderTopColor: '#ba0b2f',
           height: 80,
           paddingBottom: 16,
           paddingTop: 8,
         },
-        tabBarActiveTintColor: '#E8C547',
-        tabBarInactiveTintColor: '#444',
-        tabBarLabel: ({ color }) => (
-          <Text style={{ color, fontSize: 10, fontWeight: '600' }}>{route.name}</Text>
-        ),
-        tabBarIcon: ({ color }) => (
-          <Text style={{ fontSize: 22, opacity: color === '#E8C547' ? 1 : 0.5 }}>
-            {TAB_ICONS[route.name]}
-          </Text>
-        ),
+        tabBarActiveTintColor: '#ba0b2f',
+        tabBarInactiveTintColor: 'rgba(186,11,47,0.55)',
+        tabBarLabel: () => null, // Remove text labels
+        tabBarIcon: ({ focused }) => {
+          const Logo = TAB_ICONS[route.name];
+          // Always use #ba0b2f when active, light red when inactive
+          const fillColor = focused ? '#ba0b2f' : '#f8bfc9';
+          return (
+            <View style={{ alignItems: 'center', justifyContent: 'center' }}>
+              <Logo width={36} height={36} fill={fillColor} />
+            </View>
+          );
+        },
       })}
     >
       <Tab.Screen name="Restaurants" component={MapScreen} initialParams={{ mode: 'restaurant' }} />
@@ -70,8 +77,8 @@ export default function AppNavigator() {
 
   if (isLoading) {
     return (
-      <View style={{ flex: 1, backgroundColor: '#0A0A0A', justifyContent: 'center', alignItems: 'center' }}>
-        <ActivityIndicator color="#E8C547" size="large" />
+      <View style={{ flex: 1, backgroundColor: '#fff', justifyContent: 'center', alignItems: 'center' }}>
+        <ActivityIndicator color="#ba0b2f" size="large" />
       </View>
     );
   }

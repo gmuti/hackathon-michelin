@@ -109,7 +109,11 @@ export default function ProfileScreen() {
     setList(prev => prev.includes(id) ? prev.filter(x => x !== id) : [...prev, id]);
 
   if (loading) {
-    return <View style={styles.loader}><ActivityIndicator color="#E8C547" size="large" /></View>;
+    return (
+      <View style={styles.loader}>
+        <ActivityIndicator color="#ba0b2f" size="large" />
+      </View>
+    );
   }
 
   const p = profile ?? authUser;
@@ -355,130 +359,93 @@ export default function ProfileScreen() {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: '#0A0A0A' },
-  loader: { flex: 1, backgroundColor: '#0A0A0A', justifyContent: 'center', alignItems: 'center' },
-  header: {
-    flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center',
-    paddingHorizontal: 20, paddingTop: 8,
-  },
-  title: { color: '#E8C547', fontSize: 24, fontWeight: '800' },
+  container: { flex: 1, backgroundColor: '#fff' },
+  header: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 20, paddingTop: 8 },
+  title: { color: '#ba0b2f', fontSize: 24, fontWeight: '800' },
+  loader: { flex: 1, backgroundColor: '#ffffff', justifyContent: 'center', alignItems: 'center' },
   settingsBtn: { padding: 4 },
   settingsIcon: { fontSize: 22 },
   hero: { alignItems: 'center', paddingVertical: 24, paddingHorizontal: 20 },
   avatarLg: {
-    width: 88, height: 88, borderRadius: 44, backgroundColor: '#E8C547',
+    width: 88, height: 88, borderRadius: 44, backgroundColor: '#ba0b2f',
     alignItems: 'center', justifyContent: 'center', marginBottom: 12,
-    borderWidth: 3, borderColor: '#F5D66A',
+    borderWidth: 3, borderColor: '#ba0b2f',
   },
-  avatarLgText: { color: '#0A0A0A', fontSize: 28, fontWeight: '800' },
-  username: { color: '#fff', fontSize: 18, fontWeight: '700', marginBottom: 6 },
-  roleBadgeWrap: { marginBottom: 10 },
+  avatarLgText: { color: '#fff', fontSize: 28, fontWeight: '800' },
+  username: { color: '#ba0b2f', fontSize: 18, fontWeight: '700', marginBottom: 4 },
   roleBadge: {
-    color: '#0A0A0A', backgroundColor: '#E8C547',
-    paddingHorizontal: 14, paddingVertical: 5, borderRadius: 20, fontSize: 13, fontWeight: '700',
+    color: '#fff', backgroundColor: '#ba0b2f', paddingHorizontal: 12,
+    paddingVertical: 4, borderRadius: 20, fontSize: 13, fontWeight: '700', marginBottom: 8,
   },
-  bio: { color: '#888', fontSize: 14, textAlign: 'center', lineHeight: 20, marginBottom: 16 },
-  statsRow: { flexDirection: 'row', gap: 24, alignItems: 'center', marginTop: 8 },
+  bio: { color: '#222326', fontSize: 14, textAlign: 'center', lineHeight: 20, marginBottom: 20 },
+  statsRow: { flexDirection: 'row', gap: 24, alignItems: 'center' },
   stat: { alignItems: 'center' },
-  statNum: { color: '#fff', fontSize: 20, fontWeight: '800' },
-  statLabel: { color: '#666', fontSize: 12, marginTop: 2 },
-  statDivider: { width: 1, height: 30, backgroundColor: '#2A2A2A' },
-
-  section: { paddingHorizontal: 20, paddingBottom: 28 },
-  sectionHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 },
-  sectionTitle: { color: '#fff', fontSize: 18, fontWeight: '700' },
-  editBtn: {
-    backgroundColor: 'rgba(232,197,71,0.12)', borderWidth: 1, borderColor: '#E8C547',
-    paddingHorizontal: 14, paddingVertical: 6, borderRadius: 20,
-  },
-  editBtnText: { color: '#E8C547', fontSize: 13, fontWeight: '700' },
-
-  // ── Prefs ──
-  prefSubtitle: { color: '#666', fontSize: 12, fontWeight: '600', marginBottom: 8 },
-  prefsRow: { flexDirection: 'row', flexWrap: 'wrap', gap: 8 },
-  prefChip: {
-    flexDirection: 'row', alignItems: 'center', gap: 6,
-    backgroundColor: 'rgba(232,197,71,0.12)', borderWidth: 1.5, borderColor: '#E8C547',
-    paddingHorizontal: 12, paddingVertical: 6, borderRadius: 20,
-  },
-  prefChipDietary: { backgroundColor: 'rgba(0,200,100,0.08)', borderColor: '#00C864' },
-  prefChipEmoji: { fontSize: 14 },
-  prefChipText: { color: '#E8C547', fontSize: 13, fontWeight: '600' },
-  prefChipTextDietary: { color: '#00C864' },
-  emptyPrefs: {
-    borderWidth: 1.5, borderStyle: 'dashed', borderColor: '#2A2A2A',
-    borderRadius: 14, padding: 16, alignItems: 'center',
-  },
-  emptyPrefsText: { color: '#555', fontSize: 14 },
-
-  // ── Modal prefs ──
-  prefModalSection: { color: '#888', fontSize: 13, fontWeight: '600', marginBottom: 12 },
-  chipsWrap: { flexDirection: 'row', flexWrap: 'wrap', gap: 10 },
-  chip: {
-    flexDirection: 'row', alignItems: 'center', gap: 6,
-    backgroundColor: '#141414', paddingHorizontal: 14, paddingVertical: 10,
-    borderRadius: 50, borderWidth: 1.5, borderColor: '#2A2A2A',
-  },
-  chipActive: { backgroundColor: 'rgba(232,197,71,0.15)', borderColor: '#E8C547' },
-  chipEmoji: { fontSize: 18 },
-  chipLabel: { color: '#888', fontSize: 14, fontWeight: '600' },
-  chipLabelActive: { color: '#E8C547' },
-
-  // ── Progression ──
+  statNum: { color: '#ba0b2f', fontSize: 20, fontWeight: '800' },
+  statLabel: { color: '#222326', fontSize: 12, marginTop: 2 },
+  statDivider: { width: 1, height: 30, backgroundColor: 'rgba(186,11,47,0.35)' },
+  section: { paddingHorizontal: 20, paddingBottom: 24 },
+  sectionTitle: { color: '#ba0b2f', fontSize: 18, fontWeight: '700', marginBottom: 16 },
+  roleBadgeWrap: { marginBottom: 10 },
   roleTrack: { flexDirection: 'row', alignItems: 'center', marginBottom: 8 },
   roleStep: { flexDirection: 'row', alignItems: 'center', flex: 1 },
   roleCircle: {
-    width: 28, height: 28, borderRadius: 14, backgroundColor: '#1A1A1A',
-    alignItems: 'center', justifyContent: 'center', borderWidth: 2, borderColor: '#333',
+    width: 28, height: 28, borderRadius: 14, backgroundColor: '#fff',
+    alignItems: 'center', justifyContent: 'center', borderWidth: 2, borderColor: '#ba0b2f',
   },
-  roleCircleDone: { backgroundColor: '#E8C547', borderColor: '#E8C547' },
-  roleCircleText: { color: '#555', fontSize: 11, fontWeight: '700' },
-  roleCircleTextDone: { color: '#0A0A0A' },
-  roleLine: { flex: 1, height: 2, backgroundColor: '#2A2A2A' },
-  roleLineDone: { backgroundColor: '#E8C547' },
-  roleLabels: { flexDirection: 'row', justifyContent: 'space-between', marginBottom: 10 },
-  roleLabel: { color: '#555', fontSize: 16, textAlign: 'center', flex: 1 },
-  roleLabelDone: { color: '#E8C547' },
+  roleCircleDone: { backgroundColor: '#ba0b2f', borderColor: '#ba0b2f' },
+  roleCircleText: { color: '#ba0b2f', fontSize: 11, fontWeight: '700' },
+  roleLine: { flex: 1, height: 2, backgroundColor: 'rgba(186,11,47,0.35)' },
+  roleLineDone: { backgroundColor: '#ba0b2f' },
+  roleLabels: { flexDirection: 'row', justifyContent: 'space-between' },
+  roleLabel: { color: '#222326', fontSize: 9, textAlign: 'center', flex: 1 },
+  roleLabelDone: { color: '#ba0b2f' },
   nextRoleBox: {
-    backgroundColor: '#141414', borderRadius: 12, padding: 14,
-    borderWidth: 1, borderColor: '#2A2A2A', alignItems: 'center',
+    backgroundColor: '#fff', borderRadius: 12, padding: 14,
+    borderWidth: 1, borderColor: 'rgba(186,11,47,0.35)', alignItems: 'center',
   },
-  nextRoleText: { color: '#fff', fontWeight: '700', fontSize: 14 },
-  nextRoleCount: { color: '#E8C547', fontSize: 12, marginTop: 4 },
-
-  // ── Collection ──
+  nextRoleText: { color: '#ba0b2f', fontWeight: '700', fontSize: 14 },
+  nextRoleCount: { color: '#222326', fontSize: 12, marginTop: 4 },
   emptyBox: { alignItems: 'center', paddingVertical: 24, gap: 8 },
   emptyBoxEmoji: { fontSize: 40 },
-  emptyBoxText: { color: '#555', fontSize: 14, textAlign: 'center', lineHeight: 20 },
+  emptyBoxText: { color: '#222326', fontSize: 14, textAlign: 'center', lineHeight: 20 },
+  roleCircleTextDone: { color: '#fff' },
   collectionGrid: { flexDirection: 'row', flexWrap: 'wrap', gap: 10 },
   collectionCard: {
-    width: '47%', backgroundColor: '#141414', borderRadius: 14,
+    width: '47%', backgroundColor: '#fff', borderRadius: 14,
     padding: 14, flexDirection: 'row', alignItems: 'center', gap: 10,
+    borderWidth: 1, borderColor: 'rgba(186,11,47,0.28)',
   },
   collectionThumb: { fontSize: 28 },
   collectionInfo: { flex: 1 },
-  collectionName: { color: '#fff', fontWeight: '700', fontSize: 13 },
-  collectionCity: { color: '#666', fontSize: 11, marginTop: 2 },
-
-  // ── Logout ──
+  prefsRow: { flexDirection: 'row', flexWrap: 'wrap', gap: 8 },
+  prefChip: {
+    backgroundColor: 'rgba(186,11,47,0.1)', borderWidth: 1.5, borderColor: 'rgba(186,11,47,0.35)',
+    paddingHorizontal: 12, paddingVertical: 6, borderRadius: 20,
+  },
+  prefChipText: { color: '#ba0b2f', fontSize: 13, fontWeight: '600' },
   logoutBtn: {
     marginHorizontal: 20, paddingVertical: 14, borderRadius: 14,
-    borderWidth: 1.5, borderColor: '#FF4458', alignItems: 'center',
+    borderWidth: 1.5, borderColor: '#ba0b2f', alignItems: 'center',
   },
-  logoutText: { color: '#FF4458', fontWeight: '700', fontSize: 15 },
-
-  // ── Modals ──
+  logoutText: { color: '#ba0b2f', fontWeight: '700', fontSize: 15 },
   modalOverlay: {
-    flex: 1, backgroundColor: 'rgba(0,0,0,0.75)',
-    justifyContent: 'center', alignItems: 'center', padding: 24,
+    flex: 1, backgroundColor: 'rgba(186,11,47,0.35)',
+    justifyContent: 'center', alignItems: 'center', padding: 32,
   },
-  modalBox: { backgroundColor: '#1A1A1A', borderRadius: 20, padding: 24, width: '100%', gap: 12 },
-  modalTitle: { color: '#fff', fontSize: 20, fontWeight: '800', textAlign: 'center' },
-  modalSub: { color: '#666', fontSize: 14, textAlign: 'center', marginBottom: 4 },
-  modalBtnPrimary: { backgroundColor: '#E8C547', paddingVertical: 14, borderRadius: 12, alignItems: 'center' },
-  modalBtnPrimaryText: { color: '#0A0A0A', fontWeight: '800', fontSize: 16 },
-  modalBtnDanger: { backgroundColor: '#FF4458', paddingVertical: 14, borderRadius: 12, alignItems: 'center' },
+  modalBox: {
+    backgroundColor: '#fff', borderRadius: 20, padding: 24,
+    width: '100%', gap: 12,
+  },
+  modalTitle: { color: '#ba0b2f', fontSize: 20, fontWeight: '800', textAlign: 'center' },
+  modalSub: { color: '#222326', fontSize: 14, textAlign: 'center', marginBottom: 4 },
+  modalBtnDanger: {
+    backgroundColor: '#ba0b2f', paddingVertical: 14, borderRadius: 12, alignItems: 'center',
+  },
   modalBtnDangerText: { color: '#fff', fontWeight: '800', fontSize: 16 },
-  modalBtnCancel: { backgroundColor: '#2A2A2A', paddingVertical: 14, borderRadius: 12, alignItems: 'center' },
-  modalBtnCancelText: { color: '#888', fontWeight: '600', fontSize: 15 },
+  modalBtnCancel: {
+    backgroundColor: '#fff', paddingVertical: 14, borderRadius: 12, alignItems: 'center', borderWidth: 1, borderColor: 'rgba(186,11,47,0.35)',
+  },
+  modalBtnCancelText: { color: '#ba0b2f', fontWeight: '600', fontSize: 15 },
+  collectionName: { color: '#ba0b2f', fontWeight: '700', fontSize: 13 },
+  collectionCity: { color: '#222326', fontSize: 11, marginTop: 2 },
 });
