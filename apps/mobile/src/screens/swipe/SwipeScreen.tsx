@@ -1057,53 +1057,53 @@ const styles = StyleSheet.create({
   reloadBtnText: { color: '#fff', fontWeight: '700', fontSize: 15 },
 
   // ── Detail Modal ──
-  detailModal: { flex: 1, backgroundColor: '#0A0A0A' },
-  detailSafe: { backgroundColor: '#0D0D0D' },
+  detailModal: { flex: 1, backgroundColor: '#ffffff' },
+  detailSafe: { backgroundColor: '#ffffff' },
   detailClose: { paddingHorizontal: 20, paddingVertical: 14 },
   detailCloseText: { color: '#ba0b2f', fontWeight: '700', fontSize: 15 },
   detailScroll: { flex: 1 },
   detailContent: { paddingHorizontal: 20, paddingBottom: 40 },
-  detailName: { color: '#ffffff', fontSize: 28, fontWeight: '900', letterSpacing: -0.5, marginBottom: 6 },
+  detailName: { color: '#1A1A1A', fontSize: 28, fontWeight: '900', letterSpacing: -0.5, marginBottom: 6 },
   detailStars: { fontSize: 20, marginBottom: 16 },
   detailRow: { flexDirection: 'row', alignItems: 'flex-start', gap: 14, marginBottom: 20 },
   detailIcon: { fontSize: 24, marginTop: 2 },
   detailRowLabel: { color: '#888', fontSize: 12, fontWeight: '600', marginBottom: 2 },
-  detailRowValue: { color: '#ffffff', fontSize: 15, fontWeight: '600' },
+  detailRowValue: { color: '#1A1A1A', fontSize: 15, fontWeight: '600' },
   detailSectionTitle: { color: '#ba0b2f', fontSize: 14, fontWeight: '800', letterSpacing: 1, marginVertical: 16 },
   miniMap: { marginBottom: 8 },
-  detailAddress: { color: '#888', fontSize: 13, marginBottom: 16 },
+  detailAddress: { color: '#666', fontSize: 13, marginBottom: 16 },
 
   // ── Hours ──
-  hoursRow: { flexDirection: 'row', justifyContent: 'space-between', paddingVertical: 6, borderBottomWidth: 1, borderBottomColor: '#2A2A2A' },
-  hoursDay: { color: '#ffffff', fontSize: 14, fontWeight: '600', width: 100 },
-  hoursValue: { color: '#aaa', fontSize: 13, flex: 1, textAlign: 'right' },
+  hoursRow: { flexDirection: 'row', justifyContent: 'space-between', paddingVertical: 6, borderBottomWidth: 1, borderBottomColor: '#eee' },
+  hoursDay: { color: '#1A1A1A', fontSize: 14, fontWeight: '600', width: 100 },
+  hoursValue: { color: '#555', fontSize: 13, flex: 1, textAlign: 'right' },
   hoursClosed: { color: '#FF4458' },
 
   // ── Amenities ──
   amenitiesWrap: { flexDirection: 'row', flexWrap: 'wrap', gap: 8, marginBottom: 8 },
-  amenityChip: { backgroundColor: '#1A1A1A', paddingHorizontal: 12, paddingVertical: 6, borderRadius: 20, borderWidth: 1, borderColor: '#333' },
-  amenityChipText: { color: '#ccc', fontSize: 13 },
+  amenityChip: { backgroundColor: '#f2f2f2', paddingHorizontal: 12, paddingVertical: 6, borderRadius: 20, borderWidth: 1, borderColor: '#ddd' },
+  amenityChipText: { color: '#444', fontSize: 13 },
 
   // ── Reviews ──
   ratingBig: {
-    backgroundColor: '#1A1A1A', borderRadius: 16, padding: 16, alignItems: 'center',
-    marginBottom: 16, borderWidth: 1, borderColor: '#333',
+    backgroundColor: '#fafafa', borderRadius: 16, padding: 16, alignItems: 'center',
+    marginBottom: 16, borderWidth: 1, borderColor: 'rgba(186,11,47,0.15)',
   },
   ratingBigNum: { color: '#ba0b2f', fontSize: 42, fontWeight: '900' },
   ratingBigSub: { color: '#888', fontSize: 12, marginTop: 4 },
   reviewCard: {
-    backgroundColor: '#141414', borderRadius: 14, padding: 16, marginBottom: 10,
-    borderWidth: 1, borderColor: '#222',
+    backgroundColor: '#fafafa', borderRadius: 14, padding: 16, marginBottom: 10,
+    borderWidth: 1, borderColor: '#eee',
   },
   reviewHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 4 },
   reviewUser: { color: '#ba0b2f', fontWeight: '700', fontSize: 13 },
-  reviewBadge: { color: '#999', fontSize: 11, backgroundColor: '#1A1A1A', paddingHorizontal: 8, paddingVertical: 3, borderRadius: 10 },
-  reviewRating: { color: '#FFD700', fontSize: 13, marginBottom: 6 },
-  reviewContent: { color: '#ccc', fontSize: 14, lineHeight: 20 },
+  reviewBadge: { color: '#666', fontSize: 11, backgroundColor: '#f0f0f0', paddingHorizontal: 8, paddingVertical: 3, borderRadius: 10 },
+  reviewRating: { color: '#c8960c', fontSize: 13, marginBottom: 6 },
+  reviewContent: { color: '#444', fontSize: 14, lineHeight: 20 },
   reviewLikes: { color: '#888', fontSize: 12, marginTop: 8 },
 
   // ── Contact ──
-  contactRow: { flexDirection: 'row', alignItems: 'center', gap: 12, paddingVertical: 12, borderBottomWidth: 1, borderBottomColor: '#2A2A2A' },
+  contactRow: { flexDirection: 'row', alignItems: 'center', gap: 12, paddingVertical: 12, borderBottomWidth: 1, borderBottomColor: '#eee' },
   contactIcon: { fontSize: 20 },
   contactValue: { color: '#ba0b2f', fontSize: 14, fontWeight: '600', flex: 1 },
 
