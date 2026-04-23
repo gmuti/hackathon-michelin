@@ -1,9 +1,9 @@
-import React, { useState, useRef, useCallback, useEffect } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import {
   View, Text, StyleSheet, SafeAreaView, TouchableOpacity,
   TextInput, ScrollView, ActivityIndicator, Dimensions,
 } from 'react-native';
-import { WebView } from 'react-native-webview';
+import MapView, { Marker, PROVIDER_DEFAULT } from 'react-native-maps';
 import * as Location from 'expo-location';
 import { useAuth } from '../../context/AuthContext';
 import { api } from '../../config/api';
@@ -33,61 +33,6 @@ function cuisineEmoji(type: string): string {
   return CUISINE_EMOJI[type] ?? CUISINE_EMOJI.default;
 }
 
-function makeLeafletHtml(pins: AnyPin[], isRestaurant: boolean, centerLat: number, centerLng: number): string {
-  const markersJs = pins.map((p) => {
-    const isRest = isRestaurant;
-    const emoji = isRest
-      ? cuisineEmoji((p as RestaurantPin).cuisineType)
-      : '🏨';
-    const stars = isRest ? (p as RestaurantPin).michelinStars : (p as HotelPin).stars;
-    const starsHtml = stars > 0 ? `<span style="font-size:10px;position:absolute;top:-4px;right:-4px;background:#ba0b2f;border-radius:8px;padding:0 3px;color:#000;font-weight:bold;">${'⭐'.repeat(Math.min(stars, 3))}</span>` : '';
-    const label = `<div style="position:relative;display:inline-block;font-size:28px;line-height:1;">${emoji}${starsHtml}</div>`;
-    return `
-      var icon_${p.id.replace(/-/g, '_')} = L.divIcon({
-        html: '${label.replace(/'/g, "\\'")}',
-        className: '',
-        iconSize: [40, 40],
-        iconAnchor: [20, 40],
-      });
-      L.marker([${p.lat}, ${p.lng}], { icon: icon_${p.id.replace(/-/g, '_')} })
-        .addTo(map)
-        .on('click', function() {
-          window.ReactNativeWebView.postMessage(JSON.stringify({ type: 'pin', id: '${p.id}' }));
-        });
-    `;
-  }).join('\n');
-
-  return `<!DOCTYPE html>
-<html>
-<head>
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
-  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-  <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    body { background: #fff; }
-    #map { width: 100vw; height: 100vh; }
-    .leaflet-tile { filter: brightness(0.85) saturate(0.9); }
-  </style>
-</head>
-<body>
-  <div id="map"></div>
-  <script>
-    var map = L.map('map', {
-      zoomControl: true,
-      attributionControl: false,
-    }).setView([${centerLat}, ${centerLng}], 13);
-
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      maxZoom: 19,
-    }).addTo(map);
-
-    ${markersJs}
-  </script>
-</body>
-</html>`;
-}
-
 export default function MapScreen({ route, navigation }: any) {
   const mode: 'restaurant' | 'hotel' = route?.params?.mode ?? 'restaurant';
   const { token } = useAuth();
@@ -99,7 +44,6 @@ export default function MapScreen({ route, navigation }: any) {
   const [searchText, setSearchText] = useState('');
   const [searchResults, setSearchResults] = useState<AnyPin[]>([]);
   const [selectedPin, setSelectedPin] = useState<AnyPin | null>(null);
-  const webviewRef = useRef<WebView>(null);
 
   const fetchPins = useCallback(async (lat: number, lng: number) => {
     if (!token) return;
@@ -128,9 +72,8 @@ export default function MapScreen({ route, navigation }: any) {
         const { status } = await Location.requestForegroundPermissionsAsync();
         if (status === 'granted') {
           const loc = await Location.getCurrentPositionAsync({ accuracy: Location.Accuracy.Balanced });
-          const newCenter = { lat: loc.coords.latitude, lng: loc.coords.longitude };
-          setCenter(newCenter);
-          fetchPins(newCenter.lat, newCenter.lng);
+          setCenter({ lat: loc.coords.latitude, lng: loc.coords.longitude });
+          fetchPins(loc.coords.latitude, loc.coords.longitude);
         } else {
           fetchPins(center.lat, center.lng);
         }
@@ -150,15 +93,12 @@ export default function MapScreen({ route, navigation }: any) {
   }, [pins]);
 
   const isRestaurant = mode === 'restaurant';
-  const leafletHtml = makeLeafletHtml(pins, isRestaurant, center.lat, center.lng);
 
   return (
     <View style={styles.container}>
-      <SafeAreaView>
-        <View style={styles.header}>
-          {isRestaurant ? (<Text style={styles.title}>Restaurants</Text>) : (<Text style={styles.title}>Hôtels</Text>)}
-        </View>
-      </SafeAreaView>
+      <View style={styles.header}>
+        {isRestaurant ? (<Text style={styles.title}>Restaurants</Text>) : (<Text style={styles.title}>Hôtels</Text>)}
+      </View>
       <SafeAreaView style={styles.safe}>
         {/* ── 3 top buttons ── */}
         <View style={styles.topBar}>
@@ -190,23 +130,42 @@ export default function MapScreen({ route, navigation }: any) {
                 <Text style={styles.mapLoaderText}>Chargement de la carte…</Text>
               </View>
             )}
-            <WebView
-              ref={webviewRef}
-              source={{ html: leafletHtml }}
-              style={styles.webview}
-              originWhitelist={['*']}
-              javaScriptEnabled
-              onMessage={(e) => {
-                try {
-                  const msg = JSON.parse(e.nativeEvent.data);
-                  if (msg.type === 'pin') {
-                    const found = pins.find(p => p.id === msg.id);
-                    if (found) setSelectedPin(found);
-                  }
-                } catch {}
+            <MapView
+              provider={PROVIDER_DEFAULT}
+              style={styles.map}
+              initialRegion={{
+                latitude: center.lat,
+                longitude: center.lng,
+                latitudeDelta: 0.12,
+                longitudeDelta: 0.12,
               }}
-              onLoadEnd={() => setLoading(false)}
-            />
+            >
+              {pins.map(pin => {
+                const emoji = isRestaurant
+                  ? cuisineEmoji((pin as RestaurantPin).cuisineType)
+                  : '🏨';
+                const stars = isRestaurant
+                  ? (pin as RestaurantPin).michelinStars
+                  : (pin as HotelPin).stars;
+                return (
+                  <Marker
+                    key={pin.id}
+                    coordinate={{ latitude: pin.lat, longitude: pin.lng }}
+                    onPress={() => setSelectedPin(pin)}
+                    tracksViewChanges={false}
+                  >
+                    <View style={styles.markerWrap}>
+                      <Text style={styles.markerEmoji}>{emoji}</Text>
+                      {stars > 0 && (
+                        <View style={styles.markerBadge}>
+                          <Text style={styles.markerBadgeText}>{'⭐'.repeat(Math.min(stars, 3))}</Text>
+                        </View>
+                      )}
+                    </View>
+                  </Marker>
+                );
+              })}
+            </MapView>
 
             {/* ── Pin tooltip ── */}
             {selectedPin && (
@@ -304,6 +263,7 @@ const styles = StyleSheet.create({
   safe: { flex: 1 },
   header: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 20, paddingTop: 8 },
   title: { color: '#ba0b2f', fontSize: 24, fontWeight: '800' },
+
   // ── Top bar ──
   topBar: {
     flexDirection: 'row',
@@ -315,16 +275,16 @@ const styles = StyleSheet.create({
   },
   topBtn: {
     flex: 1, paddingVertical: 10, borderRadius: 12,
-    backgroundColor: '#ba0b2f', alignItems: 'center',
+    backgroundColor: '#fff', alignItems: 'center',
     borderWidth: 1.5, borderColor: '#2A2A2A',
   },
   topBtnActive: { backgroundColor: 'rgba(232,197,71,0.15)', borderColor: '#ba0b2f' },
-  topBtnText: { color: '#fff', fontSize: 13, fontWeight: '700' },
+  topBtnText: { color: '#666', fontSize: 13, fontWeight: '700' },
   topBtnTextActive: { color: '#ba0b2f' },
 
   // ── Map ──
   mapContainer: { flex: 1, position: 'relative' },
-  webview: { flex: 1, backgroundColor: '#fff' },
+  map: { flex: 1 },
   mapLoader: {
     position: 'absolute', top: 0, left: 0, right: 0, bottom: 0,
     backgroundColor: '#fff', alignItems: 'center', justifyContent: 'center',
@@ -332,14 +292,23 @@ const styles = StyleSheet.create({
   },
   mapLoaderText: { color: '#666', fontSize: 14 },
 
+  // ── Markers ──
+  markerWrap: { alignItems: 'center', justifyContent: 'center' },
+  markerEmoji: { fontSize: 28 },
+  markerBadge: {
+    position: 'absolute', top: -4, right: -8,
+    backgroundColor: '#ba0b2f', borderRadius: 6, paddingHorizontal: 2, paddingVertical: 1,
+  },
+  markerBadgeText: { fontSize: 8, color: '#000', fontWeight: 'bold' },
+
   // ── Pin tooltip ──
   pinTooltip: {
     position: 'absolute', bottom: 60, left: 16, right: 16,
-    backgroundColor: '#1A1A1A', borderRadius: 16, padding: 16,
+    backgroundColor: '#fff', borderRadius: 16, padding: 16,
     borderWidth: 1, borderColor: '#2A2A2A',
     shadowColor: '#000', shadowOffset: { width: 0, height: 4 }, shadowOpacity: 0.4, shadowRadius: 12,
   },
-  pinTooltipName: { color: '#fff', fontSize: 16, fontWeight: '800', marginBottom: 4 },
+  pinTooltipName: { color: '#2A2A2A', fontSize: 16, fontWeight: '800', marginBottom: 4 },
   pinTooltipSub: { color: '#888', fontSize: 13 },
   pinTooltipStars: { fontSize: 14, marginTop: 4 },
   pinTooltipClose: { position: 'absolute', top: 12, right: 16, padding: 4 },
@@ -358,7 +327,7 @@ const styles = StyleSheet.create({
   searchInput: {
     backgroundColor: '#fff', borderWidth: 1.5, borderColor: '#2A2A2A',
     borderRadius: 14, paddingHorizontal: 16, paddingVertical: 14,
-    color: '#141414', fontSize: 16, marginBottom: 12,
+    color: '#2A2A2A', fontSize: 16, marginBottom: 12,
   },
   searchHint: { alignItems: 'center', paddingTop: 60, gap: 12 },
   searchHintEmoji: { fontSize: 48 },
@@ -366,7 +335,7 @@ const styles = StyleSheet.create({
   searchResults: { flex: 1 },
   searchItem: {
     flexDirection: 'row', alignItems: 'center', gap: 12,
-    paddingVertical: 14, borderBottomWidth: 1, borderBottomColor: '#1A1A1A',
+    paddingVertical: 14, borderBottomWidth: 1, borderBottomColor: '#fff',
   },
   searchItemEmoji: { fontSize: 28, width: 40, textAlign: 'center' },
   searchItemInfo: { flex: 1 },

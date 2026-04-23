@@ -16,7 +16,7 @@ function minimapHtml(lat: number, lng: number): string {
 </head><body><div id="map"></div><script>
 var map=L.map('map',{zoomControl:false,attributionControl:false}).setView([${lat},${lng}],15);
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19}).addTo(map);
-L.circleMarker([${lat},${lng}],{radius:10,color:'#E8C547',fillColor:'#E8C547',fillOpacity:1,weight:2}).addTo(map);
+L.circleMarker([${lat},${lng}],{radius:10,color:'#ba0b2f',fillColor:'#ba0b2f',fillOpacity:1,weight:2}).addTo(map);
 </script></body></html>`;
 }
 

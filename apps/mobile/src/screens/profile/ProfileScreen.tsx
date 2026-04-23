@@ -3,6 +3,8 @@ import {
   View, Text, ScrollView, TouchableOpacity, StyleSheet,
   SafeAreaView, ActivityIndicator, Modal,
 } from 'react-native';
+import Svg, { Path } from 'react-native-svg';
+import SettingsIcon from '../../../logo/settings.svg';
 import { useFocusEffect } from '@react-navigation/native';
 import { useAuth } from '../../context/AuthContext';
 import { api } from '../../config/api';
@@ -200,7 +202,7 @@ export default function ProfileScreen() {
         <View style={styles.header}>
           <Text style={styles.title}>Profil</Text>
           <TouchableOpacity style={styles.settingsBtn} onPress={() => setConfirmLogout(true)}>
-            <Text style={styles.settingsIcon}>⚙️</Text>
+            <SettingsIcon width={24} height={24} fill="#ba0b2f" />
           </TouchableOpacity>
         </View>
       </SafeAreaView>

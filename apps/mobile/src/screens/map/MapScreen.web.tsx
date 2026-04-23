@@ -1,14 +1,13 @@
-import React, { useState, useRef, useCallback, useEffect } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import {
   View, Text, StyleSheet, SafeAreaView, TouchableOpacity,
   TextInput, ScrollView, ActivityIndicator, Dimensions,
 } from 'react-native';
-import { WebView } from 'react-native-webview';
 import * as Location from 'expo-location';
 import { useAuth } from '../../context/AuthContext';
 import { api } from '../../config/api';
 
-const { width: W, height: H } = Dimensions.get('window');
+const { width: W } = Dimensions.get('window');
 
 type Mode = 'map' | 'search' | 'swipe';
 
@@ -35,12 +34,11 @@ function cuisineEmoji(type: string): string {
 
 function makeLeafletHtml(pins: AnyPin[], isRestaurant: boolean, centerLat: number, centerLng: number): string {
   const markersJs = pins.map((p) => {
-    const isRest = isRestaurant;
-    const emoji = isRest
-      ? cuisineEmoji((p as RestaurantPin).cuisineType)
-      : '🏨';
-    const stars = isRest ? (p as RestaurantPin).michelinStars : (p as HotelPin).stars;
-    const starsHtml = stars > 0 ? `<span style="font-size:10px;position:absolute;top:-4px;right:-4px;background:#ba0b2f;border-radius:8px;padding:0 3px;color:#000;font-weight:bold;">${'⭐'.repeat(Math.min(stars, 3))}</span>` : '';
+    const emoji = isRestaurant ? cuisineEmoji((p as RestaurantPin).cuisineType) : '🏨';
+    const stars = isRestaurant ? (p as RestaurantPin).michelinStars : (p as HotelPin).stars;
+    const starsHtml = stars > 0
+      ? `<span style="font-size:10px;position:absolute;top:-4px;right:-4px;background:#ba0b2f;border-radius:8px;padding:0 3px;color:#000;font-weight:bold;">${'⭐'.repeat(Math.min(stars, 3))}</span>`
+      : '';
     const label = `<div style="position:relative;display:inline-block;font-size:28px;line-height:1;">${emoji}${starsHtml}</div>`;
     return `
       var icon_${p.id.replace(/-/g, '_')} = L.divIcon({
@@ -52,7 +50,7 @@ function makeLeafletHtml(pins: AnyPin[], isRestaurant: boolean, centerLat: numbe
       L.marker([${p.lat}, ${p.lng}], { icon: icon_${p.id.replace(/-/g, '_')} })
         .addTo(map)
         .on('click', function() {
-          window.ReactNativeWebView.postMessage(JSON.stringify({ type: 'pin', id: '${p.id}' }));
+          window.parent.postMessage(JSON.stringify({ type: 'pin', id: '${p.id}' }), '*');
         });
     `;
   }).join('\n');
@@ -95,11 +93,26 @@ export default function MapScreen({ route, navigation }: any) {
   const [viewMode, setViewMode] = useState<Mode>('map');
   const [pins, setPins] = useState<AnyPin[]>([]);
   const [loading, setLoading] = useState(true);
-  const [center, setCenter] = useState({ lat: 48.8566, lng: 2.3522 }); // Paris fallback
+  const [center, setCenter] = useState({ lat: 48.8566, lng: 2.3522 });
   const [searchText, setSearchText] = useState('');
   const [searchResults, setSearchResults] = useState<AnyPin[]>([]);
   const [selectedPin, setSelectedPin] = useState<AnyPin | null>(null);
-  const webviewRef = useRef<WebView>(null);
+  // key forces iframe re-mount when center changes (from search result click)
+  const [iframeKey, setIframeKey] = useState(0);
+
+  useEffect(() => {
+    const handler = (e: any) => {
+      try {
+        const msg = JSON.parse(e.data);
+        if (msg.type === 'pin') {
+          const found = pins.find(p => p.id === msg.id);
+          if (found) setSelectedPin(found);
+        }
+      } catch {}
+    };
+    (window as any).addEventListener('message', handler);
+    return () => (window as any).removeEventListener('message', handler);
+  }, [pins]);
 
   const fetchPins = useCallback(async (lat: number, lng: number) => {
     if (!token) return;
@@ -128,9 +141,8 @@ export default function MapScreen({ route, navigation }: any) {
         const { status } = await Location.requestForegroundPermissionsAsync();
         if (status === 'granted') {
           const loc = await Location.getCurrentPositionAsync({ accuracy: Location.Accuracy.Balanced });
-          const newCenter = { lat: loc.coords.latitude, lng: loc.coords.longitude };
-          setCenter(newCenter);
-          fetchPins(newCenter.lat, newCenter.lng);
+          setCenter({ lat: loc.coords.latitude, lng: loc.coords.longitude });
+          fetchPins(loc.coords.latitude, loc.coords.longitude);
         } else {
           fetchPins(center.lat, center.lng);
         }
@@ -154,11 +166,9 @@ export default function MapScreen({ route, navigation }: any) {
 
   return (
     <View style={styles.container}>
-      <SafeAreaView>
-        <View style={styles.header}>
-          {isRestaurant ? (<Text style={styles.title}>Restaurants</Text>) : (<Text style={styles.title}>Hôtels</Text>)}
-        </View>
-      </SafeAreaView>
+      <View style={styles.header}>
+        {isRestaurant ? (<Text style={styles.title}>Restaurants</Text>) : (<Text style={styles.title}>Hôtels</Text>)}
+      </View>
       <SafeAreaView style={styles.safe}>
         {/* ── 3 top buttons ── */}
         <View style={styles.topBar}>
@@ -190,23 +200,14 @@ export default function MapScreen({ route, navigation }: any) {
                 <Text style={styles.mapLoaderText}>Chargement de la carte…</Text>
               </View>
             )}
-            <WebView
-              ref={webviewRef}
-              source={{ html: leafletHtml }}
-              style={styles.webview}
-              originWhitelist={['*']}
-              javaScriptEnabled
-              onMessage={(e) => {
-                try {
-                  const msg = JSON.parse(e.nativeEvent.data);
-                  if (msg.type === 'pin') {
-                    const found = pins.find(p => p.id === msg.id);
-                    if (found) setSelectedPin(found);
-                  }
-                } catch {}
-              }}
-              onLoadEnd={() => setLoading(false)}
-            />
+            {(React.createElement as any)('iframe', {
+              key: iframeKey,
+              srcDoc: leafletHtml,
+              style: { width: '100%', height: '100%', border: 'none' },
+              title: 'map',
+              sandbox: 'allow-scripts allow-same-origin',
+              onLoad: () => setLoading(false),
+            })}
 
             {/* ── Pin tooltip ── */}
             {selectedPin && (
@@ -263,6 +264,7 @@ export default function MapScreen({ route, navigation }: any) {
                   style={styles.searchItem}
                   onPress={() => {
                     setCenter({ lat: item.lat, lng: item.lng });
+                    setIframeKey(k => k + 1);
                     setViewMode('map');
                     setSelectedPin(item);
                   }}
@@ -300,31 +302,25 @@ export default function MapScreen({ route, navigation }: any) {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: '#fff' },
-  safe: { flex: 1 },
   header: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 20, paddingTop: 8 },
   title: { color: '#ba0b2f', fontSize: 24, fontWeight: '800' },
-  // ── Top bar ──
+  container: { flex: 1, backgroundColor: '#fff' },
+  safe: { flex: 1 },
+
   topBar: {
-    flexDirection: 'row',
-    paddingHorizontal: 12,
-    paddingVertical: 10,
-    gap: 8,
-    backgroundColor: '#fff',
-    zIndex: 10,
+    flexDirection: 'row', paddingHorizontal: 12, paddingVertical: 10,
+    gap: 8, backgroundColor: '#fff', zIndex: 10,
   },
   topBtn: {
     flex: 1, paddingVertical: 10, borderRadius: 12,
-    backgroundColor: '#ba0b2f', alignItems: 'center',
+    backgroundColor: '#fff', alignItems: 'center',
     borderWidth: 1.5, borderColor: '#2A2A2A',
   },
   topBtnActive: { backgroundColor: 'rgba(232,197,71,0.15)', borderColor: '#ba0b2f' },
-  topBtnText: { color: '#fff', fontSize: 13, fontWeight: '700' },
+  topBtnText: { color: '#666', fontSize: 13, fontWeight: '700' },
   topBtnTextActive: { color: '#ba0b2f' },
 
-  // ── Map ──
   mapContainer: { flex: 1, position: 'relative' },
-  webview: { flex: 1, backgroundColor: '#fff' },
   mapLoader: {
     position: 'absolute', top: 0, left: 0, right: 0, bottom: 0,
     backgroundColor: '#fff', alignItems: 'center', justifyContent: 'center',
@@ -332,10 +328,9 @@ const styles = StyleSheet.create({
   },
   mapLoaderText: { color: '#666', fontSize: 14 },
 
-  // ── Pin tooltip ──
   pinTooltip: {
     position: 'absolute', bottom: 60, left: 16, right: 16,
-    backgroundColor: '#1A1A1A', borderRadius: 16, padding: 16,
+    backgroundColor: '#fff', borderRadius: 16, padding: 16,
     borderWidth: 1, borderColor: '#2A2A2A',
     shadowColor: '#000', shadowOffset: { width: 0, height: 4 }, shadowOpacity: 0.4, shadowRadius: 12,
   },
@@ -345,20 +340,18 @@ const styles = StyleSheet.create({
   pinTooltipClose: { position: 'absolute', top: 12, right: 16, padding: 4 },
   pinTooltipCloseText: { color: '#666', fontSize: 18 },
 
-  // ── Legend ──
   legend: {
     position: 'absolute', top: 12, left: 12,
-    backgroundColor: '#fff', paddingHorizontal: 12, paddingVertical: 6,
+    backgroundColor: 'rgba(10,10,10,0.85)', paddingHorizontal: 12, paddingVertical: 6,
     borderRadius: 20, borderWidth: 1, borderColor: '#2A2A2A',
   },
   legendText: { color: '#888', fontSize: 12, fontWeight: '600' },
 
-  // ── Search ──
   searchContainer: { flex: 1, paddingHorizontal: 16, paddingTop: 8 },
   searchInput: {
     backgroundColor: '#fff', borderWidth: 1.5, borderColor: '#2A2A2A',
     borderRadius: 14, paddingHorizontal: 16, paddingVertical: 14,
-    color: '#141414', fontSize: 16, marginBottom: 12,
+    color: '#fff', fontSize: 16, marginBottom: 12,
   },
   searchHint: { alignItems: 'center', paddingTop: 60, gap: 12 },
   searchHintEmoji: { fontSize: 48 },
@@ -366,7 +359,7 @@ const styles = StyleSheet.create({
   searchResults: { flex: 1 },
   searchItem: {
     flexDirection: 'row', alignItems: 'center', gap: 12,
-    paddingVertical: 14, borderBottomWidth: 1, borderBottomColor: '#1A1A1A',
+    paddingVertical: 14, borderBottomWidth: 1, borderBottomColor: '#fff',
   },
   searchItemEmoji: { fontSize: 28, width: 40, textAlign: 'center' },
   searchItemInfo: { flex: 1 },

@@ -24,7 +24,7 @@ export default function MiniMap({ lat, lng, style }: Props) {
       pitchEnabled={false}
       rotateEnabled={false}
     >
-      <Marker coordinate={{ latitude: lat, longitude: lng }} pinColor="#E8C547" />
+      <Marker coordinate={{ latitude: lat, longitude: lng }} pinColor="#ba0b2f" />
     </MapView>
   );
 }
