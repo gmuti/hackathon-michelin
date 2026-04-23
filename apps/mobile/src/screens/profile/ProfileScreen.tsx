@@ -274,7 +274,7 @@ export default function ProfileScreen() {
         {/* Préférences alimentaires */}
         <View style={styles.section}>
           <View style={styles.sectionHeader}>
-            <Text style={styles.sectionTitle}>Préférences alimentaires 🍽️</Text>
+            <Text style={styles.sectionTitle}>Préférences alimentaires</Text>
             <TouchableOpacity style={styles.editBtn} onPress={openPrefModal}>
               <Text style={styles.editBtnText}>Modifier</Text>
             </TouchableOpacity>
@@ -321,7 +321,7 @@ export default function ProfileScreen() {
 
         {/* Collection */}
         <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Ma Collection 🏆</Text>
+          <Text style={styles.sectionTitle}>Ma Collection</Text>
           {collection.length === 0 ? (
             <View style={styles.emptyBox}>
               <Text style={styles.emptyBoxEmoji}>🍽️</Text>
@@ -422,7 +422,37 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(186,11,47,0.1)', borderWidth: 1.5, borderColor: 'rgba(186,11,47,0.35)',
     paddingHorizontal: 12, paddingVertical: 6, borderRadius: 20,
   },
+  prefChipEmoji: { fontSize: 14, marginRight: 6 },
   prefChipText: { color: '#ba0b2f', fontSize: 13, fontWeight: '600' },
+  prefChipDietary: { backgroundColor: '#fff' },
+  prefChipTextDietary: { color: '#222326' },
+  prefSubtitle: { color: '#222326', fontSize: 13, fontWeight: '700', marginBottom: 8 },
+  emptyPrefs: {
+    backgroundColor: '#fff', borderWidth: 1.5, borderColor: 'rgba(186,11,47,0.35)',
+    paddingVertical: 12, paddingHorizontal: 14, borderRadius: 12,
+  },
+  emptyPrefsText: { color: '#ba0b2f', fontSize: 14, fontWeight: '600', textAlign: 'center' },
+  sectionHeader: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' },
+  editBtn: {
+    backgroundColor: '#fff', borderWidth: 1, borderColor: 'rgba(186,11,47,0.35)',
+    paddingHorizontal: 10, paddingVertical: 6, borderRadius: 10,
+  },
+  editBtnText: { color: '#ba0b2f', fontWeight: '700', fontSize: 12 },
+  prefModalSection: { color: '#ba0b2f', fontSize: 15, fontWeight: '700', marginBottom: 10 },
+  chipsWrap: { flexDirection: 'row', flexWrap: 'wrap', gap: 10 },
+  chip: {
+    flexDirection: 'row', alignItems: 'center', gap: 6,
+    backgroundColor: '#fff', paddingHorizontal: 12, paddingVertical: 9,
+    borderRadius: 50, borderWidth: 1.5, borderColor: 'rgba(186,11,47,0.35)',
+  },
+  chipActive: { backgroundColor: 'rgba(186,11,47,0.1)', borderColor: '#ba0b2f' },
+  chipEmoji: { fontSize: 16 },
+  chipLabel: { color: '#222326', fontSize: 13, fontWeight: '600' },
+  chipLabelActive: { color: '#ba0b2f' },
+  modalBtnPrimary: {
+    backgroundColor: '#ba0b2f', paddingVertical: 14, borderRadius: 12, alignItems: 'center',
+  },
+  modalBtnPrimaryText: { color: '#fff', fontWeight: '800', fontSize: 16 },
   logoutBtn: {
     marginHorizontal: 20, paddingVertical: 14, borderRadius: 14,
     borderWidth: 1.5, borderColor: '#ba0b2f', alignItems: 'center',

@@ -95,7 +95,6 @@ export default function CommunityScreen() {
       >
         {reviews.length === 0 ? (
           <View style={styles.empty}>
-            <Text style={styles.emptyEmoji}>🍽️</Text>
             <Text style={styles.emptyTitle}>Aucun avis pour le moment</Text>
             <Text style={styles.emptyText}>
               Certifie une visite et laisse le premier avis !
