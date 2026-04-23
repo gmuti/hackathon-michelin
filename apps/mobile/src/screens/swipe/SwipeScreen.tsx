@@ -576,7 +576,7 @@ export default function SwipeScreen({ route, navigation }: any) {
   // ── Loading ───────────────────────────────────────────────────────────────
   if (loading) return (
     <View style={styles.empty}>
-      <ActivityIndicator color="#E8C547" size="large" />
+      <ActivityIndicator color="#ba0b2f" size="large" />
       <Text style={styles.emptyLabel}>Chargement…</Text>
     </View>
   );
@@ -587,12 +587,12 @@ export default function SwipeScreen({ route, navigation }: any) {
       <Text style={styles.emptyEmoji}>{mode === 'restaurant' ? '🍽️' : '🏨'}</Text>
       <Text style={styles.emptyLabel}>{error ?? 'Aucun résultat dans cette zone'}</Text>
       <TouchableOpacity style={styles.reloadBtn} onPress={openFilter}>
-        <Text style={styles.reloadBtnText}>🔍 Modifier les filtres</Text>
+        <Text style={styles.reloadBtnText}>Modifier les filtres</Text>
       </TouchableOpacity>
       {/* Match modal trigger if we have matches */}
-      <TouchableOpacity style={[styles.reloadBtn, { marginTop: 10, backgroundColor: '#1A1A1A' }]}
+      <TouchableOpacity style={[styles.reloadBtn, { marginTop: 10, backgroundColor: '#fff' }]}
         onPress={() => loadMatches()}>
-        <Text style={[styles.reloadBtnText, { color: '#E8C547' }]}>⭐ Voir mes favoris</Text>
+        <Text style={[styles.reloadBtnText, { color: '#ba0b2f' }]}>⭐ Voir mes favoris</Text>
       </TouchableOpacity>
     </View>
   );
@@ -886,38 +886,38 @@ export default function SwipeScreen({ route, navigation }: any) {
 // ── Styles ──────────────────────────────────────────────────────────────────
 const styles = StyleSheet.create({
   // ── Filter ──
-  filterScreen: { flex: 1, backgroundColor: '#0A0A0A' },
+  filterScreen: { flex: 1, backgroundColor: '#fff' },
   filterHeader: {
     flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between',
     paddingHorizontal: 20, paddingVertical: 14,
-    borderBottomWidth: 1, borderBottomColor: '#1A1A1A',
+    borderBottomWidth: 1, borderBottomColor: '#ba0b2f',
   },
   backBtn: { width: 72 },
-  backBtnText: { color: '#E8C547', fontSize: 14, fontWeight: '600' },
+  backBtnText: { color: '#ba0b2f', fontSize: 14, fontWeight: '600' },
   closeBtn: { width: 72, alignItems: 'flex-end' },
   closeBtnText: { color: '#666', fontSize: 22, fontWeight: '600' },
   progressDots: { flexDirection: 'row', gap: 6 },
   progressDot: { width: 8, height: 8, borderRadius: 4, backgroundColor: '#2A2A2A' },
-  progressDotActive: { backgroundColor: '#E8C547', width: 24 },
+  progressDotActive: { backgroundColor: '#ba0b2f', width: 24 },
   stepTitleBlock: { paddingHorizontal: 24, paddingTop: 28, paddingBottom: 8 },
-  stepTitle: { color: '#fff', fontSize: 26, fontWeight: '800', letterSpacing: -0.5, marginBottom: 6 },
+  stepTitle: { color: '#1A1A1A', fontSize: 26, fontWeight: '800', letterSpacing: -0.5, marginBottom: 6 },
   stepSub: { color: '#666', fontSize: 15 },
   stepContent: { paddingHorizontal: 24, paddingTop: 24, paddingBottom: 12 },
   filterFooter: { paddingHorizontal: 24, paddingBottom: 24, paddingTop: 8, gap: 10 },
   errorText: { color: '#FF4458', fontSize: 13, textAlign: 'center' },
-  nextBtn: { backgroundColor: '#E8C547', paddingVertical: 17, borderRadius: 16, alignItems: 'center' },
-  nextBtnText: { color: '#0A0A0A', fontSize: 17, fontWeight: '800' },
+  nextBtn: { backgroundColor: '#ba0b2f', paddingVertical: 17, borderRadius: 16, alignItems: 'center' },
+  nextBtnText: { color: '#fff', fontSize: 17, fontWeight: '800' },
 
   // ── Inputs ──
   cityRow: { flexDirection: 'row', gap: 10, alignItems: 'center' },
   input: {
-    backgroundColor: '#141414', borderWidth: 1.5, borderColor: '#2A2A2A',
+    backgroundColor: '#fff', borderWidth: 1.5, borderColor: '#ba0b2f',
     borderRadius: 14, paddingHorizontal: 16, paddingVertical: 15,
-    color: '#fff', fontSize: 16, marginBottom: 8,
+    color: '#1A1A1A', fontSize: 16, marginBottom: 8,
   },
   gpsBtn: {
-    width: 52, height: 52, borderRadius: 14, backgroundColor: '#141414',
-    borderWidth: 1.5, borderColor: '#2A2A2A', alignItems: 'center', justifyContent: 'center',
+    width: 52, height: 52, borderRadius: 14, backgroundColor: '#fff',
+    borderWidth: 1.5, borderColor: '#ba0b2f', alignItems: 'center', justifyContent: 'center',
   },
   gpsBtnText: { fontSize: 24 },
   hint: { color: '#444', fontSize: 12, marginTop: 4 },
@@ -927,56 +927,56 @@ const styles = StyleSheet.create({
   distanceGrid: { gap: 12 },
   distanceCard: {
     flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 12,
-    backgroundColor: '#141414', padding: 20, borderRadius: 16,
-    borderWidth: 1.5, borderColor: '#2A2A2A',
+    backgroundColor: '#fff', padding: 20, borderRadius: 16,
+    borderWidth: 1.5, borderColor: '#ba0b2f',
   },
-  distanceCardActive: { borderColor: '#E8C547', backgroundColor: 'rgba(232,197,71,0.1)' },
+  distanceCardActive: { borderColor: '#ba0b2f', backgroundColor: 'rgba(232,197,71,0.1)' },
   distanceLabel: { color: '#888', fontSize: 17, fontWeight: '700' },
-  distanceLabelActive: { color: '#E8C547' },
+  distanceLabelActive: { color: '#ba0b2f' },
   accomEmoji: { fontSize: 24 },
 
   // ── Counter ──
   counterRow: { flexDirection: 'row', alignItems: 'center', gap: 20 },
   counterBtn: {
-    width: 44, height: 44, borderRadius: 22, backgroundColor: '#1A1A1A',
-    borderWidth: 1.5, borderColor: '#2A2A2A', alignItems: 'center', justifyContent: 'center',
+    width: 44, height: 44, borderRadius: 22, backgroundColor: '#fff',
+    borderWidth: 1.5, borderColor: '#ba0b2f', alignItems: 'center', justifyContent: 'center',
   },
-  counterBtnText: { color: '#E8C547', fontSize: 22, fontWeight: '700' },
+  counterBtnText: { color: '#ba0b2f', fontSize: 22, fontWeight: '700' },
   counterValue: { color: '#fff', fontSize: 18, fontWeight: '700', flex: 1, textAlign: 'center' },
 
   // ── Chips ──
   chipsWrap: { flexDirection: 'row', flexWrap: 'wrap', gap: 10 },
   chip: {
     flexDirection: 'row', alignItems: 'center', gap: 6,
-    backgroundColor: '#141414', paddingHorizontal: 14, paddingVertical: 10,
-    borderRadius: 50, borderWidth: 1.5, borderColor: '#2A2A2A',
+    backgroundColor: '#fff', paddingHorizontal: 14, paddingVertical: 10,
+    borderRadius: 50, borderWidth: 1.5, borderColor: '#ba0b2f',
   },
-  chipActive: { backgroundColor: 'rgba(232,197,71,0.15)', borderColor: '#E8C547' },
+  chipActive: { backgroundColor: 'rgba(232,197,71,0.15)', borderColor: '#ba0b2f' },
   chipEmoji: { fontSize: 18 },
   chipLabel: { color: '#888', fontSize: 14, fontWeight: '600' },
-  chipLabelActive: { color: '#E8C547' },
+  chipLabelActive: { color: '#ba0b2f' },
 
   // ── Countdown ──
-  countdown: { flex: 1, backgroundColor: '#0A0A0A', alignItems: 'center', justifyContent: 'center' },
-  countdownNum: { fontSize: 120, fontWeight: '900', color: '#E8C547' },
+  countdown: { flex: 1, backgroundColor: '#fff', alignItems: 'center', justifyContent: 'center' },
+  countdownNum: { fontSize: 120, fontWeight: '900', color: '#ba0b2f' },
   countdownLabel: { color: '#888', fontSize: 22, marginTop: 12, fontWeight: '600' },
 
   // ── Swipe screen ──
-  container: { flex: 1, backgroundColor: '#0A0A0A', alignItems: 'center' },
+  container: { flex: 1, backgroundColor: '#fff', alignItems: 'center' },
   header: {
     width: '100%', flexDirection: 'row', justifyContent: 'space-between',
     alignItems: 'center', paddingHorizontal: 16, paddingTop: 8, zIndex: 10,
   },
   backArrow: { padding: 8 },
-  backArrowText: { color: '#E8C547', fontSize: 22, fontWeight: '700' },
-  headerTitle: { color: '#E8C547', fontSize: 16, fontWeight: '700', letterSpacing: 0.5 },
+  backArrowText: { color: '#ba0b2f', fontSize: 22, fontWeight: '700' },
+  headerTitle: { color: '#ba0b2f', fontSize: 16, fontWeight: '700', letterSpacing: 0.5 },
   headerRight: { flexDirection: 'row', alignItems: 'center', gap: 8 },
   filterIconBtn: {
-    width: 36, height: 36, borderRadius: 18, backgroundColor: '#1A1A1A',
+    width: 36, height: 36, borderRadius: 18, backgroundColor: '#fff',
     alignItems: 'center', justifyContent: 'center', borderWidth: 1, borderColor: '#2A2A2A',
   },
   filterIconText: { fontSize: 16 },
-  jamBtn: { backgroundColor: '#E8C547', paddingHorizontal: 12, paddingVertical: 6, borderRadius: 20 },
+  jamBtn: { backgroundColor: '#ba0b2f', paddingHorizontal: 12, paddingVertical: 6, borderRadius: 20 },
   jamBtnText: { color: '#0A0A0A', fontWeight: '700', fontSize: 12 },
 
   // ── Cards ──
@@ -993,7 +993,7 @@ const styles = StyleSheet.create({
   hotelBg: { flex: 1, backgroundColor: '#1A1A1A', alignItems: 'center', justifyContent: 'center', gap: 12 },
   hotelBgEmoji: { fontSize: 72 },
   hotelBgName: { color: '#fff', fontSize: 22, fontWeight: '800', textAlign: 'center', paddingHorizontal: 20 },
-  hotelBgEnv: { color: '#E8C547', fontSize: 16, fontWeight: '600' },
+  hotelBgEnv: { color: '#ba0b2f', fontSize: 16, fontWeight: '600' },
   photoDots: {
     position: 'absolute', top: 12, left: 0, right: 0, flexDirection: 'row', justifyContent: 'center', gap: 4,
   },
@@ -1012,15 +1012,15 @@ const styles = StyleSheet.create({
   cardName: { color: '#fff', fontSize: 24, fontWeight: '800', letterSpacing: -0.5 },
   cardMeta: { flexDirection: 'row', alignItems: 'center', gap: 8, marginTop: 4, flexWrap: 'wrap' },
   cardCity: { color: 'rgba(255,255,255,0.75)', fontSize: 13 },
-  cardCuisine: { color: '#E8C547', fontSize: 12, fontWeight: '600' },
+  cardCuisine: { color: '#ba0b2f', fontSize: 12, fontWeight: '600' },
   cardPrice: { color: 'rgba(255,255,255,0.75)', fontSize: 13, marginLeft: 'auto' },
-  cardRating: { color: '#E8C547', fontSize: 12, fontWeight: '600', marginTop: 4 },
+  cardRating: { color: '#ba0b2f', fontSize: 12, fontWeight: '600', marginTop: 4 },
   detailBtn: {
     marginTop: 10, paddingVertical: 8, paddingHorizontal: 16,
     backgroundColor: 'rgba(232,197,71,0.15)', borderRadius: 20, alignSelf: 'flex-start',
     borderWidth: 1, borderColor: 'rgba(232,197,71,0.4)',
   },
-  detailBtnText: { color: '#E8C547', fontSize: 13, fontWeight: '700' },
+  detailBtnText: { color: '#ba0b2f', fontSize: 13, fontWeight: '700' },
 
   // ── Progressive indicators ──
   indicator: {
@@ -1029,33 +1029,33 @@ const styles = StyleSheet.create({
   },
   indicatorLike: { left: 20, borderColor: '#00E676', transform: [{ rotate: '-15deg' }] },
   indicatorNope: { right: 20, borderColor: '#FF4458', transform: [{ rotate: '15deg' }] },
-  indicatorSuper: { alignSelf: 'center', left: W / 2 - 60, bottom: 100, top: undefined, borderColor: '#E8C547' },
+  indicatorSuper: { alignSelf: 'center', left: W / 2 - 60, bottom: 100, top: undefined, borderColor: '#ba0b2f' },
   indicatorText: { fontSize: 28, fontWeight: '900' },
 
   // ── Actions ──
   actions: { position: 'absolute', bottom: 24, flexDirection: 'row', gap: 20, alignItems: 'center' },
   actionBtn: {
-    width: 60, height: 60, borderRadius: 30, backgroundColor: '#1A1A1A',
+    width: 60, height: 60, borderRadius: 30, backgroundColor: '#fff',
     alignItems: 'center', justifyContent: 'center',
     shadowColor: '#000', shadowOffset: { width: 0, height: 4 }, shadowOpacity: 0.3, shadowRadius: 8,
   },
   actionNope: { borderColor: '#FF4458', borderWidth: 2 },
-  actionSuper: { width: 50, height: 50, borderRadius: 25, borderColor: '#E8C547', borderWidth: 2 },
+  actionSuper: { width: 50, height: 50, borderRadius: 25, borderColor: '#ba0b2f', borderWidth: 2 },
   actionLike: { borderColor: '#00E676', borderWidth: 2 },
   actionIcon: { fontSize: 24 },
 
   // ── Empty ──
-  empty: { flex: 1, alignItems: 'center', justifyContent: 'center', backgroundColor: '#0A0A0A', gap: 12 },
+  empty: { flex: 1, alignItems: 'center', justifyContent: 'center', backgroundColor: '#fff', gap: 12 },
   emptyEmoji: { fontSize: 60 },
   emptyLabel: { color: '#555', fontSize: 16, textAlign: 'center', paddingHorizontal: 32 },
-  reloadBtn: { marginTop: 8, backgroundColor: '#E8C547', paddingHorizontal: 20, paddingVertical: 12, borderRadius: 14 },
-  reloadBtnText: { color: '#0A0A0A', fontWeight: '700', fontSize: 15 },
+  reloadBtn: { marginTop: 8, backgroundColor: '#ba0b2f', paddingHorizontal: 20, paddingVertical: 12, borderRadius: 14 },
+  reloadBtnText: { color: '#fff', fontWeight: '700', fontSize: 15 },
 
   // ── Detail Modal ──
-  detailModal: { flex: 1, backgroundColor: '#0D0D0D' },
+  detailModal: { flex: 1, backgroundColor: '#fff' },
   detailSafe: { backgroundColor: '#0D0D0D' },
   detailClose: { paddingHorizontal: 20, paddingVertical: 14 },
-  detailCloseText: { color: '#E8C547', fontWeight: '700', fontSize: 15 },
+  detailCloseText: { color: '#ba0b2f', fontWeight: '700', fontSize: 15 },
   detailScroll: { flex: 1 },
   detailContent: { paddingHorizontal: 20, paddingBottom: 40 },
   detailName: { color: '#fff', fontSize: 28, fontWeight: '900', letterSpacing: -0.5, marginBottom: 6 },
@@ -1064,7 +1064,7 @@ const styles = StyleSheet.create({
   detailIcon: { fontSize: 24, marginTop: 2 },
   detailRowLabel: { color: '#666', fontSize: 12, fontWeight: '600', marginBottom: 2 },
   detailRowValue: { color: '#fff', fontSize: 15, fontWeight: '600' },
-  detailSectionTitle: { color: '#E8C547', fontSize: 14, fontWeight: '800', letterSpacing: 1, marginVertical: 16 },
+  detailSectionTitle: { color: '#ba0b2f', fontSize: 14, fontWeight: '800', letterSpacing: 1, marginVertical: 16 },
   miniMap: { marginBottom: 8 },
   detailAddress: { color: '#888', fontSize: 13, marginBottom: 16 },
 
@@ -1084,14 +1084,14 @@ const styles = StyleSheet.create({
     backgroundColor: '#1A1A1A', borderRadius: 16, padding: 16, alignItems: 'center',
     marginBottom: 16, borderWidth: 1, borderColor: '#2A2A2A',
   },
-  ratingBigNum: { color: '#E8C547', fontSize: 42, fontWeight: '900' },
+  ratingBigNum: { color: '#ba0b2f', fontSize: 42, fontWeight: '900' },
   ratingBigSub: { color: '#666', fontSize: 12, marginTop: 4 },
   reviewCard: {
     backgroundColor: '#141414', borderRadius: 14, padding: 16, marginBottom: 10,
     borderWidth: 1, borderColor: '#1E1E1E',
   },
   reviewHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 4 },
-  reviewUser: { color: '#E8C547', fontWeight: '700', fontSize: 13 },
+  reviewUser: { color: '#ba0b2f', fontWeight: '700', fontSize: 13 },
   reviewBadge: { color: '#666', fontSize: 11, backgroundColor: '#1A1A1A', paddingHorizontal: 8, paddingVertical: 3, borderRadius: 10 },
   reviewRating: { color: '#FFD700', fontSize: 13, marginBottom: 6 },
   reviewContent: { color: '#ccc', fontSize: 14, lineHeight: 20 },
@@ -1100,19 +1100,19 @@ const styles = StyleSheet.create({
   // ── Contact ──
   contactRow: { flexDirection: 'row', alignItems: 'center', gap: 12, paddingVertical: 12, borderBottomWidth: 1, borderBottomColor: '#1A1A1A' },
   contactIcon: { fontSize: 20 },
-  contactValue: { color: '#E8C547', fontSize: 14, fontWeight: '600', flex: 1 },
+  contactValue: { color: '#ba0b2f', fontSize: 14, fontWeight: '600', flex: 1 },
 
   // ── Match Modal ──
   matchOverlay: { flex: 1, backgroundColor: 'rgba(0,0,0,0.85)', justifyContent: 'center', alignItems: 'center', padding: 24 },
-  matchBox: { backgroundColor: '#1A1A1A', borderRadius: 24, padding: 24, width: '100%', borderWidth: 1, borderColor: '#E8C547' },
-  matchTitle: { color: '#E8C547', fontSize: 26, fontWeight: '900', textAlign: 'center', marginBottom: 6 },
+  matchBox: { backgroundColor: '#1A1A1A', borderRadius: 24, padding: 24, width: '100%', borderWidth: 1, borderColor: '#ba0b2f' },
+  matchTitle: { color: '#ba0b2f', fontSize: 26, fontWeight: '900', textAlign: 'center', marginBottom: 6 },
   matchSub: { color: '#666', fontSize: 14, textAlign: 'center', marginBottom: 20 },
   matchItem: { flexDirection: 'row', alignItems: 'center', gap: 12, paddingVertical: 10, borderBottomWidth: 1, borderBottomColor: '#2A2A2A' },
   matchItemEmoji: { fontSize: 24 },
   matchItemInfo: { flex: 1 },
   matchItemName: { color: '#fff', fontWeight: '700', fontSize: 15 },
   matchItemSub: { color: '#666', fontSize: 12, marginTop: 2 },
-  matchClose: { backgroundColor: '#E8C547', paddingVertical: 14, borderRadius: 14, alignItems: 'center', marginTop: 20 },
+  matchClose: { backgroundColor: '#ba0b2f', paddingVertical: 14, borderRadius: 14, alignItems: 'center', marginTop: 20 },
   matchCloseText: { color: '#0A0A0A', fontWeight: '800', fontSize: 15 },
   matchCloseSecondary: { paddingVertical: 12, alignItems: 'center', marginTop: 8 },
   matchCloseSecondaryText: { color: '#666', fontSize: 14 },

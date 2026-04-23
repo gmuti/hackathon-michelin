@@ -356,7 +356,6 @@ Toutes les décisions UI sont pensées pour le tactile et les contraintes du mob
 | **Swipe cards** | Gestes natifs `PanResponder` | Interaction principale sur mobile, feedback haptique naturel |
 | **Bottom tabs** | Hauteur 80px, paddingBottom 16px | Zone de pouce accessible, safe area iOS respectée |
 | **Modales** | `presentation: 'modal'` (Jam, Swipe) | Navigation naturelle, dismiss par swipe vers le bas |
-| **Thème** | Fond `#0A0A0A`, accent `#E8C547` | Contraste fort, lisible en extérieur, économe sur écrans OLED |
 | **Touch targets** | Minimum 44×44px | Recommandation Apple HIG / Google Material Design |
 | **Carte** | Plein écran + overlay contextuel | Immersion maximale sans quitter l'écran |
 
