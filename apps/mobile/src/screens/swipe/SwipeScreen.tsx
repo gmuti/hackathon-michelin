@@ -710,19 +710,19 @@ export default function SwipeScreen({ route, navigation }: any) {
           <MichelinStar size={28} />
         </Animated.View>
       </Animated.View>
+        {/* Actions */}
+        <View style={styles.actions}>
+            <TouchableOpacity style={[styles.actionBtn, styles.actionNope]} onPress={() => swipeCard('left')}>
+                <Text style={styles.actionIcon}>✕</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={[styles.actionBtn, styles.actionSuper]} onPress={() => swipeCard('up')}>
+                <MichelinStar size={24} />
+            </TouchableOpacity>
+            <TouchableOpacity style={[styles.actionBtn, styles.actionLike]} onPress={() => swipeCard('right')}>
+                <Text style={styles.actionIcon}>💛</Text>
+            </TouchableOpacity>
+        </View>
 
-      {/* Actions */}
-      <View style={styles.actions}>
-        <TouchableOpacity style={[styles.actionBtn, styles.actionNope]} onPress={() => swipeCard('left')}>
-          <Text style={styles.actionIcon}>✕</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={[styles.actionBtn, styles.actionSuper]} onPress={() => swipeCard('up')}>
-          <MichelinStar size={24} />
-        </TouchableOpacity>
-        <TouchableOpacity style={[styles.actionBtn, styles.actionLike]} onPress={() => swipeCard('right')}>
-          <Text style={styles.actionIcon}>💛</Text>
-        </TouchableOpacity>
-      </View>
 
       {/* ── Detail Modal ── */}
       <Modal visible={showDetail} animationType="slide" onRequestClose={() => setShowDetail(false)}>
@@ -839,7 +839,7 @@ export default function SwipeScreen({ route, navigation }: any) {
             {(restaurant?.website ?? hotel?.website) && (
               <TouchableOpacity style={styles.contactRow}
                 onPress={() => Linking.openURL(restaurant?.website ?? hotel?.website ?? '')}>
-                <Text style={styles.contactIcon}>🌐</Text>
+                <Text style={styles.contactIcon}>🌐</Text>er
                 <Text style={styles.contactValue}>{restaurant?.website ?? hotel?.website}</Text>
               </TouchableOpacity>
             )}

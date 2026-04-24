@@ -38,7 +38,7 @@ function makeLeafletHtml(pins: AnyPin[], isRestaurant: boolean, centerLat: numbe
     const emoji = isRestaurant ? cuisineEmoji((p as RestaurantPin).cuisineType) : '🏨';
     const stars = isRestaurant ? (p as RestaurantPin).michelinStars : (p as HotelPin).stars;
     const starsHtml = stars > 0
-      ? `<span style="position:absolute;top:-4px;right:-4px;background:#ba0b2f;border-radius:8px;padding:1px 3px;display:inline-flex;align-items:center;gap:1px;">${michelinStarsHtml(stars, 8, '#ffffff')}</span>`
+      ? `<span style="position:absolute;top:-4px;right:-4px;background:#ba0b2f;border-radius:8px;padding:1px 3px;display:inline-flex;align-items:center;gap:1px;">${michelinStarsHtml(stars, 20, '#ffffff')}</span>`
       : '';
     const label = `<div style="position:relative;display:inline-block;font-size:28px;line-height:1;">${emoji}${starsHtml}</div>`;
     return `
@@ -220,7 +220,7 @@ export default function MapScreen({ route, navigation }: any) {
                     : `${(selectedPin as HotelPin).pricePerNight}€/nuit`}
                 </Text>
                 {isRestaurant && (selectedPin as RestaurantPin).michelinStars > 0 && (
-                  <MichelinStars count={(selectedPin as RestaurantPin).michelinStars} size={14} style={{ marginTop: 4 }} />
+                  <MichelinStars count={(selectedPin as RestaurantPin).michelinStars} size={22} style={{ marginTop: 4 }} />
                 )}
                 <TouchableOpacity style={styles.pinTooltipClose} onPress={() => setSelectedPin(null)}>
                   <Text style={styles.pinTooltipCloseText}>✕</Text>
@@ -281,7 +281,7 @@ export default function MapScreen({ route, navigation }: any) {
                     </Text>
                   </View>
                   {isRestaurant && (item as RestaurantPin).michelinStars > 0 && (
-                    <MichelinStars count={(item as RestaurantPin).michelinStars} size={14} />
+                    <MichelinStars count={(item as RestaurantPin).michelinStars} size={22} />
                   )}
                 </TouchableOpacity>
               ))}
